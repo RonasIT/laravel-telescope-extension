@@ -35,13 +35,16 @@ class TelescopePrune extends Command
         EntryType::SCHEDULED_TASK,
         EntryType::GATE,
         EntryType::VIEW,
-        EntryType::SCHEDULED_TASK,
+    ];
+
+    const EXCEPTION_TYPES = [
+        self::UNRESOLVED_EXCEPTION,
+        self::RESOLVED_EXCEPTION,
     ];
 
     const TYPES = [
         ...self::COMMON_TYPES,
-        self::UNRESOLVED_EXCEPTION,
-        self::RESOLVED_EXCEPTION,
+        ...self::EXCEPTION_TYPES,
     ];
 
     protected $signature = 'telescope:prune
@@ -54,15 +57,13 @@ class TelescopePrune extends Command
 
     protected Carbon $defaultExpirationDate;
 
-    protected array $setHoursTypes = [];
-
     public function handle(): void
     {
         try {
             $this->validateSetHoursOption();
             $this->validateHoursOption();
-
-            $this->prune();
+            $this->pruneSetHours();
+            $this->pruneHours();
         } catch (Throwable $exception) {
             $this->error($exception->getMessage());
         }
@@ -96,7 +97,6 @@ class TelescopePrune extends Command
                     throw new Exception("Hours value for '{$type}' type must be a number.");
                 }
 
-                $this->setHoursTypes[] = $type;
                 $this->expirationDates[$type] = Carbon::now()->subHours($hour);
             }
         }
@@ -115,26 +115,28 @@ class TelescopePrune extends Command
         }
     }
 
-    protected function prune(): void
+    protected function pruneSetHours(): void
     {
-        $repository = app(TelescopeRepository::class);
-
         if ($this->expirationDates) {
             foreach ($this->expirationDates as $type => $expirationDate) {
                 $this->info("Pruning records of type '{$type}' older than {$expirationDate} hours...");
 
-                $count = $repository->pruneByEventType([$type], $expirationDate);
+                $count = app(TelescopeRepository::class)->pruneByEventType([$type], $expirationDate);
 
                 $this->info("Deleted {$count} records.");
             }
         }
+    }
 
+    protected function pruneHours(): void
+    {
         if (!empty($this->defaultExpirationDate)) {
+            $repository = app(TelescopeRepository::class);
+
             $this->info("Pruning records of other types older than {$this->defaultExpirationDate} hours...");
 
             if ($this->expirationDates) {
                 $types = $this->filterTypes();
-
                 $count = $repository->pruneByEventType($types, $this->defaultExpirationDate);
             } else {
                 $count = $repository->prune($this->defaultExpirationDate);
@@ -150,15 +152,15 @@ class TelescopePrune extends Command
         $types = array_diff(self::COMMON_TYPES, $excludeTypes);
 
         if (
-            in_array(self::UNRESOLVED_EXCEPTION, $this->setHoursTypes)
-            || in_array(self::RESOLVED_EXCEPTION, $this->setHoursTypes)
+            in_array(self::UNRESOLVED_EXCEPTION, $excludeTypes)
+            || in_array(self::RESOLVED_EXCEPTION, $excludeTypes)
         ) {
             $types = array_diff($types, EntryType::EXCEPTION);
 
-            if (!(in_array(self::UNRESOLVED_EXCEPTION, $this->setHoursTypes) && in_array(self::RESOLVED_EXCEPTION, $this->setHoursTypes))) {
+            if (!in_array(self::EXCEPTION_TYPES, $excludeTypes)) {
                 $types = [
                     ...$types,
-                    (in_array(self::UNRESOLVED_EXCEPTION, $this->setHoursTypes))
+                    (in_array(self::UNRESOLVED_EXCEPTION, $excludeTypes))
                         ? self::RESOLVED_EXCEPTION
                         : self::UNRESOLVED_EXCEPTION
                 ];
