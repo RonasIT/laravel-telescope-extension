@@ -6,8 +6,8 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "Vitaly Iskrin",
-            "email": "iskrinvv@gmail.com"
+            "name": "Ronas IT",
+            "homepage": "https://github.com/RonasIT/laravel-swagger/graphs/contributors"
         }
     ],
     "require": {
@@ -17,12 +17,16 @@
     },
     "require-dev": {
         "orchestra/testbench": "^7.0|^8.0",
-        "phpunit/phpunit": "^9.0"
+        "phpunit/phpunit": "^10.5",
+        "php-coveralls/php-coveralls": "^2.7"
     },
     "autoload": {
         "psr-4": {
             "RonasIT\\TelescopeExtension\\": "src/"
-        }
+        },
+        "exclude-from-classmap": [
+            "src/Tests/"
+        ]
     },
     "extra": {
         "laravel": {
