@@ -16,10 +16,6 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
     {
         AboutCommand::add('Telescope Extension', fn () => ['Version' => '0.1.0']);
 
-        $this->publishes([
-            __DIR__.'/../config/telescope-extension.php' => config_path('telescope-extension.php'),
-        ]);
-
         if ($this->app->runningInConsole()) {
             $this->commands([
                 TelescopePrune::class,
@@ -45,6 +41,10 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
         $this->app->singleton(
             PrunableRepository::class, TelescopeRepository::class
         );
+
+        /*$this->app->singleton(
+            PruneCommand::class, TelescopePrune::class
+        );*/
 
         $this->app->when(TelescopeRepository::class)
             ->needs('$connection')

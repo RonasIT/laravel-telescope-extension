@@ -11,10 +11,6 @@ use Throwable;
 
 class TelescopePrune extends Command
 {
-    //php artisan telescope:prune
-    //--set-hours=requests:240,queries:24,unresolved-exceptions:480
-    //--hours=100
-
     const UNRESOLVED_EXCEPTION = 'unresolved_exception';
     const RESOLVED_EXCEPTION = 'resolved_exception';
 
@@ -53,20 +49,22 @@ class TelescopePrune extends Command
 
     protected $description = 'Command description';
 
-    protected array $expirationDates = [];
+    protected array $expirationHours = [];
 
-    protected Carbon $defaultExpirationDate;
+    protected int $defaultExpirationHours;
 
     public function handle(): void
     {
-        try {
+        $this->defaultExpirationHours = 0;
+
+        //try {
             $this->validateSetHoursOption();
             $this->validateHoursOption();
             $this->pruneSetHours();
             $this->pruneHours();
-        } catch (Throwable $exception) {
-            $this->error($exception->getMessage());
-        }
+        //} catch (Throwable $exception) {
+          //  $this->error($exception->getMessage());
+        //}
     }
 
     protected function validateSetHoursOption(): void
@@ -83,44 +81,45 @@ class TelescopePrune extends Command
                     throw new Exception("Incorrect value '{$typeHour}' of the 'set-hours' option.");
                 }
 
-                [$type, $hour] = $parts;
+                [$type, $hours] = $parts;
 
                 if (!in_array($type, self::TYPES)) {
                     throw new Exception("Incorrect type value '{$type}'.");
                 }
 
-                if (!$hour) {
+                if (!$hours) {
                     throw new Exception("Hours value for '{$type}' type must be set.");
                 }
 
-                if (!is_numeric($hour)) {
+                if (!is_numeric($hours)) {
                     throw new Exception("Hours value for '{$type}' type must be a number.");
                 }
 
-                $this->expirationDates[$type] = Carbon::now()->subHours($hour);
+                $this->expirationHours[$type] = $hours;
             }
         }
     }
 
     protected function validateHoursOption(): void
     {
-        $value = $this->option('hours');
+        $hours = $this->option('hours');
 
-        if ($value) {
-            if (!is_numeric($value)) {
-                throw new Exception('Hours value must be a number.');
+        if ($hours) {
+            if (!is_numeric($hours)) {
+                throw new Exception('Hours hours must be a number.');
             }
 
-            $this->defaultExpirationDate = Carbon::now()->subHours($value);
+            $this->defaultExpirationHours = $hours;
         }
     }
 
     protected function pruneSetHours(): void
     {
-        if ($this->expirationDates) {
-            foreach ($this->expirationDates as $type => $expirationDate) {
-                $this->info("Pruning records of type '{$type}' older than {$expirationDate} hours...");
+        if ($this->expirationHours) {
+            foreach ($this->expirationHours as $type => $hours) {
+                $this->info("Pruning records of type '{$type}' older than {$hours} hours...");
 
+                $expirationDate = Carbon::now()->subHours($hours);
                 $count = app(TelescopeRepository::class)->pruneByEventType([$type], $expirationDate);
 
                 $this->info("Deleted {$count} records.");
@@ -130,25 +129,31 @@ class TelescopePrune extends Command
 
     protected function pruneHours(): void
     {
-        if (!empty($this->defaultExpirationDate)) {
-            $repository = app(TelescopeRepository::class);
+        $repository = app(TelescopeRepository::class);
 
-            $this->info("Pruning records of other types older than {$this->defaultExpirationDate} hours...");
+        if (!empty($this->defaultExpirationHours)) {
+            $defaultExpirationDate = Carbon::now()->subHours($this->defaultExpirationHours);
 
-            if ($this->expirationDates) {
+            $this->info("Pruning records of other types older than {$this->defaultExpirationHours} hours...");
+
+            if ($this->expirationHours) {
                 $types = $this->filterTypes();
-                $count = $repository->pruneByEventType($types, $this->defaultExpirationDate);
+                $count = $repository->pruneByEventType($types, $defaultExpirationDate);
             } else {
-                $count = $repository->prune($this->defaultExpirationDate);
+                $count = $repository->prune($defaultExpirationDate);
             }
 
             $this->info("Deleted {$count} records.");
+        } elseif (!$this->expirationHours) {
+            $repository->clear();
+
+            $this->info("Deleted all records.");
         }
     }
 
     protected function filterTypes(): array
     {
-        $excludeTypes = array_keys($this->expirationDates);
+        $excludeTypes = array_keys($this->expirationHours);
         $types = array_diff(self::COMMON_TYPES, $excludeTypes);
 
         if (

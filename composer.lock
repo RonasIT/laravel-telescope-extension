@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0fa37f7a57b7253547dd160727686c8c",
+    "content-hash": "12ff430336f416a1949a6befe22c413e",
     "packages": [
         {
             "name": "brick/math",
@@ -5690,6 +5690,129 @@
                 "source": "https://github.com/mockery/mockery"
             },
             "time": "2024-05-16T03:13:13+00:00"
+        },
+        {
+            "name": "mpyw/laravel-database-mock",
+            "version": "v0.0.1-alpha5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mpyw/laravel-database-mock.git",
+                "reference": "3813d2342e7fd2992d1378c493fdc9573bc7d616"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mpyw/laravel-database-mock/zipball/3813d2342e7fd2992d1378c493fdc9573bc7d616",
+                "reference": "3813d2342e7fd2992d1378c493fdc9573bc7d616",
+                "shasum": ""
+            },
+            "require": {
+                "ext-pdo": "*",
+                "illuminate/database": "^9.0 || ^10.0 || ^11.0",
+                "illuminate/support": "^9.0 || ^10.0 || ^11.0",
+                "mpyw/mockery-pdo": "0.0.1-alpha7@alpha",
+                "php": "^7.3 || ^8.0"
+            },
+            "require-dev": {
+                "nilportugues/sql-query-formatter": "^1.2.2",
+                "orchestra/testbench": "*",
+                "orchestra/testbench-core": ">=7.0",
+                "phpunit/phpunit": ">=9.5"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Mpyw\\LaravelDatabaseMock\\DatabaseMockServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Mpyw\\LaravelDatabaseMock\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "mpyw",
+                    "email": "ryosuke_i_628@yahoo.co.jp"
+                }
+            ],
+            "description": "Database Mocking Library which mocks PDO underlying Laravel Connection classes",
+            "keywords": [
+                "database",
+                "eloquent",
+                "illuminate",
+                "laravel",
+                "mock",
+                "mocking",
+                "query",
+                "test",
+                "unit"
+            ],
+            "support": {
+                "issues": "https://github.com/mpyw/laravel-database-mock/issues",
+                "source": "https://github.com/mpyw/laravel-database-mock/tree/v0.0.1-alpha5"
+            },
+            "time": "2023-03-13T09:24:43+00:00"
+        },
+        {
+            "name": "mpyw/mockery-pdo",
+            "version": "v0.0.1-alpha7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mpyw/mockery-pdo.git",
+                "reference": "3e80a41fd08b7705a14ff260da5d6bf6afdf7cd9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mpyw/mockery-pdo/zipball/3e80a41fd08b7705a14ff260da5d6bf6afdf7cd9",
+                "reference": "3e80a41fd08b7705a14ff260da5d6bf6afdf7cd9",
+                "shasum": ""
+            },
+            "require": {
+                "ext-pdo": "*",
+                "mockery/mockery": "^1.3.3 || ^1.4.2",
+                "php": "^7.3 || ^8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Mpyw\\MockeryPDO\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "mpyw",
+                    "email": "ryosuke_i_628@yahoo.co.jp"
+                }
+            ],
+            "description": "BDD-style PDO Mocking Library for Mockery",
+            "keywords": [
+                "BDD",
+                "database",
+                "mock",
+                "mockery",
+                "mocking",
+                "pdo",
+                "test",
+                "testing"
+            ],
+            "support": {
+                "issues": "https://github.com/mpyw/mockery-pdo/issues",
+                "source": "https://github.com/mpyw/mockery-pdo/tree/v0.0.1-alpha7"
+            },
+            "time": "2021-11-13T19:09:22+00:00"
         },
         {
             "name": "myclabs/deep-copy",

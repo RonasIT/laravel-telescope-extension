@@ -4,14 +4,12 @@ namespace RonasIT\TelescopeExtension\Repositories;
 
 use DateTimeInterface;
 use Illuminate\Database\Query\Builder;
-use Illuminate\Support\Arr;
-use Laravel\Telescope\EntryType;
 use Laravel\Telescope\Storage\DatabaseEntriesRepository;
 use RonasIT\TelescopeExtension\Console\Commands\TelescopePrune;
 
 class TelescopeRepository extends DatabaseEntriesRepository
 {
-    protected array $pruneTypes;
+    protected array $pruneTypes = [];
 
     public function prune(DateTimeInterface $before): int
     {
@@ -27,7 +25,7 @@ class TelescopeRepository extends DatabaseEntriesRepository
                                 : "content::jsonb->>'resolved_at' is not null"
                         );
                     } else {
-                        $subQuery->orWhere('type', $this->pruneTypes);
+                        $subQuery->orWhere('type', $type);
                     }
                 }
             });
