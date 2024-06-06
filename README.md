@@ -1,5 +1,7 @@
 # Laravel Telescope Extension
 
+[![Coverage Status](https://coveralls.io/repos/github/RonasIT/laravel-telescope-extension/badge.svg?branch=main)](https://coveralls.io/github/RonasIT/laravel-telescope-extension?branch=main)
+
 The library extends the [Laravel Telescope's](https://github.com/laravel/telescope) prune command. 
 
 ## Installation
