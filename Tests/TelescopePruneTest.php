@@ -4,7 +4,6 @@ namespace RonasIT\TelescopeExtension\Tests;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Artisan;
-use Laravel\Telescope\Storage\DatabaseEntriesRepository;
 use Orchestra\Testbench\TestCase;
 use RonasIT\TelescopeExtension\Repositories\TelescopeRepository;
 use RonasIT\TelescopeExtension\TelescopeExtensionServiceProvider;
@@ -50,7 +49,6 @@ class TelescopePruneTest extends TestCase
             'prefix' => '',
         ]);
 
-        //$app->when(DatabaseEntriesRepository::class)
         $app->when(TelescopeRepository::class)
             ->needs('$connection')
             ->give('testbench');
@@ -122,9 +120,74 @@ class TelescopePruneTest extends TestCase
             ->assertExitCode(0);
     }
 
-    /*public function testPruneRequestsAndOthers()
-    {
-        Artisan::call('telescope:prune --set-hours=requests:6 --hours=2');
 
-    }*/
+    public function testPruneWithUnresolvedException()
+    {
+        $this->mockQueriesWithUnresolvedException();
+
+        $this->artisan('telescope:prune --set-hours=request:5,unresolved_exception:20,query:25 --hours=80')
+            ->expectsOutput("Pruning records of type 'request' older than 5 hours...")
+            ->expectsOutput('Deleted 200 records.')
+            ->expectsOutput("Pruning records of type 'unresolved_exception' older than 20 hours...")
+            ->expectsOutput('Deleted 32 records.')
+            ->expectsOutput("Pruning records of type 'query' older than 25 hours...")
+            ->expectsOutput('Deleted 50 records.')
+            ->expectsOutput('Pruning records of other types older than 80 hours...')
+            ->expectsOutput('Deleted 200 records.')
+            ->assertExitCode(0);
+    }
+
+    public function testPruneWithResolvedExceptionWithoutHours()
+    {
+        $this->mockQueriesWithResolvedExceptionWithoutHours();
+
+        $this->artisan('telescope:prune --set-hours=request:5,resolved_exception:10,query:25')
+            ->expectsOutput("Pruning records of type 'request' older than 5 hours...")
+            ->expectsOutput('Deleted 200 records.')
+            ->expectsOutput("Pruning records of type 'resolved_exception' older than 10 hours...")
+            ->expectsOutput('Deleted 15 records.')
+            ->expectsOutput("Pruning records of type 'query' older than 25 hours...")
+            ->expectsOutput('Deleted 50 records.')
+            ->assertExitCode(0);
+    }
+
+    public function testPruneValidateSetHoursType()
+    {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage("Incorrect type value 'incorrect'.");
+
+        $this->artisan('telescope:prune --set-hours=query:12,incorrect:22');
+    }
+
+    public function testPruneValidateSetHoursValueNotSet()
+    {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage("Incorrect value 'request' of the 'set-hours' option.");
+
+        $this->artisan('telescope:prune --set-hours=query:12,request');
+    }
+
+    public function testPruneValidateSetHoursValueEmpty()
+    {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage("Hours value for 'request' type must be set.");
+
+        $this->artisan('telescope:prune --set-hours=query:12,request:');
+    }
+
+    public function testPruneValidateSetHoursValueIsNotNumber()
+    {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage("Hours value for 'request' type must be a number.");
+
+        $this->artisan('telescope:prune --set-hours=query:12,request:ss');
+    }
+
+    public function testPruneValidateHoursValueIsNotNumber()
+    {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Hours hours must be a number.');
+
+        $this->artisan('telescope:prune --set-hours=query:12,request:34 --hours=ss');
+    }
 }

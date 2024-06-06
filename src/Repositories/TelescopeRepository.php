@@ -4,6 +4,7 @@ namespace RonasIT\TelescopeExtension\Repositories;
 
 use DateTimeInterface;
 use Illuminate\Database\Query\Builder;
+use Laravel\Telescope\EntryType;
 use Laravel\Telescope\Storage\DatabaseEntriesRepository;
 use RonasIT\TelescopeExtension\Console\Commands\TelescopePrune;
 
@@ -19,11 +20,15 @@ class TelescopeRepository extends DatabaseEntriesRepository
             ->where(function(Builder $subQuery) {
                 foreach ($this->pruneTypes as $type) {
                     if (in_array($type, TelescopePrune::EXCEPTION_TYPES)) {
-                        $subQuery->orWhereRaw(
-                            ($type === TelescopePrune::UNRESOLVED_EXCEPTION)
-                                ? "content::jsonb->>'resolved_at' is null"
-                                : "content::jsonb->>'resolved_at' is not null"
-                        );
+                        $subQuery->orWhere(function ($subSubQuery) use ($type) {
+                            $subSubQuery
+                                ->where('type', EntryType::EXCEPTION)
+                                ->whereRaw(
+                                    ($type === TelescopePrune::UNRESOLVED_EXCEPTION)
+                                        ? "content::jsonb->>'resolved_at' is null"
+                                        : "content::jsonb->>'resolved_at' is not null"
+                                );
+                        });
                     } else {
                         $subQuery->orWhere('type', $type);
                     }

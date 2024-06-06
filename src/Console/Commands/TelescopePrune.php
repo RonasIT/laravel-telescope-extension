@@ -7,7 +7,6 @@ use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Laravel\Telescope\EntryType;
 use Exception;
-use Throwable;
 
 class TelescopePrune extends Command
 {
@@ -57,14 +56,10 @@ class TelescopePrune extends Command
     {
         $this->defaultExpirationHours = 0;
 
-        //try {
-            $this->validateSetHoursOption();
-            $this->validateHoursOption();
-            $this->pruneSetHours();
-            $this->pruneHours();
-        //} catch (Throwable $exception) {
-          //  $this->error($exception->getMessage());
-        //}
+        $this->validateSetHoursOption();
+        $this->validateHoursOption();
+        $this->pruneSetHours();
+        $this->pruneHours();
     }
 
     protected function validateSetHoursOption(): void
@@ -160,7 +155,7 @@ class TelescopePrune extends Command
             in_array(self::UNRESOLVED_EXCEPTION, $excludeTypes)
             || in_array(self::RESOLVED_EXCEPTION, $excludeTypes)
         ) {
-            $types = array_diff($types, EntryType::EXCEPTION);
+            $types = array_diff($types, [EntryType::EXCEPTION]);
 
             if (!in_array(self::EXCEPTION_TYPES, $excludeTypes)) {
                 $types = [

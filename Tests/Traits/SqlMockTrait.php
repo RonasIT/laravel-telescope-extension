@@ -6,6 +6,7 @@ use Illuminate\Support\Carbon;
 use Laravel\Telescope\EntryType;
 use Mpyw\LaravelDatabaseMock\Facades\DBMock;
 use Mpyw\LaravelDatabaseMock\Proxies\SingleConnectionProxy;
+use RonasIT\TelescopeExtension\Console\Commands\TelescopePrune;
 
 trait SqlMockTrait
 {
@@ -185,6 +186,143 @@ trait SqlMockTrait
                 EntryType::GATE,
                 EntryType::VIEW
             ]
+        );
+    }
+
+    protected function mockQueriesWithUnresolvedException(): void
+    {
+        $this->mockDelete(
+            'delete from "telescope_entries" where "rowid" in (select "telescope_entries"."rowid" '
+            . 'from "telescope_entries" where "created_at" < ? and ("type" = ?) limit 1000)',
+            [Carbon::now()->subHours(5)->toDateTimeString(), EntryType::REQUEST],
+            200
+        );
+
+        $this->mockDelete(
+            'delete from "telescope_entries" where "rowid" in (select "telescope_entries"."rowid" '
+            . 'from "telescope_entries" where "created_at" < ? and ("type" = ?) limit 1000)',
+            [Carbon::now()->subHours(5)->toDateTimeString(), EntryType::REQUEST]
+        );
+
+        $this->mockDelete(
+            'delete from "telescope_entries" where "rowid" in (select "telescope_entries"."rowid" '
+            . 'from "telescope_entries" where "created_at" < ? and (("type" = ? '
+            . 'and content::jsonb->>\'resolved_at\' is null)) limit 1000)',
+            [Carbon::now()->subHours(20)->toDateTimeString(), EntryType::EXCEPTION],
+            32
+        );
+
+        $this->mockDelete(
+            'delete from "telescope_entries" where "rowid" in (select "telescope_entries"."rowid" '
+            . 'from "telescope_entries" where "created_at" < ? and (("type" = ? '
+            . 'and content::jsonb->>\'resolved_at\' is null)) limit 1000)',
+            [Carbon::now()->subHours(20)->toDateTimeString(), EntryType::EXCEPTION]
+        );
+
+        $this->mockDelete(
+            'delete from "telescope_entries" where "rowid" in (select "telescope_entries"."rowid" '
+            . 'from "telescope_entries" where "created_at" < ? and ("type" = ?) limit 1000)',
+            [Carbon::now()->subHours(25)->toDateTimeString(), EntryType::QUERY],
+            50
+        );
+
+        $this->mockDelete(
+            'delete from "telescope_entries" where "rowid" in (select "telescope_entries"."rowid" '
+            . 'from "telescope_entries" where "created_at" < ? and ("type" = ?) limit 1000)',
+            [Carbon::now()->subHours(25)->toDateTimeString(), EntryType::QUERY]
+        );
+
+        $this->mockDelete(
+            'delete from "telescope_entries" where "rowid" in (select "telescope_entries"."rowid" '
+            . 'from "telescope_entries" where "created_at" < ? and ("type" = ? or "type" = ? or '
+            . '"type" = ? or "type" = ? or "type" = ? or "type" = ? or "type" = ? or "type" = ? or '
+            . '"type" = ? or "type" = ? or "type" = ? or "type" = ? or "type" = ? or ("type" = ? and content::jsonb->>\'resolved_at\' is not null)) limit 1000)',
+            [
+                Carbon::now()->subHours(80)->toDateTimeString(),
+                EntryType::BATCH,
+                EntryType::CACHE,
+                EntryType::DUMP,
+                EntryType::EVENT,
+                EntryType::JOB,
+                EntryType::LOG,
+                EntryType::MAIL,
+                EntryType::MODEL,
+                EntryType::NOTIFICATION,
+                EntryType::REDIS,
+                EntryType::SCHEDULED_TASK,
+                EntryType::GATE,
+                EntryType::VIEW,
+                EntryType::EXCEPTION
+            ],
+            200
+        );
+
+        $this->mockDelete(
+            'delete from "telescope_entries" where "rowid" in (select "telescope_entries"."rowid" '
+            . 'from "telescope_entries" where "created_at" < ? and ("type" = ? or "type" = ? or '
+            . '"type" = ? or "type" = ? or "type" = ? or "type" = ? or "type" = ? or "type" = ? or '
+            . '"type" = ? or "type" = ? or "type" = ? or "type" = ? or "type" = ? or ("type" = ? and content::jsonb->>\'resolved_at\' is not null)) limit 1000)',
+            [
+                Carbon::now()->subHours(80)->toDateTimeString(),
+                EntryType::BATCH,
+                EntryType::CACHE,
+                EntryType::DUMP,
+                EntryType::EVENT,
+                EntryType::JOB,
+                EntryType::LOG,
+                EntryType::MAIL,
+                EntryType::MODEL,
+                EntryType::NOTIFICATION,
+                EntryType::REDIS,
+                EntryType::SCHEDULED_TASK,
+                EntryType::GATE,
+                EntryType::VIEW,
+                EntryType::EXCEPTION
+            ]
+        );
+    }
+
+    protected function mockQueriesWithResolvedExceptionWithoutHours(): void
+    {
+        $this->mockDelete(
+            'delete from "telescope_entries" where "rowid" in (select "telescope_entries"."rowid" '
+            . 'from "telescope_entries" where "created_at" < ? and ("type" = ?) limit 1000)',
+            [Carbon::now()->subHours(5)->toDateTimeString(), EntryType::REQUEST],
+            200
+        );
+
+        $this->mockDelete(
+            'delete from "telescope_entries" where "rowid" in (select "telescope_entries"."rowid" '
+            . 'from "telescope_entries" where "created_at" < ? and ("type" = ?) limit 1000)',
+            [Carbon::now()->subHours(5)->toDateTimeString(), EntryType::REQUEST]
+        );
+
+        $this->mockDelete(
+            'delete from "telescope_entries" where "rowid" in (select "telescope_entries"."rowid" '
+            . 'from "telescope_entries" where "created_at" < ? and (("type" = ? '
+            . 'and content::jsonb->>\'resolved_at\' is not null)) limit 1000)',
+            [Carbon::now()->subHours(10)->toDateTimeString(), EntryType::EXCEPTION],
+            15
+        );
+
+        $this->mockDelete(
+            'delete from "telescope_entries" where "rowid" in (select "telescope_entries"."rowid" '
+            . 'from "telescope_entries" where "created_at" < ? and (("type" = ? '
+            . 'and content::jsonb->>\'resolved_at\' is not null)) limit 1000)',
+            [Carbon::now()->subHours(10)->toDateTimeString(), EntryType::EXCEPTION]
+        );
+
+        $this->mockDelete(
+            'delete from "telescope_entries" where "rowid" in (select "telescope_entries"."rowid" '
+            . 'from "telescope_entries" where "created_at" < ? and ("type" = ?) limit 1000)',
+            [Carbon::now()->subHours(25)->toDateTimeString(), EntryType::QUERY],
+            50
+        );
+
+        $this->mockDelete(
+            'delete from "telescope_entries" where "rowid" in (select "telescope_entries"."rowid" '
+            . 'from "telescope_entries" where "created_at" < ? and ("type" = ?) limit 1000)',
+            [Carbon::now()->subHours(25)->toDateTimeString(), EntryType::QUERY]
         );
     }
 
