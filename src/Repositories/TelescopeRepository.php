@@ -12,7 +12,7 @@ class TelescopeRepository extends DatabaseEntriesRepository
 {
     protected array $pruneTypes = [];
 
-    public function prune(DateTimeInterface $before, $keepExceptions): int
+    public function prune(DateTimeInterface $before, $keepExceptions = null): int
     {
         $query = $this
             ->table('telescope_entries')
