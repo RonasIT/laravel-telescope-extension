@@ -12,12 +12,12 @@ class TelescopeRepository extends DatabaseEntriesRepository
 {
     protected array $pruneTypes = [];
 
-    public function prune(DateTimeInterface $before): int
+    public function prune(DateTimeInterface $before, $keepExceptions): int
     {
         $query = $this
             ->table('telescope_entries')
             ->where('created_at', '<', $before)
-            ->where(function(Builder $subQuery) {
+            ->where(function (Builder $subQuery) {
                 foreach ($this->pruneTypes as $type) {
                     if (in_array($type, TelescopePrune::EXCEPTION_TYPES)) {
                         $subQuery->orWhere(function ($subSubQuery) use ($type) {
