@@ -1,7 +1,7 @@
 {
     "name": "ronasit/laravel-telescope-extension",
     "description": "Laravel library for Telescope",
-    "keywords": ["telescope", "laravel", "prune"],
+    "keywords": ["telescope", "laravel"],
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -12,14 +12,14 @@
     ],
     "require": {
         "php": "^8.1",
-        "laravel/framework": "^11.31",
-        "laravel/telescope": "^4.0"
+        "laravel/framework": "^11",
+        "laravel/telescope": "^5"
     },
     "require-dev": {
-        "orchestra/testbench": "^7.0|^8.0",
         "phpunit/phpunit": "^10.5",
         "php-coveralls/php-coveralls": "^2.7",
-        "mpyw/laravel-database-mock": "^0.0.1@alpha"
+        "mpyw/laravel-database-mock": "^0.0.1@alpha",
+        "orchestra/testbench": "^9.8"
     },
     "autoload": {
         "psr-4": {
