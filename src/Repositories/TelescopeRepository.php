@@ -4,6 +4,9 @@ namespace RonasIT\TelescopeExtension\Repositories;
 
 use DateTimeInterface;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Laravel\Telescope\EntryType;
 use Laravel\Telescope\Storage\DatabaseEntriesRepository;
 use RonasIT\TelescopeExtension\Console\Commands\TelescopePrune;
@@ -57,5 +60,34 @@ class TelescopeRepository extends DatabaseEntriesRepository
     {
         $this->table('telescope_entries')->delete();
         $this->table('telescope_monitoring')->delete();
+    }
+
+    public function store(Collection $entries): void
+    {
+        if ($entries->isEmpty()) {
+            return;
+        }
+
+        [$exceptions, $entries] = $entries->partition->isException();
+
+        $this->storeExceptions($exceptions);
+
+        $table = $this->table('telescope_entries');
+
+        $entries->chunk($this->chunkSize)->each(function ($chunked) use ($table) {
+            $table->insert($chunked->map(function ($entry) {
+                $content = json_encode($entry->content, JSON_INVALID_UTF8_SUBSTITUTE);
+
+                if (DB::getDefaultConnection() === 'pgsql') {
+                    $content = Str::remove(['\u0000*', '\u0000'], $content);
+                }
+
+                $entry->content = $content;
+
+                return $entry->toArray();
+            })->toArray());
+        });
+
+        $this->storeTags($entries->pluck('tags', 'uuid'));
     }
 }
