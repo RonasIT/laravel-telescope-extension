@@ -5,14 +5,16 @@ namespace RonasIT\TelescopeExtension\Repositories;
 use DateTimeInterface;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Laravel\Telescope\EntryType;
 use Laravel\Telescope\Storage\DatabaseEntriesRepository;
 use RonasIT\TelescopeExtension\Console\Commands\TelescopePrune;
+use RonasIT\TelescopeExtension\Traits\TelescopeTrait;
 
 class TelescopeRepository extends DatabaseEntriesRepository
 {
+    use TelescopeTrait;
+
     protected array $pruneTypes = [];
 
     public function prune(DateTimeInterface $before, $keepExceptions = null): int
@@ -78,7 +80,7 @@ class TelescopeRepository extends DatabaseEntriesRepository
             $table->insert($chunked->map(function ($entry) {
                 $content = json_encode($entry->content, JSON_INVALID_UTF8_SUBSTITUTE);
 
-                if (DB::getDefaultConnection() === 'pgsql') {
+                if ($this->getDatabaseDriver() === 'pgsql') {
                     $content = Str::remove(['\u0000*', '\u0000'], $content);
                 }
 

@@ -5,17 +5,15 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
+use RonasIT\TelescopeExtension\Traits\TelescopeTrait;
 
 return new class extends Migration
 {
-    public function getConnection(): ?string
-    {
-        return config('telescope.storage.database.connection');
-    }
+    use TelescopeTrait;
 
     public function up()
     {
-        if ($this->getConnection() === 'pgsql') {
+        if ($this->getDatabaseDriver() === 'pgsql') {
             Schema::table('telescope_entries', function (Blueprint $table) {
                 $table->jsonb('content_temp')->nullable();
             });
@@ -43,7 +41,7 @@ return new class extends Migration
 
     public function down()
     {
-        if ($this->getConnection() === 'pgsql') {
+        if ($this->getDatabaseDriver() === 'pgsql') {
             Schema::table('telescope_entries', function (Blueprint $table) {
                 $table->longText('content_temp')->nullable();
             });
