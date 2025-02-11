@@ -8,9 +8,14 @@ use Illuminate\Support\Str;
 
 return new class extends Migration
 {
+    public function getConnection(): ?string
+    {
+        return config('telescope.storage.database.connection');
+    }
+
     public function up()
     {
-        if (DB::getDefaultConnection() === 'pgsql') {
+        if ($this->getConnection() === 'pgsql') {
             Schema::table('telescope_entries', function (Blueprint $table) {
                 $table->jsonb('content_temp')->nullable();
             });
@@ -38,7 +43,7 @@ return new class extends Migration
 
     public function down()
     {
-        if (DB::getDefaultConnection() === 'pgsql') {
+        if ($this->getConnection() === 'pgsql') {
             Schema::table('telescope_entries', function (Blueprint $table) {
                 $table->longText('content_temp')->nullable();
             });
