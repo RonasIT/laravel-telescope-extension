@@ -80,7 +80,7 @@ class TelescopeRepository extends DatabaseEntriesRepository
             $table->insert($chunked->map(function ($entry) {
                 $content = json_encode($entry->content, JSON_INVALID_UTF8_SUBSTITUTE);
 
-                if ($this->getDatabaseDriver() === 'pgsql') {
+                if ($this->isPostgreDatabaseDriver()) {
                     $content = Str::remove(['\u0000*', '\u0000'], $content);
                 }
 

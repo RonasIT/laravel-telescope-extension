@@ -10,4 +10,9 @@ trait TelescopeTrait
 
         return config("database.connections.{$connection}.driver");
     }
+
+    public function isPostgreDatabaseDriver(): bool
+    {
+        return $this->getDatabaseDriver() === 'pgsql';
+    }
 }

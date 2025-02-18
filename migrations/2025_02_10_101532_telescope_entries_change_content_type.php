@@ -13,7 +13,7 @@ return new class extends Migration
 
     public function up()
     {
-        if ($this->getDatabaseDriver() === 'pgsql') {
+        if ($this->isPostgreDatabaseDriver()) {
             Schema::table('telescope_entries', function (Blueprint $table) {
                 $table->jsonb('content_temp')->nullable();
             });
@@ -41,7 +41,7 @@ return new class extends Migration
 
     public function down()
     {
-        if ($this->getDatabaseDriver() === 'pgsql') {
+        if ($this->isPostgreDatabaseDriver()) {
             Schema::table('telescope_entries', function (Blueprint $table) {
                 $table->longText('content_temp')->nullable();
             });
