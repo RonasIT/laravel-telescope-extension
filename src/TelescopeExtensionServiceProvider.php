@@ -8,9 +8,7 @@ use Laravel\Telescope\Contracts\ClearableRepository;
 use Laravel\Telescope\Contracts\EntriesRepository;
 use Laravel\Telescope\Contracts\PrunableRepository;
 use RonasIT\TelescopeExtension\Console\Commands\TelescopePrune;
-use RonasIT\TelescopeExtension\Filters\TelescopeFilter;
 use RonasIT\TelescopeExtension\Repositories\TelescopeRepository;
-use Laravel\Telescope\Telescope;
 
 class TelescopeExtensionServiceProvider extends ServiceProvider
 {
@@ -28,8 +26,6 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->registerDatabaseDriver();
-
-        Telescope::filter((new TelescopeFilter())->apply());
     }
 
     protected function registerDatabaseDriver(): void

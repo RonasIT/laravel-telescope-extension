@@ -3,12 +3,13 @@
 namespace RonasIT\TelescopeExtension\Filters;
 
 use Closure;
+use Illuminate\Support\Arr;
 use Laravel\Telescope\EntryType;
 use Laravel\Telescope\IncomingEntry;
 use Laravel\Telescope\Watchers\RequestWatcher;
 use Symfony\Component\HttpFoundation\Response;
 
-class TelescopeFilter
+abstract class AbstractFilter
 {
     protected readonly array $requestWatcherConfig;
 
@@ -17,16 +18,7 @@ class TelescopeFilter
         $this->requestWatcherConfig = config('telescope.watchers.' . RequestWatcher::class);
     }
 
-    public function apply(): Closure
-    {
-        return fn (IncomingEntry $entry) => $this->isException($entry)
-            || $this->isFailedRequest($entry)
-            || $this->isFailedHttpRequest($entry)
-            || $entry->isSlowQuery()
-            || $this->isJob($entry)
-            || $entry->isScheduledTask()
-            || $entry->hasMonitoredTag();
-    }
+    public abstract function apply(): Closure;
 
     protected function isException(IncomingEntry $entry): bool
     {
@@ -37,8 +29,21 @@ class TelescopeFilter
     {
         $currentStatus = $entry->content['response_status'] ?? Response::HTTP_OK;
 
-        return $entry->isRequest()
-            && ($entry->content['duration'] > $this->requestWatcherConfig['max_duration'] * 1000 || $currentStatus >= Response::HTTP_BAD_REQUEST);
+        return !$this->isIgnorableRequest($entry) && $currentStatus >= Response::HTTP_BAD_REQUEST;
+    }
+
+    protected function isIgnorableRequest(IncomingEntry $entry): bool
+    {
+        return !$entry->isRequest()
+            || $this->hasIgnorableMessage($entry->content);
+    }
+
+    protected function hasIgnorableMessage(array $content): bool
+    {
+        $errorMessage = Arr::get($content, 'response.message');
+        $ignorableMessages = config('telescope.watchers.' . RequestWatcher::class . 'ignore_error_messages', []);
+
+        return in_array($errorMessage, $ignorableMessages);
     }
 
     protected function isFailedHttpRequest(IncomingEntry $entry): bool
