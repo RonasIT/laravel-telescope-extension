@@ -6,7 +6,6 @@ use Illuminate\Support\Carbon;
 use Laravel\Telescope\EntryType;
 use Mpyw\LaravelDatabaseMock\Facades\DBMock;
 use Mpyw\LaravelDatabaseMock\Proxies\SingleConnectionProxy;
-use RonasIT\TelescopeExtension\Console\Commands\TelescopePrune;
 
 trait SqlMockTrait
 {
@@ -323,6 +322,13 @@ trait SqlMockTrait
             'delete from "telescope_entries" where "rowid" in (select "telescope_entries"."rowid" '
             . 'from "telescope_entries" where "created_at" < ? and ("type" = ?) limit 1000)',
             [Carbon::now()->subHours(25)->toDateTimeString(), EntryType::QUERY]
+        );
+    }
+
+    protected function mockQueriesWithCompletedJobWithoutHours(): void
+    {
+        $this->mockDelete(
+            'delete from "telescope_entries" where "rowid" in (select "telescope_entries"."rowid" from "telescope_entries" where "created_at" < 2018-11-11 06:11:11 and (("type" = completed_job and json_extract("content", $."status") = processed)) limit 1000',
         );
     }
 

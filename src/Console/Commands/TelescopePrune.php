@@ -30,6 +30,7 @@ class TelescopePrune extends Command
         EntryType::SCHEDULED_TASK,
         EntryType::GATE,
         EntryType::VIEW,
+        self::COMPLETED_JOB_TYPE,
     ];
 
     const EXCEPTION_TYPES = [
@@ -41,6 +42,8 @@ class TelescopePrune extends Command
         ...self::COMMON_TYPES,
         ...self::EXCEPTION_TYPES,
     ];
+
+    const COMPLETED_JOB_TYPE = 'completed_job';
 
     protected $signature = 'telescope:prune
                             {--set-hours= : description}

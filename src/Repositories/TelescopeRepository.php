@@ -29,6 +29,11 @@ class TelescopeRepository extends DatabaseEntriesRepository
                                         : "content::jsonb->>'resolved_at' is not null"
                                 );
                         });
+                    } elseif ($type === TelescopePrune::COMPLETED_JOB_TYPE) {
+                        $subQuery->orWhere(fn ($subSubQuery) => $subSubQuery
+                            ->where('type', EntryType::JOB)
+                            ->whereRaw("content::jsonb->>'status' = 'processed'")
+                        );
                     } else {
                         $subQuery->orWhere('type', $type);
                     }

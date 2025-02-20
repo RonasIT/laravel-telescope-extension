@@ -150,6 +150,14 @@ class TelescopePruneTest extends TestCase
             ->assertExitCode(0);
     }
 
+    public function testPruneCompletedJob()
+    {
+        $this->mockQueriesWithCompletedJobWithoutHours();
+
+        $this->artisan('telescope:prune --set-hours=completed_job:5')
+            ->assertExitCode(0);
+    }
+
     public function testPruneValidateSetHoursType()
     {
         $this->expectException('Exception');
