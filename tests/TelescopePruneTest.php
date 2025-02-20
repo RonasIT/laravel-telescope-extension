@@ -150,11 +150,35 @@ class TelescopePruneTest extends TestCase
             ->assertExitCode(0);
     }
 
-    public function testPruneCompletedJob()
+    public function testPruneWithCompletedJob()
+    {
+        $this->mockQueriesWithCompletedJob();
+
+        $this
+            ->artisan('telescope:prune --set-hours=request:5,completed_job:10,query:25 --hours=80')
+            ->expectsOutput("Pruning records of type 'request' older than 5 hours...")
+            ->expectsOutput('Deleted 200 records.')
+            ->expectsOutput("Pruning records of type 'completed_job' older than 10 hours...")
+            ->expectsOutput('Deleted 15 records.')
+            ->expectsOutput("Pruning records of type 'query' older than 25 hours...")
+            ->expectsOutput('Deleted 50 records.')
+            ->expectsOutput('Pruning records of other types older than 80 hours...')
+            ->expectsOutput('Deleted 200 records.')
+            ->assertExitCode(0);
+    }
+
+    public function testPruneWithCompletedJobWithoutHours()
     {
         $this->mockQueriesWithCompletedJobWithoutHours();
 
-        $this->artisan('telescope:prune --set-hours=completed_job:5')
+        $this
+            ->artisan('telescope:prune --set-hours=request:5,completed_job:10,query:25')
+            ->expectsOutput("Pruning records of type 'request' older than 5 hours...")
+            ->expectsOutput('Deleted 200 records.')
+            ->expectsOutput("Pruning records of type 'completed_job' older than 10 hours...")
+            ->expectsOutput('Deleted 15 records.')
+            ->expectsOutput("Pruning records of type 'query' older than 25 hours...")
+            ->expectsOutput('Deleted 50 records.')
             ->assertExitCode(0);
     }
 
