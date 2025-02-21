@@ -29,6 +29,26 @@ class ProductionFilterTest extends TestCase
         $this->assertTrue($closure(new IncomingEntry([])));
     }
 
+    public function testExceptionProdEnv()
+    {
+        $this->mockEnvironment('production');
+
+        $filter = new ProductionFilter();
+
+        $entry = Mockery::mock(IncomingEntry::class);
+        $entry->type = EntryType::EXCEPTION;
+
+        $entry->shouldReceive('isRequest')->andReturnFalse();
+        $entry->shouldReceive('isClientRequest')->andReturnFalse();
+        $entry->shouldReceive('isSlowQuery')->andReturnFalse();
+        $entry->shouldReceive('isScheduledTask')->andReturnFalse();
+        $entry->shouldReceive('hasMonitoredTag')->andReturnFalse();
+
+        $closure = $filter->apply();
+
+        $this->assertTrue($closure($entry));
+    }
+
     public function testSuccessRequestProdEnv()
     {
         $this->mockEnvironment('production');
