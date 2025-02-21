@@ -242,8 +242,6 @@ class ProductionFilterTest extends TestCase
     {
         $this->mockEnvironment('production');
 
-        config(['telescope.watchers.' . RequestWatcher::class => []]);
-
         $filter = new ProductionFilter();
 
         $entry = Mockery::mock(IncomingEntry::class);
