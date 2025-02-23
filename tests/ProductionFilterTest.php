@@ -29,6 +29,17 @@ class ProductionFilterTest extends TestCase
         $this->assertTrue($closure(new IncomingEntry([])));
     }
 
+    public function testLocalEnv()
+    {
+        $this->mockEnvironment('local');
+
+        $filter = new ProductionFilter();
+
+        $closure = $filter->apply();
+
+        $this->assertTrue($closure(new IncomingEntry([])));
+    }
+
     public function testExceptionProdEnv()
     {
         $this->mockEnvironment('production');
