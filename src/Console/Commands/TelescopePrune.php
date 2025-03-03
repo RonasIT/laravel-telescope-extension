@@ -12,6 +12,7 @@ class TelescopePrune extends Command
 {
     const UNRESOLVED_EXCEPTION = 'unresolved_exception';
     const RESOLVED_EXCEPTION = 'resolved_exception';
+    const COMPLETED_JOB_TYPE = 'completed_job';
 
     const COMMON_TYPES = [
         EntryType::BATCH,
@@ -42,8 +43,6 @@ class TelescopePrune extends Command
         ...self::COMMON_TYPES,
         ...self::EXCEPTION_TYPES,
     ];
-
-    const COMPLETED_JOB_TYPE = 'completed_job';
 
     protected $signature = 'telescope:prune
                             {--set-hours= : description}
