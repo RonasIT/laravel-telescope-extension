@@ -21,15 +21,15 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
                 TelescopePrune::class,
             ]);
         }
+
+        $this->publishesMigrations([
+            __DIR__ . '/../migrations' => database_path('migrations'),
+        ]);
     }
 
     public function register(): void
     {
         $this->registerDatabaseDriver();
-
-        $this->publishesMigrations([
-            __DIR__ . '/../migrations' => database_path('migrations'),
-        ]);
     }
 
     protected function registerDatabaseDriver(): void
