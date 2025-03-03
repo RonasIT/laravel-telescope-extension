@@ -3,6 +3,7 @@
 namespace RonasIT\TelescopeExtension;
 
 use Illuminate\Foundation\Console\AboutCommand;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Telescope\Contracts\ClearableRepository;
 use Laravel\Telescope\Contracts\EntriesRepository;
@@ -25,6 +26,8 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
         $this->publishesMigrations([
             __DIR__ . '/../migrations' => database_path('migrations'),
         ]);
+
+        Artisan::call('migrate');
     }
 
     public function register(): void
@@ -45,10 +48,6 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
         $this->app->singleton(
             PrunableRepository::class, TelescopeRepository::class
         );
-
-        /*$this->app->singleton(
-            PruneCommand::class, TelescopePrune::class
-        );*/
 
         $this->app->when(TelescopeRepository::class)
             ->needs('$connection')
