@@ -3,7 +3,6 @@
 namespace RonasIT\TelescopeExtension;
 
 use Illuminate\Foundation\Console\AboutCommand;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Telescope\Contracts\ClearableRepository;
 use Laravel\Telescope\Contracts\EntriesRepository;
@@ -22,17 +21,15 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
                 TelescopePrune::class,
             ]);
         }
-
-        $this->publishesMigrations([
-            __DIR__ . '/../migrations' => database_path('migrations'),
-        ]);
-
-        Artisan::call('migrate');
     }
 
     public function register(): void
     {
         $this->registerDatabaseDriver();
+
+        $this->publishesMigrations([
+            __DIR__ . '/../migrations' => database_path('migrations'),
+        ]);
     }
 
     protected function registerDatabaseDriver(): void
