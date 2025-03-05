@@ -20,7 +20,7 @@ return new class extends Migration
 
             DB::table('telescope_entries')
                 ->orderBy('sequence')
-                ->chunk(100, function ($telescopeEntries) {
+                ->chunk(10, function ($telescopeEntries) {
                     foreach ($telescopeEntries as $telescopeEntry) {
                         $content = Str::remove(['\u0000*', '\u0000'], $telescopeEntry->content);
 
