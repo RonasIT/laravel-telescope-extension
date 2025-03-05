@@ -22,9 +22,6 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
             ]);
         }
 
-        $this->publishesMigrations([
-            __DIR__ . '/../migrations' => database_path('migrations'),
-        ]);
 
         $this->loadMigrationsFrom(__DIR__ . '/../migrations');
     }
