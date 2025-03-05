@@ -22,9 +22,8 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
             ]);
         }
 
-        $this->publishesMigrations([
-            __DIR__ . '/../migrations' => database_path('migrations'),
-        ]);
+
+        $this->loadMigrationsFrom(__DIR__ . '/../migrations');
     }
 
     public function register(): void
@@ -45,10 +44,6 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
         $this->app->singleton(
             PrunableRepository::class, TelescopeRepository::class
         );
-
-        /*$this->app->singleton(
-            PruneCommand::class, TelescopePrune::class
-        );*/
 
         $this->app->when(TelescopeRepository::class)
             ->needs('$connection')
