@@ -57,3 +57,4 @@ Here is the list of possible `entry-type` values:
 | view                 |
 | unresolved_exception |
 | resolved_exception   |
+| completed_job        |
