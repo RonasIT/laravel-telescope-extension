@@ -4,9 +4,11 @@ namespace RonasIT\TelescopeExtension\Tests;
 
 use Laravel\Telescope\EntryType;
 use Laravel\Telescope\IncomingEntry;
+use Laravel\Telescope\Storage\DatabaseEntriesRepository;
 use Laravel\Telescope\Watchers\RequestWatcher;
 use RonasIT\TelescopeExtension\Filters\ProductionFilter;
-use Mockery;
+use RonasIT\TelescopeExtension\Repositories\TelescopeRepository;
+use RonasIT\TelescopeExtension\TelescopeExtensionServiceProvider;
 use Symfony\Component\HttpFoundation\Response;
 
 class ProductionFilterTest extends TestCase
@@ -16,6 +18,38 @@ class ProductionFilterTest extends TestCase
         parent::setUp();
 
         config(['telescope.watchers.' . RequestWatcher::class => []]);
+    }
+
+    protected function getPackageProviders($app): array
+    {
+        return [
+            TelescopeExtensionServiceProvider::class,
+        ];
+    }
+
+    protected function getEnvironmentSetUp($app): void
+    {
+        parent::getEnvironmentSetUp($app);
+
+        $config = $app->get('config');
+
+        $config->set('logging.default', 'errorlog');
+
+        $config->set('database.default', 'testbench');
+
+        $config->set('telescope.storage.database.connection', 'database');
+
+        $config->set('queue.batching.database', 'testbench');
+
+        $config->set('database.connections.testbench', [
+            'driver' => 'sqlite',
+            'database' => ':memory:',
+            'prefix' => '',
+        ]);
+
+        $app->when(TelescopeRepository::class)
+            ->needs('$connection')
+            ->give('testbench');
     }
 
     public function testDevEnv()
@@ -46,14 +80,8 @@ class ProductionFilterTest extends TestCase
 
         $filter = new ProductionFilter();
 
-        $entry = Mockery::mock(IncomingEntry::class);
-        $entry->type = EntryType::EXCEPTION;
-
-        $entry->shouldReceive('isRequest')->andReturnFalse();
-        $entry->shouldReceive('isClientRequest')->andReturnFalse();
-        $entry->shouldReceive('isSlowQuery')->andReturnFalse();
-        $entry->shouldReceive('isScheduledTask')->andReturnFalse();
-        $entry->shouldReceive('hasMonitoredTag')->andReturnFalse();
+        $entry = new IncomingEntry([]);
+        $entry->type(EntryType::EXCEPTION);
 
         $closure = $filter->apply();
 
@@ -66,13 +94,8 @@ class ProductionFilterTest extends TestCase
 
         $filter = new ProductionFilter();
 
-        $entry = Mockery::mock(IncomingEntry::class);
-
-        $entry->shouldReceive('isRequest')->andReturnTrue();
-        $entry->shouldReceive('isClientRequest')->andReturnFalse();
-        $entry->shouldReceive('isSlowQuery')->andReturnFalse();
-        $entry->shouldReceive('isScheduledTask')->andReturnFalse();
-        $entry->shouldReceive('hasMonitoredTag')->andReturnFalse();
+        $entry = new IncomingEntry([]);
+        $entry->type(EntryType::REQUEST);
 
         $closure = $filter->apply();
 
@@ -85,14 +108,8 @@ class ProductionFilterTest extends TestCase
 
         $filter = new ProductionFilter();
 
-        $entry = Mockery::mock(IncomingEntry::class);
-        $entry->content['response_status'] = Response::HTTP_BAD_REQUEST;
-
-        $entry->shouldReceive('isRequest')->andReturnTrue();
-        $entry->shouldReceive('isClientRequest')->andReturnFalse();
-        $entry->shouldReceive('isSlowQuery')->andReturnFalse();
-        $entry->shouldReceive('isScheduledTask')->andReturnFalse();
-        $entry->shouldReceive('hasMonitoredTag')->andReturnFalse();
+        $entry = new IncomingEntry(['response_status' => Response::HTTP_BAD_REQUEST]);
+        $entry->type(EntryType::EXCEPTION);
 
         $closure = $filter->apply();
 
@@ -109,16 +126,12 @@ class ProductionFilterTest extends TestCase
 
         $filter = new ProductionFilter();
 
-        $entry = Mockery::mock(IncomingEntry::class);
-        $entry->type = EntryType::REQUEST;
-        $entry->content['response_status'] = Response::HTTP_BAD_REQUEST;
-        $entry->content['response']['message'] = 'ignore_message';
+        $entry = new IncomingEntry([
+            'response_status' => Response::HTTP_BAD_REQUEST,
+            'response' => ['message' => 'ignore_message'],
+        ]);
 
-        $entry->shouldReceive('isRequest')->andReturnTrue();
-        $entry->shouldReceive('isClientRequest')->andReturnFalse();
-        $entry->shouldReceive('isSlowQuery')->andReturnFalse();
-        $entry->shouldReceive('isScheduledTask')->andReturnFalse();
-        $entry->shouldReceive('hasMonitoredTag')->andReturnFalse();
+        $entry->type(EntryType::REQUEST);
 
         $closure = $filter->apply();
 
@@ -135,16 +148,12 @@ class ProductionFilterTest extends TestCase
 
         $filter = new ProductionFilter();
 
-        $entry = Mockery::mock(IncomingEntry::class);
-        $entry->type = EntryType::REQUEST;
-        $entry->content['response_status'] = Response::HTTP_BAD_REQUEST;
-        $entry->content['response']['message'] = 'ignore_message';
+        $entry = new IncomingEntry([
+            'response_status' => Response::HTTP_BAD_REQUEST,
+            'response' => ['message' => 'ignore_message'],
+        ]);
 
-        $entry->shouldReceive('isRequest')->andReturnTrue();
-        $entry->shouldReceive('isClientRequest')->andReturnFalse();
-        $entry->shouldReceive('isSlowQuery')->andReturnFalse();
-        $entry->shouldReceive('isScheduledTask')->andReturnFalse();
-        $entry->shouldReceive('hasMonitoredTag')->andReturnFalse();
+        $entry->type(EntryType::REQUEST);
 
         $closure = $filter->apply();
 
@@ -157,13 +166,8 @@ class ProductionFilterTest extends TestCase
 
         $filter = new ProductionFilter();
 
-        $entry = Mockery::mock(IncomingEntry::class);
-
-        $entry->shouldReceive('isRequest')->andReturnFalse();
-        $entry->shouldReceive('isClientRequest')->andReturnTrue();
-        $entry->shouldReceive('isSlowQuery')->andReturnFalse();
-        $entry->shouldReceive('isScheduledTask')->andReturnFalse();
-        $entry->shouldReceive('hasMonitoredTag')->andReturnFalse();
+        $entry = new IncomingEntry([]);
+        $entry->type(EntryType::CLIENT_REQUEST);
 
         $closure = $filter->apply();
 
@@ -176,15 +180,8 @@ class ProductionFilterTest extends TestCase
 
         $filter = new ProductionFilter();
 
-        $entry = Mockery::mock(IncomingEntry::class);
-        $entry->type = EntryType::CLIENT_REQUEST;
-        $entry->content['response_status'] = Response::HTTP_BAD_REQUEST;
-
-        $entry->shouldReceive('isRequest')->andReturnFalse();
-        $entry->shouldReceive('isClientRequest')->andReturnTrue();
-        $entry->shouldReceive('isSlowQuery')->andReturnFalse();
-        $entry->shouldReceive('isScheduledTask')->andReturnFalse();
-        $entry->shouldReceive('hasMonitoredTag')->andReturnFalse();
+        $entry = new IncomingEntry(['response_status' => Response::HTTP_BAD_REQUEST]);
+        $entry->type(EntryType::CLIENT_REQUEST);
 
         $closure = $filter->apply();
 
@@ -197,13 +194,8 @@ class ProductionFilterTest extends TestCase
 
         $filter = new ProductionFilter();
 
-        $entry = Mockery::mock(IncomingEntry::class);
-
-        $entry->shouldReceive('isRequest')->andReturnFalse();
-        $entry->shouldReceive('isClientRequest')->andReturnFalse();
-        $entry->shouldReceive('isSlowQuery')->andReturnTrue();
-        $entry->shouldReceive('isScheduledTask')->andReturnFalse();
-        $entry->shouldReceive('hasMonitoredTag')->andReturnFalse();
+        $entry = new IncomingEntry(['slow' => true]);
+        $entry->type(EntryType::QUERY);
 
         $closure = $filter->apply();
 
@@ -216,14 +208,8 @@ class ProductionFilterTest extends TestCase
 
         $filter = new ProductionFilter();
 
-        $entry = Mockery::mock(IncomingEntry::class);
-        $entry->type = EntryType::JOB;
-
-        $entry->shouldReceive('isRequest')->andReturnFalse();
-        $entry->shouldReceive('isClientRequest')->andReturnFalse();
-        $entry->shouldReceive('isSlowQuery')->andReturnFalse();
-        $entry->shouldReceive('isScheduledTask')->andReturnFalse();
-        $entry->shouldReceive('hasMonitoredTag')->andReturnFalse();
+        $entry = new IncomingEntry([]);
+        $entry->type(EntryType::JOB);
 
         $closure = $filter->apply();
 
@@ -236,13 +222,8 @@ class ProductionFilterTest extends TestCase
 
         $filter = new ProductionFilter();
 
-        $entry = Mockery::mock(IncomingEntry::class);
-
-        $entry->shouldReceive('isRequest')->andReturnFalse();
-        $entry->shouldReceive('isClientRequest')->andReturnFalse();
-        $entry->shouldReceive('isSlowQuery')->andReturnFalse();
-        $entry->shouldReceive('isScheduledTask')->andReturnTrue();
-        $entry->shouldReceive('hasMonitoredTag')->andReturnFalse();
+        $entry = new IncomingEntry([]);
+        $entry->type(EntryType::SCHEDULED_TASK);
 
         $closure = $filter->apply();
 
@@ -255,13 +236,11 @@ class ProductionFilterTest extends TestCase
 
         $filter = new ProductionFilter();
 
-        $entry = Mockery::mock(IncomingEntry::class);
+        $entry = \Mockery::mock(DatabaseEntriesRepository::class);
+        $entry->shouldReceive('loadMonitoredTags')->andReturn(['test']);
 
-        $entry->shouldReceive('isRequest')->andReturnFalse();
-        $entry->shouldReceive('isClientRequest')->andReturnFalse();
-        $entry->shouldReceive('isSlowQuery')->andReturnFalse();
-        $entry->shouldReceive('isScheduledTask')->andReturnFalse();
-        $entry->shouldReceive('hasMonitoredTag')->andReturnTrue();
+        $entry = new IncomingEntry([]);
+        $entry->tags(['test']);
 
         $closure = $filter->apply();
 
