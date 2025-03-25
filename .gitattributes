@@ -1,0 +1,8 @@
+/.github export-ignore
+/tests export-ignore
+CONTRIBUTING.md export-ignore
+LICENSE export-ignore
+composer.lock export-ignore
+docker-compose.yml export-ignore
+phpunit.xml export-ignore
+README.md export-ignore
