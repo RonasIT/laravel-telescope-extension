@@ -22,6 +22,11 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
             ]);
         }
 
+        $this->mergeConfigFrom(__DIR__ . '/../config/telescope-guzzle-watcher.php', 'telescope-guzzle-watcher');
+
+        $this->publishes([
+            __DIR__ . '/../config/telescope-guzzle-watcher.php' => config_path('telescope-guzzle-watcher.php'),
+        ], 'config');
 
         $this->loadMigrationsFrom(__DIR__ . '/../migrations');
     }

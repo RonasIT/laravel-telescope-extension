@@ -13,7 +13,8 @@
     "require": {
         "php": "^8.1",
         "laravel/framework": ">=11.44.1",
-        "laravel/telescope": "^5"
+        "laravel/telescope": "^5",
+        "muhammadhuzaifa/telescope-guzzle-watcher": "^3.2"
     },
     "require-dev": {
         "phpunit/phpunit": "^10.5",
