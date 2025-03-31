@@ -12,17 +12,14 @@ trait SqlMockTrait
 {
     protected SingleConnectionProxy $pdo;
 
-    protected function mockSelect(): void
+    protected function mockSelectTags(array $returnData): void
     {
         $statementMock = Mockery::mock(PDOStatement::class);
 
         $statementMock
             ->shouldReceive('fetchAll')
             ->twice()
-            ->andReturn([
-                ['tag' => 'test'],
-                ['tag' => 'test 2'],
-            ]);
+            ->andReturn([$returnData]);
 
         $statementMock
             ->shouldReceive('execute')

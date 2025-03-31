@@ -234,7 +234,7 @@ class ProductionFilterTest extends TestCase
 
     public function testMonitoredTagProdEnv()
     {
-        $this->mockSelect();
+        $this->mockSelectTags(['tag' => 'test']);
 
         $this->mockEnvironment('production');
 
