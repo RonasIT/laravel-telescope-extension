@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Artisan;
 use Orchestra\Testbench\TestCase;
 use RonasIT\TelescopeExtension\Repositories\TelescopeRepository;
 use RonasIT\TelescopeExtension\TelescopeExtensionServiceProvider;
-use RonasIT\TelescopeExtension\Tests\Traits\SqlMockTrait;
+use RonasIT\TelescopeExtension\Tests\Traits\TelescopePruneTest\SqlMockTrait;
 
 class TelescopePruneTest extends TestCase
 {

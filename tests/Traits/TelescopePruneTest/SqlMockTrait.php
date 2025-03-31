@@ -1,12 +1,11 @@
 <?php
 
-namespace RonasIT\TelescopeExtension\Tests\Traits;
+namespace RonasIT\TelescopeExtension\Tests\Traits\TelescopePruneTest;
 
 use Illuminate\Support\Carbon;
 use Laravel\Telescope\EntryType;
 use Mpyw\LaravelDatabaseMock\Facades\DBMock;
 use Mpyw\LaravelDatabaseMock\Proxies\SingleConnectionProxy;
-use RonasIT\TelescopeExtension\Console\Commands\TelescopePrune;
 
 trait SqlMockTrait
 {

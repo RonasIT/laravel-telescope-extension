@@ -4,15 +4,17 @@ namespace RonasIT\TelescopeExtension\Tests;
 
 use Laravel\Telescope\EntryType;
 use Laravel\Telescope\IncomingEntry;
-use Laravel\Telescope\Storage\DatabaseEntriesRepository;
 use Laravel\Telescope\Watchers\RequestWatcher;
 use RonasIT\TelescopeExtension\Filters\ProductionFilter;
 use RonasIT\TelescopeExtension\Repositories\TelescopeRepository;
 use RonasIT\TelescopeExtension\TelescopeExtensionServiceProvider;
+use RonasIT\TelescopeExtension\Tests\Traits\ProductionFilterTest\SqlMockTrait;
 use Symfony\Component\HttpFoundation\Response;
 
 class ProductionFilterTest extends TestCase
 {
+    use SqlMockTrait;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -37,7 +39,7 @@ class ProductionFilterTest extends TestCase
 
         $config->set('database.default', 'testbench');
 
-        $config->set('telescope.storage.database.connection', 'database');
+        $config->set('telescope.storage.database.connection', 'testbench');
 
         $config->set('queue.batching.database', 'testbench');
 
@@ -232,12 +234,11 @@ class ProductionFilterTest extends TestCase
 
     public function testMonitoredTagProdEnv()
     {
+        $this->mockSelect();
+
         $this->mockEnvironment('production');
 
         $filter = new ProductionFilter();
-
-        $entry = \Mockery::mock(DatabaseEntriesRepository::class);
-        $entry->shouldReceive('loadMonitoredTags')->andReturn(['test']);
 
         $entry = new IncomingEntry([]);
         $entry->tags(['test']);
