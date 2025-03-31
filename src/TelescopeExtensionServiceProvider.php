@@ -21,6 +21,9 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
                 TelescopePrune::class,
             ]);
         }
+
+
+        $this->loadMigrationsFrom(__DIR__ . '/../migrations');
     }
 
     public function register(): void
@@ -41,10 +44,6 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
         $this->app->singleton(
             PrunableRepository::class, TelescopeRepository::class
         );
-
-        /*$this->app->singleton(
-            PruneCommand::class, TelescopePrune::class
-        );*/
 
         $this->app->when(TelescopeRepository::class)
             ->needs('$connection')

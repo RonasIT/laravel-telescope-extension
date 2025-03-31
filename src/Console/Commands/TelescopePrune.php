@@ -12,6 +12,7 @@ class TelescopePrune extends Command
 {
     const UNRESOLVED_EXCEPTION = 'unresolved_exception';
     const RESOLVED_EXCEPTION = 'resolved_exception';
+    const COMPLETED_JOB_TYPE = 'completed_job';
 
     const COMMON_TYPES = [
         EntryType::BATCH,
@@ -30,6 +31,7 @@ class TelescopePrune extends Command
         EntryType::SCHEDULED_TASK,
         EntryType::GATE,
         EntryType::VIEW,
+        self::COMPLETED_JOB_TYPE,
     ];
 
     const EXCEPTION_TYPES = [
