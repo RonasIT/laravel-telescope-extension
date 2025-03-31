@@ -20,7 +20,7 @@ Manually call the console command `telescope:prune` with your options
 or specify it into [schedule](https://laravel.com/docs/10.x/scheduling#scheduling-artisan-commands). For example:
 
 ```sh
-php artisan telescope:prune --set-hours=request:240,query:24,unresolved-exception:480 --hours=100
+php artisan telescope:prune --set-hours=request:240,query:24,unresolved_exception:480 --hours=100
 ```
 
 The explanation: remove all records with entry type `request` older than 240 hours,
