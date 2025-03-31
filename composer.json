@@ -19,7 +19,8 @@
         "phpunit/phpunit": "^10.5",
         "php-coveralls/php-coveralls": "^2.7",
         "mpyw/laravel-database-mock": "^0.0.1@alpha",
-        "orchestra/testbench": "^9.8"
+        "orchestra/testbench": "^9.8",
+        "ext-pdo": "*"
     },
     "autoload": {
         "psr-4": {
