@@ -16,17 +16,21 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
     {
         AboutCommand::add('Telescope Extension', fn () => ['Version' => '0.1.0']);
 
-        if ($this->app->runningInConsole()) {
-            $this->commands([
-                TelescopePrune::class,
-            ]);
-        }
+        $this->publishes([
+            __DIR__ . '/../config/telescope.php' => config_path('telescope.php'),
+        ], 'config');
 
         $this->mergeConfigFrom(__DIR__ . '/../config/telescope-guzzle-watcher.php', 'telescope-guzzle-watcher');
 
         $this->publishes([
             __DIR__ . '/../config/telescope-guzzle-watcher.php' => config_path('telescope-guzzle-watcher.php'),
         ], 'config');
+
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                TelescopePrune::class,
+            ]);
+        }
 
         $this->loadMigrationsFrom(__DIR__ . '/../migrations');
     }
