@@ -20,6 +20,13 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
             __DIR__ . '/../config/telescope.php' => config_path('telescope.php'),
         ], 'config');
 
+        $this->mergeConfigFrom(__DIR__ . '/../config/telescope.php', 'telescope');
+        $this->mergeConfigFrom(__DIR__ . '/../config/telescope-guzzle-watcher.php', 'telescope-guzzle-watcher');
+
+        $this->publishes([
+            __DIR__ . '/../config/telescope-guzzle-watcher.php' => config_path('telescope-guzzle-watcher.php'),
+        ], 'config');
+
         if ($this->app->runningInConsole()) {
             $this->commands([
                 TelescopePrune::class,
