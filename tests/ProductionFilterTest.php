@@ -6,52 +6,18 @@ use Laravel\Telescope\EntryType;
 use Laravel\Telescope\IncomingEntry;
 use Laravel\Telescope\Watchers\RequestWatcher;
 use RonasIT\TelescopeExtension\Filters\ProductionFilter;
-use RonasIT\TelescopeExtension\Repositories\TelescopeRepository;
-use RonasIT\TelescopeExtension\TelescopeExtensionServiceProvider;
-use RonasIT\TelescopeExtension\Tests\Traits\ProductionFilterTest\SqlMockTrait;
+use RonasIT\TelescopeExtension\Tests\Support\ProductionFilterTestTrait;
 use Symfony\Component\HttpFoundation\Response;
 
 class ProductionFilterTest extends TestCase
 {
-    use SqlMockTrait;
+    use ProductionFilterTestTrait;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         config(['telescope.watchers.' . RequestWatcher::class => []]);
-    }
-
-    protected function getPackageProviders($app): array
-    {
-        return [
-            TelescopeExtensionServiceProvider::class,
-        ];
-    }
-
-    protected function getEnvironmentSetUp($app): void
-    {
-        parent::getEnvironmentSetUp($app);
-
-        $config = $app->get('config');
-
-        $config->set('logging.default', 'errorlog');
-
-        $config->set('database.default', 'testbench');
-
-        $config->set('telescope.storage.database.connection', 'testbench');
-
-        $config->set('queue.batching.database', 'testbench');
-
-        $config->set('database.connections.testbench', [
-            'driver' => 'sqlite',
-            'database' => ':memory:',
-            'prefix' => '',
-        ]);
-
-        $app->when(TelescopeRepository::class)
-            ->needs('$connection')
-            ->give('testbench');
     }
 
     public function testDevEnv()

@@ -1,16 +1,14 @@
 <?php
 
-namespace RonasIT\TelescopeExtension\Tests\Traits\ProductionFilterTest;
+namespace RonasIT\TelescopeExtension\Tests\Support;
 
-use Mpyw\LaravelDatabaseMock\Facades\DBMock;
-use Mpyw\LaravelDatabaseMock\Proxies\SingleConnectionProxy;
 use Mockery;
 use PDO;
 use PDOStatement;
 
-trait SqlMockTrait
+trait ProductionFilterTestTrait
 {
-    protected SingleConnectionProxy $pdo;
+    use SQLMockTrait;
 
     protected function mockSelectTags(array $returnData): void
     {
@@ -38,12 +36,5 @@ trait SqlMockTrait
             ->twice()
             ->with('select "tag" from "telescope_monitoring"')
             ->andReturn($statementMock);
-    }
-
-    protected function getPdo(): SingleConnectionProxy
-    {
-        $this->pdo ??= DBMock::mockPdo();
-
-        return $this->pdo;
     }
 }

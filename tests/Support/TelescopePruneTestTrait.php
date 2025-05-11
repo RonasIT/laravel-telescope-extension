@@ -1,15 +1,13 @@
 <?php
 
-namespace RonasIT\TelescopeExtension\Tests\Traits\TelescopePruneTest;
+namespace RonasIT\TelescopeExtension\Tests\Support;
 
 use Illuminate\Support\Carbon;
 use Laravel\Telescope\EntryType;
-use Mpyw\LaravelDatabaseMock\Facades\DBMock;
-use Mpyw\LaravelDatabaseMock\Proxies\SingleConnectionProxy;
 
-trait SqlMockTrait
+trait TelescopePruneTestTrait
 {
-    protected SingleConnectionProxy $pdo;
+    use SQLMockTrait;
 
     protected function mockQueriesWithoutParameters(): void
     {
@@ -465,17 +463,5 @@ trait SqlMockTrait
             . 'from "telescope_entries" where "created_at" < ? and ("type" = ?) limit 1000)',
             [Carbon::now()->subHours(25)->toDateTimeString(), EntryType::QUERY],
         );
-    }
-
-    protected function mockDelete(string $sql, array $bindings = [], ?int $rowCount = 0): void
-    {
-        $this->getPdo()->shouldDeleteForRows($sql, $bindings, $rowCount);
-    }
-
-    protected function getPdo(): SingleConnectionProxy
-    {
-        $this->pdo ??= DBMock::mockPdo();
-
-        return $this->pdo;
     }
 }
