@@ -2,7 +2,7 @@
 
 [![Coverage Status](https://coveralls.io/repos/github/RonasIT/laravel-telescope-extension/badge.svg?branch=main)](https://coveralls.io/github/RonasIT/laravel-telescope-extension?branch=main)
 
-The library extends the [Laravel Telescope's](https://github.com/laravel/telescope) prune command. 
+The library extends the [Laravel Telescope's](https://github.com/laravel/telescope) package. 
 
 ## Installation
 
@@ -12,9 +12,17 @@ Install the package using the following command
 composer require ronasit/laravel-telescope-extension
 ```
 
+Publish the package configuration:
+
+``` sh
+php artisan vendor:publish --provider=RonasIT\\TelescopeExtension\\TelescopeExtensionServiceProvider
+```
+
 That's it!
 
-## Usage
+## Features
+
+### Updated prune command
 
 Manually call the console command `telescope:prune` with your options
 or specify it into [schedule](https://laravel.com/docs/10.x/scheduling#scheduling-artisan-commands). For example:
@@ -58,3 +66,7 @@ Here is the list of possible `entry-type` values:
 | unresolved_exception |
 | resolved_exception   |
 | completed_job        |
+
+### Store content in JSON field
+
+The content field in the telescope_entries table now has the jsonb type which makes it easier to work with using the database management system's tools.
