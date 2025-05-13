@@ -203,6 +203,6 @@ return [
 
         Watchers\ScheduleWatcher::class => env('TELESCOPE_SCHEDULE_WATCHER', true),
         Watchers\ViewWatcher::class => env('TELESCOPE_VIEW_WATCHER', true),
-        TelescopeGuzzleWatcher::class,
+        TelescopeGuzzleWatcher::class => env('TELESCOPE_GUZZLE_WATCHER', true),
     ],
 ];
