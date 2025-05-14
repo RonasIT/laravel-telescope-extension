@@ -6,6 +6,8 @@ use Laravel\Telescope\EntryType;
 use Laravel\Telescope\IncomingEntry;
 use Laravel\Telescope\Watchers\RequestWatcher;
 use RonasIT\TelescopeExtension\Filters\ProductionFilter;
+use RonasIT\TelescopeExtension\Tests\Support\Mock\IncomingClientRequest;
+use RonasIT\TelescopeExtension\Tests\Support\Mock\IncomingRequest;
 use RonasIT\TelescopeExtension\Tests\Support\ProductionFilterTestTrait;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -17,7 +19,9 @@ class ProductionFilterTest extends TestCase
     {
         parent::setUp();
 
-        config(['telescope.watchers.' . RequestWatcher::class => []]);
+        config(['telescope.watchers.' . RequestWatcher::class => [
+            'ignore_error_messages' => ['ignore_message'],
+        ]]);
     }
 
     public function testDevEnv()
@@ -62,8 +66,7 @@ class ProductionFilterTest extends TestCase
 
         $filter = new ProductionFilter();
 
-        $entry = new IncomingEntry([]);
-        $entry->type(EntryType::REQUEST);
+        $entry = new IncomingRequest();
 
         $closure = $filter->apply();
 
@@ -76,8 +79,7 @@ class ProductionFilterTest extends TestCase
 
         $filter = new ProductionFilter();
 
-        $entry = new IncomingEntry(['response_status' => Response::HTTP_BAD_REQUEST]);
-        $entry->type(EntryType::EXCEPTION);
+        $entry = new IncomingRequest(Response::HTTP_BAD_REQUEST);
 
         $closure = $filter->apply();
 
@@ -88,18 +90,9 @@ class ProductionFilterTest extends TestCase
     {
         $this->mockEnvironment('production');
 
-        config(['telescope.watchers.' . RequestWatcher::class => [
-            'ignore_error_messages' => ['ignore_message'],
-        ]]);
-
         $filter = new ProductionFilter();
 
-        $entry = new IncomingEntry([
-            'response_status' => Response::HTTP_BAD_REQUEST,
-            'response' => ['message' => 'ignore_message'],
-        ]);
-
-        $entry->type(EntryType::REQUEST);
+        $entry = new IncomingRequest(Response::HTTP_BAD_REQUEST, ['message' => 'ignore_message']);
 
         $closure = $filter->apply();
 
@@ -116,12 +109,7 @@ class ProductionFilterTest extends TestCase
 
         $filter = new ProductionFilter();
 
-        $entry = new IncomingEntry([
-            'response_status' => Response::HTTP_BAD_REQUEST,
-            'response' => ['message' => 'ignore_message'],
-        ]);
-
-        $entry->type(EntryType::REQUEST);
+        $entry = new IncomingRequest(Response::HTTP_BAD_REQUEST, ['message' => 'ignore_message']);
 
         $closure = $filter->apply();
 
@@ -134,8 +122,7 @@ class ProductionFilterTest extends TestCase
 
         $filter = new ProductionFilter();
 
-        $entry = new IncomingEntry([]);
-        $entry->type(EntryType::CLIENT_REQUEST);
+        $entry = new IncomingClientRequest();
 
         $closure = $filter->apply();
 
@@ -148,8 +135,7 @@ class ProductionFilterTest extends TestCase
 
         $filter = new ProductionFilter();
 
-        $entry = new IncomingEntry(['response_status' => Response::HTTP_BAD_REQUEST]);
-        $entry->type(EntryType::CLIENT_REQUEST);
+        $entry = new IncomingClientRequest(Response::HTTP_BAD_REQUEST);
 
         $closure = $filter->apply();
 
