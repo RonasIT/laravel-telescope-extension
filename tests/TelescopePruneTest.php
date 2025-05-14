@@ -4,14 +4,11 @@ namespace RonasIT\TelescopeExtension\Tests;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Artisan;
-use Orchestra\Testbench\TestCase;
-use RonasIT\TelescopeExtension\Repositories\TelescopeRepository;
-use RonasIT\TelescopeExtension\TelescopeExtensionServiceProvider;
-use RonasIT\TelescopeExtension\Tests\Traits\SqlMockTrait;
+use RonasIT\TelescopeExtension\Tests\Support\TelescopePruneTestTrait;
 
 class TelescopePruneTest extends TestCase
 {
-    use SqlMockTrait;
+    use TelescopePruneTestTrait;
 
     protected string $testNow = '2018-11-11 11:11:11';
 
@@ -20,38 +17,6 @@ class TelescopePruneTest extends TestCase
         parent::setUp();
 
         Carbon::setTestNow(Carbon::parse($this->testNow));
-    }
-
-    protected function getPackageProviders($app): array
-    {
-        return [
-            TelescopeExtensionServiceProvider::class,
-        ];
-    }
-
-    protected function getEnvironmentSetUp($app): void
-    {
-        parent::getEnvironmentSetUp($app);
-
-        $config = $app->get('config');
-
-        $config->set('logging.default', 'errorlog');
-
-        $config->set('database.default', 'testbench');
-
-        $config->set('telescope.storage.database.connection', 'testbench');
-
-        $config->set('queue.batching.database', 'testbench');
-
-        $config->set('database.connections.testbench', [
-            'driver' => 'sqlite',
-            'database' => ':memory:',
-            'prefix' => '',
-        ]);
-
-        $app->when(TelescopeRepository::class)
-            ->needs('$connection')
-            ->give('testbench');
     }
 
     public function testCommandInTheList()
