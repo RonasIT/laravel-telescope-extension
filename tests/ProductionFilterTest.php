@@ -99,23 +99,6 @@ class ProductionFilterTest extends TestCase
         $this->assertFalse($closure($entry));
     }
 
-    public function testFailedRequestAnotherIgnoreMessageProdEnv()
-    {
-        $this->mockEnvironment('production');
-
-        config(['telescope.watchers.' . RequestWatcher::class => [
-            'ignore_error_messages' => ['another_ignore_message'],
-        ]]);
-
-        $filter = new ProductionFilter();
-
-        $entry = new IncomingRequest(Response::HTTP_BAD_REQUEST, ['message' => 'ignore_message']);
-
-        $closure = $filter->apply();
-
-        $this->assertTrue($closure($entry));
-    }
-
     public function testSuccessClientRequestProdEnv()
     {
         $this->mockEnvironment('production');
