@@ -70,3 +70,26 @@ Here is the list of possible `entry-type` values:
 ### Store content in JSON field
 
 The content field in the telescope_entries table now has the jsonb type which makes it easier to work with using the database management system's tools.
+
+### Production Filter
+
+If you register production filter in TelescopeServiceProvider:
+
+```php
+namespace App\Providers;
+
+use Illuminate\Support\ServiceProvider;
+use Laravel\Telescope\Telescope;
+use RonasIT\TelescopeExtension\Filters\ProductionFilter;
+
+class TelescopeServiceProvider extends ServiceProvider
+{
+    public function register()
+    {
+        Telescope::filter(new ProductionFilter());
+    }
+}
+```
+
+The telescope will start logging only important queries (exceptions, failed queries, jobs, slow queries, scheduled tasks)
+if your env does not local or development.

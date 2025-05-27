@@ -30,7 +30,7 @@ class ProductionFilterTest extends TestCase
 
         $filter = new ProductionFilter();
 
-        $closure = $filter->apply();
+        $closure = $filter();
 
         $this->assertTrue($closure(new IncomingEntry([])));
     }
@@ -41,7 +41,7 @@ class ProductionFilterTest extends TestCase
 
         $filter = new ProductionFilter();
 
-        $closure = $filter->apply();
+        $closure = $filter();
 
         $this->assertTrue($closure(new IncomingEntry([])));
     }
@@ -55,7 +55,7 @@ class ProductionFilterTest extends TestCase
         $entry = new IncomingEntry([]);
         $entry->type(EntryType::EXCEPTION);
 
-        $closure = $filter->apply();
+        $closure = $filter();
 
         $this->assertTrue($closure($entry));
     }
@@ -68,7 +68,7 @@ class ProductionFilterTest extends TestCase
 
         $entry = new IncomingRequest();
 
-        $closure = $filter->apply();
+        $closure = $filter();
 
         $this->assertFalse($closure($entry));
     }
@@ -81,7 +81,7 @@ class ProductionFilterTest extends TestCase
 
         $entry = new IncomingRequest(Response::HTTP_BAD_REQUEST);
 
-        $closure = $filter->apply();
+        $closure = $filter();
 
         $this->assertTrue($closure($entry));
     }
@@ -94,7 +94,7 @@ class ProductionFilterTest extends TestCase
 
         $entry = new IncomingRequest(Response::HTTP_BAD_REQUEST, ['message' => 'ignore_message']);
 
-        $closure = $filter->apply();
+        $closure = $filter();
 
         $this->assertFalse($closure($entry));
     }
@@ -107,7 +107,7 @@ class ProductionFilterTest extends TestCase
 
         $entry = new IncomingClientRequest();
 
-        $closure = $filter->apply();
+        $closure = $filter();
 
         $this->assertFalse($closure($entry));
     }
@@ -120,7 +120,7 @@ class ProductionFilterTest extends TestCase
 
         $entry = new IncomingClientRequest(Response::HTTP_BAD_REQUEST);
 
-        $closure = $filter->apply();
+        $closure = $filter();
 
         $this->assertTrue($closure($entry));
     }
@@ -134,7 +134,7 @@ class ProductionFilterTest extends TestCase
         $entry = new IncomingEntry(['slow' => true]);
         $entry->type(EntryType::QUERY);
 
-        $closure = $filter->apply();
+        $closure = $filter();
 
         $this->assertTrue($closure($entry));
     }
@@ -148,7 +148,7 @@ class ProductionFilterTest extends TestCase
         $entry = new IncomingEntry([]);
         $entry->type(EntryType::JOB);
 
-        $closure = $filter->apply();
+        $closure = $filter();
 
         $this->assertTrue($closure($entry));
     }
@@ -162,7 +162,7 @@ class ProductionFilterTest extends TestCase
         $entry = new IncomingEntry([]);
         $entry->type(EntryType::SCHEDULED_TASK);
 
-        $closure = $filter->apply();
+        $closure = $filter();
 
         $this->assertTrue($closure($entry));
     }
@@ -178,7 +178,7 @@ class ProductionFilterTest extends TestCase
         $entry = new IncomingEntry([]);
         $entry->tags(['test']);
 
-        $closure = $filter->apply();
+        $closure = $filter();
 
         $this->assertTrue($closure($entry));
     }

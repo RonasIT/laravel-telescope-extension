@@ -19,4 +19,9 @@ class ProductionFilter extends AbstractFilter
             || $entry->isScheduledTask()
             || $entry->hasMonitoredTag();
     }
+
+    public function __invoke(): Closure
+    {
+        return $this->apply();
+    }
 }
