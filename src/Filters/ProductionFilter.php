@@ -8,7 +8,7 @@ use Laravel\Telescope\IncomingEntry;
 
 class ProductionFilter extends AbstractFilter
 {
-    public function apply(): Closure
+    public function __invoke(): Closure
     {
         return fn (IncomingEntry $entry) => App::environment('local', 'development')
             || $this->isException($entry)
@@ -18,10 +18,5 @@ class ProductionFilter extends AbstractFilter
             || $this->isJob($entry)
             || $entry->isScheduledTask()
             || $entry->hasMonitoredTag();
-    }
-
-    public function __invoke(): Closure
-    {
-        return $this->apply();
     }
 }

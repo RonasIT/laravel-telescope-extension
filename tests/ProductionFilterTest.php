@@ -15,6 +15,8 @@ class ProductionFilterTest extends TestCase
 {
     use ProductionFilterTestTrait;
 
+    protected ProductionFilter $filter;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -22,15 +24,15 @@ class ProductionFilterTest extends TestCase
         config(['telescope.watchers.' . RequestWatcher::class => [
             'ignore_error_messages' => ['ignore_message'],
         ]]);
+
+        $this->filter = new ProductionFilter();
     }
 
     public function testDevEnv()
     {
         $this->mockEnvironment('development');
 
-        $filter = new ProductionFilter();
-
-        $closure = $filter();
+        $closure = ($this->filter)();
 
         $this->assertTrue($closure(new IncomingEntry([])));
     }
@@ -39,9 +41,7 @@ class ProductionFilterTest extends TestCase
     {
         $this->mockEnvironment('local');
 
-        $filter = new ProductionFilter();
-
-        $closure = $filter();
+        $closure = ($this->filter)();
 
         $this->assertTrue($closure(new IncomingEntry([])));
     }
@@ -50,12 +50,10 @@ class ProductionFilterTest extends TestCase
     {
         $this->mockEnvironment('production');
 
-        $filter = new ProductionFilter();
-
         $entry = new IncomingEntry([]);
         $entry->type(EntryType::EXCEPTION);
 
-        $closure = $filter();
+        $closure = ($this->filter)();
 
         $this->assertTrue($closure($entry));
     }
@@ -64,11 +62,9 @@ class ProductionFilterTest extends TestCase
     {
         $this->mockEnvironment('production');
 
-        $filter = new ProductionFilter();
-
         $entry = new IncomingRequest();
 
-        $closure = $filter();
+        $closure = ($this->filter)();
 
         $this->assertFalse($closure($entry));
     }
@@ -77,11 +73,9 @@ class ProductionFilterTest extends TestCase
     {
         $this->mockEnvironment('production');
 
-        $filter = new ProductionFilter();
-
         $entry = new IncomingRequest(Response::HTTP_BAD_REQUEST);
 
-        $closure = $filter();
+        $closure = ($this->filter)();
 
         $this->assertTrue($closure($entry));
     }
@@ -90,11 +84,9 @@ class ProductionFilterTest extends TestCase
     {
         $this->mockEnvironment('production');
 
-        $filter = new ProductionFilter();
-
         $entry = new IncomingRequest(Response::HTTP_BAD_REQUEST, ['message' => 'ignore_message']);
 
-        $closure = $filter();
+        $closure = ($this->filter)();
 
         $this->assertFalse($closure($entry));
     }
@@ -103,11 +95,9 @@ class ProductionFilterTest extends TestCase
     {
         $this->mockEnvironment('production');
 
-        $filter = new ProductionFilter();
-
         $entry = new IncomingClientRequest();
 
-        $closure = $filter();
+        $closure = ($this->filter)();
 
         $this->assertFalse($closure($entry));
     }
@@ -116,11 +106,9 @@ class ProductionFilterTest extends TestCase
     {
         $this->mockEnvironment('production');
 
-        $filter = new ProductionFilter();
-
         $entry = new IncomingClientRequest(Response::HTTP_BAD_REQUEST);
 
-        $closure = $filter();
+        $closure = ($this->filter)();
 
         $this->assertTrue($closure($entry));
     }
@@ -129,12 +117,10 @@ class ProductionFilterTest extends TestCase
     {
         $this->mockEnvironment('production');
 
-        $filter = new ProductionFilter();
-
         $entry = new IncomingEntry(['slow' => true]);
         $entry->type(EntryType::QUERY);
 
-        $closure = $filter();
+        $closure = ($this->filter)();
 
         $this->assertTrue($closure($entry));
     }
@@ -143,12 +129,10 @@ class ProductionFilterTest extends TestCase
     {
         $this->mockEnvironment('production');
 
-        $filter = new ProductionFilter();
-
         $entry = new IncomingEntry([]);
         $entry->type(EntryType::JOB);
 
-        $closure = $filter();
+        $closure = ($this->filter)();
 
         $this->assertTrue($closure($entry));
     }
@@ -157,12 +141,10 @@ class ProductionFilterTest extends TestCase
     {
         $this->mockEnvironment('production');
 
-        $filter = new ProductionFilter();
-
         $entry = new IncomingEntry([]);
         $entry->type(EntryType::SCHEDULED_TASK);
 
-        $closure = $filter();
+        $closure = ($this->filter)();
 
         $this->assertTrue($closure($entry));
     }
@@ -173,12 +155,10 @@ class ProductionFilterTest extends TestCase
 
         $this->mockEnvironment('production');
 
-        $filter = new ProductionFilter();
-
         $entry = new IncomingEntry([]);
         $entry->tags(['test']);
 
-        $closure = $filter();
+        $closure = ($this->filter)();
 
         $this->assertTrue($closure($entry));
     }

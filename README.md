@@ -73,23 +73,22 @@ The content field in the telescope_entries table now has the jsonb type which ma
 
 ### Production Filter
 
-If you register production filter in TelescopeServiceProvider:
+Feel free to use the predefined telescope filter for the production environment. It'll collect next entries:
+
+• exceptions
+
+• incoming http requests with the status >= 400
+
+• outgoing http requests with the status >= 400
+
+• failed jobs
+
+• slow queries
+
+• scheduled tasks
+
+To enable the filter just use it in your own TelescopeServiceProvider
 
 ```php
-namespace App\Providers;
-
-use Illuminate\Support\ServiceProvider;
-use Laravel\Telescope\Telescope;
-use RonasIT\TelescopeExtension\Filters\ProductionFilter;
-
-class TelescopeServiceProvider extends ServiceProvider
-{
-    public function register()
-    {
-        Telescope::filter(new ProductionFilter());
-    }
-}
+Telescope::filter(new \RonasIT\TelescopeExtension\Filters\ProductionFilter());
 ```
-
-The telescope will start logging only important queries (exceptions, failed queries, jobs, slow queries, scheduled tasks)
-if your env does not local or development.
