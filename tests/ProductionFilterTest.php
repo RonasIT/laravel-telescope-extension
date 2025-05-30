@@ -10,12 +10,15 @@ use RonasIT\TelescopeExtension\Tests\Support\Mock\IncomingClientRequest;
 use RonasIT\TelescopeExtension\Tests\Support\Mock\IncomingRequest;
 use RonasIT\TelescopeExtension\Tests\Support\ProductionFilterTestTrait;
 use Symfony\Component\HttpFoundation\Response;
+use Closure;
 
 class ProductionFilterTest extends TestCase
 {
     use ProductionFilterTestTrait;
 
     protected ProductionFilter $filter;
+
+    protected Closure $closure;
 
     protected function setUp(): void
     {
@@ -26,24 +29,26 @@ class ProductionFilterTest extends TestCase
         ]]);
 
         $this->filter = new ProductionFilter();
+
+        $this->closure = call_user_func($this->filter);
     }
 
     public function testDevEnv()
     {
         $this->mockEnvironment('development');
 
-        $closure = ($this->filter)();
+        $result = call_user_func($this->closure, new IncomingEntry([]));
 
-        $this->assertTrue($closure(new IncomingEntry([])));
+        $this->assertTrue($result);
     }
 
     public function testLocalEnv()
     {
         $this->mockEnvironment('local');
 
-        $closure = ($this->filter)();
+        $result = call_user_func($this->closure, new IncomingEntry([]));
 
-        $this->assertTrue($closure(new IncomingEntry([])));
+        $this->assertTrue($result);
     }
 
     public function testExceptionProdEnv()
@@ -53,9 +58,9 @@ class ProductionFilterTest extends TestCase
         $entry = new IncomingEntry([]);
         $entry->type(EntryType::EXCEPTION);
 
-        $closure = ($this->filter)();
+        $result = call_user_func($this->closure, $entry);
 
-        $this->assertTrue($closure($entry));
+        $this->assertTrue($result);
     }
 
     public function testSuccessRequestProdEnv()
@@ -64,9 +69,9 @@ class ProductionFilterTest extends TestCase
 
         $entry = new IncomingRequest();
 
-        $closure = ($this->filter)();
+        $result = call_user_func($this->closure, $entry);
 
-        $this->assertFalse($closure($entry));
+        $this->assertFalse($result);
     }
 
     public function testFailedRequestProdEnv()
@@ -75,9 +80,9 @@ class ProductionFilterTest extends TestCase
 
         $entry = new IncomingRequest(Response::HTTP_BAD_REQUEST);
 
-        $closure = ($this->filter)();
+        $result = call_user_func($this->closure, $entry);
 
-        $this->assertTrue($closure($entry));
+        $this->assertTrue($result);
     }
 
     public function testFailedRequestIgnoreMessageProdEnv()
@@ -86,9 +91,9 @@ class ProductionFilterTest extends TestCase
 
         $entry = new IncomingRequest(Response::HTTP_BAD_REQUEST, ['message' => 'ignore_message']);
 
-        $closure = ($this->filter)();
+        $result = call_user_func($this->closure, $entry);
 
-        $this->assertFalse($closure($entry));
+        $this->assertFalse($result);
     }
 
     public function testSuccessClientRequestProdEnv()
@@ -97,9 +102,9 @@ class ProductionFilterTest extends TestCase
 
         $entry = new IncomingClientRequest();
 
-        $closure = ($this->filter)();
+        $result = call_user_func($this->closure, $entry);
 
-        $this->assertFalse($closure($entry));
+        $this->assertFalse($result);
     }
 
     public function testFailedClientRequestProdEnv()
@@ -108,9 +113,9 @@ class ProductionFilterTest extends TestCase
 
         $entry = new IncomingClientRequest(Response::HTTP_BAD_REQUEST);
 
-        $closure = ($this->filter)();
+        $result = call_user_func($this->closure, $entry);
 
-        $this->assertTrue($closure($entry));
+        $this->assertTrue($result);
     }
 
     public function testSlowQueryProdEnv()
@@ -120,9 +125,9 @@ class ProductionFilterTest extends TestCase
         $entry = new IncomingEntry(['slow' => true]);
         $entry->type(EntryType::QUERY);
 
-        $closure = ($this->filter)();
+        $result = call_user_func($this->closure, $entry);
 
-        $this->assertTrue($closure($entry));
+        $this->assertTrue($result);
     }
 
     public function testJobProdEnv()
@@ -132,9 +137,9 @@ class ProductionFilterTest extends TestCase
         $entry = new IncomingEntry([]);
         $entry->type(EntryType::JOB);
 
-        $closure = ($this->filter)();
+        $result = call_user_func($this->closure, $entry);
 
-        $this->assertTrue($closure($entry));
+        $this->assertTrue($result);
     }
 
     public function testScheduledTaskProdEnv()
@@ -144,9 +149,9 @@ class ProductionFilterTest extends TestCase
         $entry = new IncomingEntry([]);
         $entry->type(EntryType::SCHEDULED_TASK);
 
-        $closure = ($this->filter)();
+        $result = call_user_func($this->closure, $entry);
 
-        $this->assertTrue($closure($entry));
+        $this->assertTrue($result);
     }
 
     public function testMonitoredTagProdEnv()
@@ -158,8 +163,8 @@ class ProductionFilterTest extends TestCase
         $entry = new IncomingEntry([]);
         $entry->tags(['test']);
 
-        $closure = ($this->filter)();
+        $result = call_user_func($this->closure, $entry);
 
-        $this->assertTrue($closure($entry));
+        $this->assertTrue($result);
     }
 }
