@@ -16,9 +16,7 @@ class ProductionFilterTest extends TestCase
 {
     use ProductionFilterTestTrait;
 
-    protected ProductionFilter $filter;
-
-    protected Closure $closure;
+    protected Closure $filter;
 
     protected function setUp(): void
     {
@@ -28,16 +26,14 @@ class ProductionFilterTest extends TestCase
             'ignore_error_messages' => ['ignore_message'],
         ]]);
 
-        $this->filter = new ProductionFilter();
-
-        $this->closure = call_user_func($this->filter);
+        $this->filter = call_user_func(new ProductionFilter());
     }
 
     public function testDevEnv()
     {
         $this->mockEnvironment('development');
 
-        $result = call_user_func($this->closure, new IncomingEntry([]));
+        $result = call_user_func($this->filter, new IncomingEntry([]));
 
         $this->assertTrue($result);
     }
@@ -46,7 +42,7 @@ class ProductionFilterTest extends TestCase
     {
         $this->mockEnvironment('local');
 
-        $result = call_user_func($this->closure, new IncomingEntry([]));
+        $result = call_user_func($this->filter, new IncomingEntry([]));
 
         $this->assertTrue($result);
     }
@@ -58,7 +54,7 @@ class ProductionFilterTest extends TestCase
         $entry = new IncomingEntry([]);
         $entry->type(EntryType::EXCEPTION);
 
-        $result = call_user_func($this->closure, $entry);
+        $result = call_user_func($this->filter, $entry);
 
         $this->assertTrue($result);
     }
@@ -69,7 +65,7 @@ class ProductionFilterTest extends TestCase
 
         $entry = new IncomingRequest();
 
-        $result = call_user_func($this->closure, $entry);
+        $result = call_user_func($this->filter, $entry);
 
         $this->assertFalse($result);
     }
@@ -80,7 +76,7 @@ class ProductionFilterTest extends TestCase
 
         $entry = new IncomingRequest(Response::HTTP_BAD_REQUEST);
 
-        $result = call_user_func($this->closure, $entry);
+        $result = call_user_func($this->filter, $entry);
 
         $this->assertTrue($result);
     }
@@ -91,7 +87,7 @@ class ProductionFilterTest extends TestCase
 
         $entry = new IncomingRequest(Response::HTTP_BAD_REQUEST, ['message' => 'ignore_message']);
 
-        $result = call_user_func($this->closure, $entry);
+        $result = call_user_func($this->filter, $entry);
 
         $this->assertFalse($result);
     }
@@ -102,7 +98,7 @@ class ProductionFilterTest extends TestCase
 
         $entry = new IncomingClientRequest();
 
-        $result = call_user_func($this->closure, $entry);
+        $result = call_user_func($this->filter, $entry);
 
         $this->assertFalse($result);
     }
@@ -113,7 +109,7 @@ class ProductionFilterTest extends TestCase
 
         $entry = new IncomingClientRequest(Response::HTTP_BAD_REQUEST);
 
-        $result = call_user_func($this->closure, $entry);
+        $result = call_user_func($this->filter, $entry);
 
         $this->assertTrue($result);
     }
@@ -125,7 +121,7 @@ class ProductionFilterTest extends TestCase
         $entry = new IncomingEntry(['slow' => true]);
         $entry->type(EntryType::QUERY);
 
-        $result = call_user_func($this->closure, $entry);
+        $result = call_user_func($this->filter, $entry);
 
         $this->assertTrue($result);
     }
@@ -137,7 +133,7 @@ class ProductionFilterTest extends TestCase
         $entry = new IncomingEntry([]);
         $entry->type(EntryType::JOB);
 
-        $result = call_user_func($this->closure, $entry);
+        $result = call_user_func($this->filter, $entry);
 
         $this->assertTrue($result);
     }
@@ -149,7 +145,7 @@ class ProductionFilterTest extends TestCase
         $entry = new IncomingEntry([]);
         $entry->type(EntryType::SCHEDULED_TASK);
 
-        $result = call_user_func($this->closure, $entry);
+        $result = call_user_func($this->filter, $entry);
 
         $this->assertTrue($result);
     }
@@ -163,7 +159,7 @@ class ProductionFilterTest extends TestCase
         $entry = new IncomingEntry([]);
         $entry->tags(['test']);
 
-        $result = call_user_func($this->closure, $entry);
+        $result = call_user_func($this->filter, $entry);
 
         $this->assertTrue($result);
     }
