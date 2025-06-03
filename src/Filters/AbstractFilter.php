@@ -18,7 +18,7 @@ abstract class AbstractFilter
         $this->requestWatcherConfig = config('telescope.watchers.' . RequestWatcher::class);
     }
 
-    public abstract function apply(): Closure;
+    public abstract function __invoke(): Closure;
 
     protected function isException(IncomingEntry $entry): bool
     {

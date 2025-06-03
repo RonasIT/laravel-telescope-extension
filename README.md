@@ -70,3 +70,25 @@ Here is the list of possible `entry-type` values:
 ### Store content in JSON field
 
 The content field in the telescope_entries table now has the jsonb type which makes it easier to work with using the database management system's tools.
+
+### Production Filter
+
+Feel free to use the predefined telescope filter for the production environment. It'll collect next entries:
+
+• exceptions
+
+• incoming http requests with the status >= 400
+
+• outgoing http requests with the status >= 400
+
+• failed jobs
+
+• slow queries
+
+• scheduled tasks
+
+To enable the filter just use it in your own TelescopeServiceProvider
+
+```php
+Telescope::filter(new \RonasIT\TelescopeExtension\Filters\ProductionFilter());
+```
