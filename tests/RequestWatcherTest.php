@@ -25,7 +25,9 @@ class RequestWatcherTest extends TestCase
 
     public function testIgnoreErrorMessage()
     {
-        Config::set("{$this->configName}.ignore_error_messages", ['Something went wrong!']);
+        Config::set("{$this->configName}.ignore_error_messages", [
+            'Something went wrong!',
+        ]);
 
         $response = new Response();
         $response->exception = new UnprocessableEntityHttpException('Something went wrong!');
@@ -36,7 +38,7 @@ class RequestWatcherTest extends TestCase
 
         (new RequestWatcher($options))->recordRequest($event);
 
-        $this->assertTrue(empty(Telescope::$entriesQueue));
+        $this->assertEmpty(Telescope::$entriesQueue);
     }
 
     public function testNotIgnoreErrorMessage()
@@ -55,6 +57,6 @@ class RequestWatcherTest extends TestCase
 
         (new RequestWatcher($options))->recordRequest($event);
 
-        $this->assertFalse(empty(Telescope::$entriesQueue));
+        $this->assertNotEmpty(Telescope::$entriesQueue);
     }
 }
