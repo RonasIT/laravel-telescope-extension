@@ -92,3 +92,16 @@ To enable the filter just use it in your own TelescopeServiceProvider
 ```php
 Telescope::filter(new \RonasIT\TelescopeExtension\Filters\ProductionFilter());
 ```
+
+### Request Watcher
+
+Ability in RequestWatcher ignore requests by exception messages.
+
+```php
+        RequestWatcher::class => [
+            .....
+            'ignore_error_messages' => [],
+        ],
+```
+
+The  watcher will ignore a request that contains an error message that is in the configuration.
