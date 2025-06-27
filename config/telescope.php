@@ -3,6 +3,7 @@
 use Laravel\Telescope\Http\Middleware\Authorize;
 use Laravel\Telescope\Watchers;
 use MuhammadHuzaifa\TelescopeGuzzleWatcher\Watchers\TelescopeGuzzleWatcher;
+use RonasIT\TelescopeExtension\Watchers\RequestWatcher;
 
 return [
 
@@ -123,6 +124,10 @@ return [
         //
     ],
 
+    'ignore_error_messages' => [
+        //
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Telescope Watchers
@@ -194,11 +199,12 @@ return [
 
         Watchers\RedisWatcher::class => env('TELESCOPE_REDIS_WATCHER', true),
 
-        Watchers\RequestWatcher::class => [
+        RequestWatcher::class => [
             'enabled' => env('TELESCOPE_REQUEST_WATCHER', true),
             'size_limit' => env('TELESCOPE_RESPONSE_SIZE_LIMIT', 64),
             'ignore_http_methods' => [],
             'ignore_status_codes' => [],
+            'ignore_error_messages' => [],
         ],
 
         Watchers\ScheduleWatcher::class => env('TELESCOPE_SCHEDULE_WATCHER', true),

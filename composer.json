@@ -21,7 +21,8 @@
         "php-coveralls/php-coveralls": "^2.7",
         "mpyw/laravel-database-mock": "^0.0.1@alpha",
         "orchestra/testbench": "^9.8",
-        "ext-pdo": "*"
+        "ext-pdo": "*",
+        "ext-http": "*"
     },
     "autoload": {
         "psr-4": {
