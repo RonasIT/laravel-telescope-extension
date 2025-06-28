@@ -90,5 +90,5 @@ Feel free to use the predefined telescope filter for the production environment.
 To enable the filter just use it in your own TelescopeServiceProvider
 
 ```php
-Telescope::filter(new \RonasIT\TelescopeExtension\Filters\ProductionFilter());
+Telescope::filter((new \RonasIT\TelescopeExtension\Filters\ProductionFilter)());
 ```
