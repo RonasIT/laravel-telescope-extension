@@ -37,7 +37,7 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
 
         $this->loadMigrationsFrom(__DIR__ . '/../migrations');
 
-        Route::post('/telescope/telescope-api/requests', [RequestsController::class, 'index']);
+        $this->redefineRoutes();
     }
 
     public function register(): void
@@ -66,5 +66,17 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
         $this->app->when(TelescopeRepository::class)
             ->needs('$chunkSize')
             ->give(config('telescope.storage.database.chunk'));
+    }
+
+    protected function redefineRoutes(): void
+    {
+        Route::group([
+            'domain' => config('telescope.domain'),
+            'namespace' => 'Laravel\Telescope\Http\Controllers',
+            'prefix' => config('telescope.path'),
+            'middleware' => 'telescope',
+        ], function () {
+            $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
+        });
     }
 }
