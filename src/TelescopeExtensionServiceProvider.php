@@ -37,8 +37,7 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
 
         $this->loadMigrationsFrom(__DIR__ . '/../migrations');
 
-        Route::post('/telescope-api/requests', [RequestsController::class, 'index']);
-        Route::get('/telescope-api/requests/{telescopeEntryId}', [RequestsController::class, 'show']);
+        Route::post('/telescope/telescope-api/requests', [RequestsController::class, 'index']);
     }
 
     public function register(): void
