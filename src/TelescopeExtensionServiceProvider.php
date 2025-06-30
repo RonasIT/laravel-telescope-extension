@@ -8,6 +8,7 @@ use Laravel\Telescope\Contracts\ClearableRepository;
 use Laravel\Telescope\Contracts\EntriesRepository;
 use Laravel\Telescope\Contracts\PrunableRepository;
 use RonasIT\TelescopeExtension\Console\Commands\TelescopePrune;
+use RonasIT\TelescopeExtension\Http\Controllers\RequestsController;
 use RonasIT\TelescopeExtension\Repositories\TelescopeRepository;
 
 class TelescopeExtensionServiceProvider extends ServiceProvider
@@ -39,6 +40,8 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->registerDatabaseDriver();
+
+        $this->app->bind(RequestsController::class, RequestsController::class);
     }
 
     protected function registerDatabaseDriver(): void
