@@ -3,7 +3,7 @@
 namespace RonasIT\TelescopeExtension;
 
 use Illuminate\Foundation\Console\AboutCommand;
-use Illuminate\Support\Facades\Route;
+use Illuminate\Routing\Route;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Telescope\Contracts\ClearableRepository;
 use Laravel\Telescope\Contracts\EntriesRepository;
@@ -37,7 +37,8 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
 
         $this->loadMigrationsFrom(__DIR__ . '/../migrations');
 
-        $this->redefineRoutes();
+        $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
+
     }
 
     public function register(): void
@@ -66,17 +67,5 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
         $this->app->when(TelescopeRepository::class)
             ->needs('$chunkSize')
             ->give(config('telescope.storage.database.chunk'));
-    }
-
-    protected function redefineRoutes(): void
-    {
-        Route::group([
-            'domain' => config('telescope.domain'),
-            'namespace' => 'RonasIT\TelescopeExtension\Http\Controllers',
-            'prefix' => config('telescope.path'),
-            'middleware' => 'telescope',
-        ], function () {
-            $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
-        });
     }
 }
