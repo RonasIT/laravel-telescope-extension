@@ -20,7 +20,7 @@ class RequestWatcher extends BaseRequestWatcher
 
     protected function shouldIgnoreErrorMessage(RequestHandled $event): bool
     {
-        $message = $event->response?->exception?->getMessage();
+        $message = $event->response->exception?->getMessage();
 
         return in_array($message, $this->options['ignore_error_messages'] ?? []);
     }
