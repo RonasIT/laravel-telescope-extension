@@ -10,4 +10,3 @@ Route::group([
 ], function () {
     Route::post('telescope-api/requests', [RequestsController::class, 'index']);
 });
-
