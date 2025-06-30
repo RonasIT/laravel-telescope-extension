@@ -3,6 +3,7 @@
 namespace RonasIT\TelescopeExtension;
 
 use Illuminate\Foundation\Console\AboutCommand;
+use Illuminate\Routing\Route;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Telescope\Contracts\ClearableRepository;
 use Laravel\Telescope\Contracts\EntriesRepository;
@@ -35,13 +36,14 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
         }
 
         $this->loadMigrationsFrom(__DIR__ . '/../migrations');
+
+        Route::post('/telescope-api/requests', [RequestsController::class, 'index']);
+        Route::get('/telescope-api/requests/{telescopeEntryId}', [RequestsController::class, 'show']);
     }
 
     public function register(): void
     {
         $this->registerDatabaseDriver();
-
-        $this->app->bind(RequestsController::class, RequestsController::class);
     }
 
     protected function registerDatabaseDriver(): void
