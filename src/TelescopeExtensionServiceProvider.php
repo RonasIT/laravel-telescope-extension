@@ -72,7 +72,7 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
     {
         Route::group([
             'domain' => config('telescope.domain'),
-            'namespace' => 'Laravel\Telescope\Http\Controllers',
+            'namespace' => 'RonasIT\TelescopeExtension\Http\Controllers',
             'prefix' => config('telescope.path'),
             'middleware' => 'telescope',
         ], function () {
