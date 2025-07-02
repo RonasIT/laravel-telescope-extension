@@ -21,14 +21,27 @@ class RequestWatcherTest extends TestCase
         Telescope::$shouldRecord = true;
 
         $this->configName = 'telescope.' . RequestWatcher::class;
+
+        Config::set("{$this->configName}.ignore_error_messages", [
+            'Something went wrong!',
+        ]);
     }
 
     public function testIgnoreErrorMessage()
     {
-        Config::set("{$this->configName}.ignore_error_messages", [
-            'Something went wrong!',
-        ]);
+        $response = new Response(json_encode(['message' => 'Something went wrong!']), Response::HTTP_BAD_REQUEST);
 
+        $event = new RequestHandled(new Request(), $response);
+
+        $options = config($this->configName);
+
+        new RequestWatcher($options)->recordRequest($event);
+
+        $this->assertEmpty(Telescope::$entriesQueue);
+    }
+
+    public function testIgnoreErrorMessageAsException()
+    {
         $response = new Response();
         $response->exception = new UnprocessableEntityHttpException('Something went wrong!');
 
@@ -36,18 +49,26 @@ class RequestWatcherTest extends TestCase
 
         $options = config($this->configName);
 
-        (new RequestWatcher($options))->recordRequest($event);
+        new RequestWatcher($options)->recordRequest($event);
 
         $this->assertEmpty(Telescope::$entriesQueue);
     }
 
     public function testNotIgnoreErrorMessage()
     {
-        Config::set("{$this->configName}.ignore_error_messages", [
-            'Something went wrong',
-            'Internal error',
-        ]);
+        $response = new Response(json_encode(['message' => 'Some other error']), Response::HTTP_BAD_REQUEST);
 
+        $event = new RequestHandled(new Request(), $response);
+
+        $options = config($this->configName);
+
+        new RequestWatcher($options)->recordRequest($event);
+
+        $this->assertNotEmpty(Telescope::$entriesQueue);
+    }
+
+    public function testNotIgnoreErrorMessageAsException()
+    {
         $response = new Response();
         $response->exception = new UnprocessableEntityHttpException('Some other error');
 
@@ -55,7 +76,20 @@ class RequestWatcherTest extends TestCase
 
         $options = config($this->configName);
 
-        (new RequestWatcher($options))->recordRequest($event);
+        new RequestWatcher($options)->recordRequest($event);
+
+        $this->assertNotEmpty(Telescope::$entriesQueue);
+    }
+
+    public function testMessageContent()
+    {
+        $response = new Response('Something went wrong!', Response::HTTP_BAD_REQUEST);
+
+        $event = new RequestHandled(new Request(), $response);
+
+        $options = config($this->configName);
+
+        new RequestWatcher($options)->recordRequest($event);
 
         $this->assertNotEmpty(Telescope::$entriesQueue);
     }

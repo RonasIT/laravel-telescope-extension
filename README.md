@@ -95,7 +95,7 @@ Telescope::filter(new \RonasIT\TelescopeExtension\Filters\ProductionFilter());
 
 ### Request Watcher
 
-Using the production filter, you can skip incoming HTTP requests by the `message` field in the response. Just fill the new RequestWatcher config key:
+The extended Request watcher works with the new configuration and allows skipping incoming HTTP requests based on the `message` field in the response:
 
 ```php
         RequestWatcher::class => [

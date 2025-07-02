@@ -22,6 +22,12 @@ class RequestWatcher extends BaseRequestWatcher
     {
         $message = $event->response->exception?->getMessage();
 
+        if (empty($message)) {
+            $responseContent = json_decode($event->response->getContent(), true);
+
+            $message = Arr::get($responseContent, 'message');
+        }
+
         return in_array($message, Arr::get($this->options, 'ignore_error_messages', []));
     }
 }

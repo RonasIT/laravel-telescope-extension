@@ -200,6 +200,14 @@ return [
             'size_limit' => env('TELESCOPE_RESPONSE_SIZE_LIMIT', 64),
             'ignore_http_methods' => [],
             'ignore_status_codes' => [],
+
+            /*
+            |--------------------------------------------------------------------------
+            | Ignorable response messages, array<string>
+            |--------------------------------------------------------------------------
+            | Requests that have one of the values in the `message` field of the response
+            | will not be recorded.
+            */
             'ignore_error_messages' => [],
         ],
 
