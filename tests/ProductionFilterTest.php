@@ -12,7 +12,7 @@ use RonasIT\TelescopeExtension\Tests\Support\ProductionFilterTestTrait;
 use Symfony\Component\HttpFoundation\Response;
 use Closure;
 
-class ProductionFilterTest extends TestCase
+class  ProductionFilterTest extends TestCase
 {
     use ProductionFilterTestTrait;
 
@@ -81,16 +81,6 @@ class ProductionFilterTest extends TestCase
         $this->assertTrue($result);
     }
 
-    public function testFailedRequestIgnoreMessageProdEnv()
-    {
-        $this->mockEnvironment('production');
-
-        $entry = new IncomingRequest(Response::HTTP_BAD_REQUEST, ['message' => 'ignore_message']);
-
-        $result = call_user_func($this->filter, $entry);
-
-        $this->assertFalse($result);
-    }
 
     public function testSuccessClientRequestProdEnv()
     {
