@@ -3,6 +3,7 @@
 namespace RonasIT\TelescopeExtension\Watchers;
 
 use Illuminate\Foundation\Http\Events\RequestHandled;
+use Illuminate\Support\Arr;
 use Laravel\Telescope\Telescope;
 use Laravel\Telescope\Watchers\RequestWatcher as BaseRequestWatcher;
 
@@ -10,10 +11,9 @@ class RequestWatcher extends BaseRequestWatcher
 {
     public function recordRequest(RequestHandled $event): void
     {
-        $shouldNotRecord = !Telescope::isRecording()
-            || $this->shouldIgnoreErrorMessage($event);
+        $shouldSkip = !Telescope::isRecording() || $this->shouldIgnoreErrorMessage($event);
 
-        if (!$shouldNotRecord) {
+        if (!$shouldSkip) {
             parent::recordRequest($event);
         }
     }
@@ -22,6 +22,6 @@ class RequestWatcher extends BaseRequestWatcher
     {
         $message = $event->response->exception?->getMessage();
 
-        return in_array($message, $this->options['ignore_error_messages'] ?? []);
+        return in_array($message, Arr::get($this->options, 'ignore_error_messages', []));
     }
 }
