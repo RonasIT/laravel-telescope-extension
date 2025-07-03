@@ -3,6 +3,7 @@
 use Laravel\Telescope\Http\Middleware\Authorize;
 use Laravel\Telescope\Watchers;
 use MuhammadHuzaifa\TelescopeGuzzleWatcher\Watchers\TelescopeGuzzleWatcher;
+use RonasIT\TelescopeExtension\Watchers\RequestWatcher;
 
 return [
 
@@ -194,11 +195,20 @@ return [
 
         Watchers\RedisWatcher::class => env('TELESCOPE_REDIS_WATCHER', true),
 
-        Watchers\RequestWatcher::class => [
+        RequestWatcher::class => [
             'enabled' => env('TELESCOPE_REQUEST_WATCHER', true),
             'size_limit' => env('TELESCOPE_RESPONSE_SIZE_LIMIT', 64),
             'ignore_http_methods' => [],
             'ignore_status_codes' => [],
+
+            /*
+            |--------------------------------------------------------------------------
+            | Ignorable response messages, array<string>
+            |--------------------------------------------------------------------------
+            | Requests that have one of the values in the `message` field of the response
+            | will not be recorded.
+            */
+            'ignore_error_messages' => [],
         ],
 
         Watchers\ScheduleWatcher::class => env('TELESCOPE_SCHEDULE_WATCHER', true),

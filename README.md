@@ -25,7 +25,7 @@ That's it!
 ### Updated prune command
 
 Manually call the console command `telescope:prune` with your options
-or specify it into [schedule](https://laravel.com/docs/10.x/scheduling#scheduling-artisan-commands). For example:
+or specify it into [schedule](https://laravel.com/docs/12.x/scheduling#scheduling-artisan-commands). For example:
 
 ```sh
 php artisan telescope:prune --set-hours=request:240,query:24,unresolved_exception:480 --hours=100
@@ -69,26 +69,37 @@ Here is the list of possible `entry-type` values:
 
 ### Store content in JSON field
 
-The content field in the telescope_entries table now has the jsonb type which makes it easier to work with using the database management system's tools.
+The content field in the `telescope_entries` table now has the `jsonb` type which makes it easier to work with using the database management system's tools.
 
 ### Production Filter
 
 Feel free to use the predefined telescope filter for the production environment. It'll collect next entries:
 
-• exceptions
+• Exceptions
 
-• incoming http requests with the status >= 400
+• Incoming HTTP requests with the status >= `400`
 
-• outgoing http requests with the status >= 400
+• Outgoing HTTP requests with the status >= `400`
 
-• failed jobs
+• Failed jobs
 
-• slow queries
+• Slow DB queries
 
-• scheduled tasks
+• Scheduled tasks
 
 To enable the filter just use it in your own TelescopeServiceProvider
 
 ```php
 Telescope::filter((new \RonasIT\TelescopeExtension\Filters\ProductionFilter)());
+```
+
+### Request Watcher
+
+The extended Request watcher works with the new configuration and allows skipping incoming HTTP requests based on the `message` field in the response:
+
+```php
+        RequestWatcher::class => [
+            .....
+            'ignore_error_messages' => [],
+        ],
 ```
