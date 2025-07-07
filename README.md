@@ -73,7 +73,7 @@ The content field in the `telescope_entries` table now has the `jsonb` type whic
 
 ### Production Filter
 
-Feel free to use the predefined telescope filter for the production environment. It'll collect next entries:
+Feel free to use the predefined telescope filter for the `production` environment. It'll collect next entries:
 
 • Exceptions
 
@@ -87,10 +87,10 @@ Feel free to use the predefined telescope filter for the production environment.
 
 • Scheduled tasks
 
-To enable the filter just use it in your own TelescopeServiceProvider
+To enable the filter just use it in your own `TelescopeServiceProvider`
 
 ```php
-Telescope::filter((new \RonasIT\TelescopeExtension\Filters\ProductionFilter)());
+Telescope::filter(call_user_func(new \RonasIT\TelescopeExtension\Filters\ProductionFilter));
 ```
 
 ### Request Watcher
