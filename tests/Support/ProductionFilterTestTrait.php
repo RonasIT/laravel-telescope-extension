@@ -16,24 +16,24 @@ trait ProductionFilterTestTrait
 
         $statementMock
             ->shouldReceive('fetchAll')
-            ->twice()
+            ->once()
             ->andReturn([$returnData]);
 
         $statementMock
             ->shouldReceive('execute')
-            ->twice()
+            ->once()
             ->andReturnTrue();
 
         $statementMock
             ->shouldReceive('setFetchMode')
-            ->twice()
+            ->once()
             ->with(PDO::PARAM_BOOL)
             ->andReturnTrue();
 
         $this
             ->getPdo()
             ->shouldReceive('prepare')
-            ->twice()
+            ->once()
             ->with('select "tag" from "telescope_monitoring"')
             ->andReturn($statementMock);
     }
