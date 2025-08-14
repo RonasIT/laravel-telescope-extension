@@ -3,13 +3,12 @@
 namespace RonasIT\TelescopeExtension;
 
 use Illuminate\Foundation\Console\AboutCommand;
-use Illuminate\Routing\Route;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Telescope\Contracts\ClearableRepository;
 use Laravel\Telescope\Contracts\EntriesRepository;
 use Laravel\Telescope\Contracts\PrunableRepository;
+use RonasIT\Support\Http\Middleware\CheckIpMiddleware;
 use RonasIT\TelescopeExtension\Console\Commands\TelescopePrune;
-use RonasIT\TelescopeExtension\Http\Controllers\RequestsController;
 use RonasIT\TelescopeExtension\Repositories\TelescopeRepository;
 
 class TelescopeExtensionServiceProvider extends ServiceProvider
@@ -38,6 +37,15 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__ . '/../migrations');
 
         $this->loadRoutesFrom(__DIR__ . '/../routes/telescope.php');
+
+        $allowedIps = config('telescope.allowed_ips');
+
+        if (!empty($allowedIps)) {
+            $middleware = config('telescope.middleware');
+            $middleware[] = CheckIpMiddleware::class . ':' . implode(',', $allowedIps);
+
+            config(['telescope.middleware' => $middleware]);
+        }
     }
 
     public function register(): void
