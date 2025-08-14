@@ -11,7 +11,9 @@ class RequestWatcher extends BaseRequestWatcher
 {
     public function recordRequest(RequestHandled $event): void
     {
-        $shouldSkip = !Telescope::isRecording() || $this->shouldIgnoreErrorMessage($event);
+        $shouldSkip = !Telescope::isRecording()
+            || $this->shouldIgnorePath($event)
+            || $this->shouldIgnoreErrorMessage($event);
 
         if (!$shouldSkip) {
             parent::recordRequest($event);
@@ -29,5 +31,10 @@ class RequestWatcher extends BaseRequestWatcher
         }
 
         return in_array($message, Arr::get($this->options, 'ignore_error_messages', []));
+    }
+
+    protected function shouldIgnorePath(RequestHandled $event): bool
+    {
+        return in_array($event->request->path(), Arr::get($this->options, 'ignore_paths', []));
     }
 }

@@ -209,6 +209,14 @@ return [
             | will not be recorded.
             */
             'ignore_error_messages' => [],
+
+            /*
+            |--------------------------------------------------------------------------
+            | Ignorable paths, array<string>
+            |--------------------------------------------------------------------------
+            | Requests that match one of these paths will not be recorded.
+            */
+            'ignore_paths' => [],
         ],
 
         Watchers\ScheduleWatcher::class => env('TELESCOPE_SCHEDULE_WATCHER', true),
