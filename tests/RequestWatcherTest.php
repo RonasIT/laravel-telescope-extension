@@ -99,7 +99,7 @@ class RequestWatcherTest extends TestCase
         $this->assertNotEmpty(Telescope::$entriesQueue);
     }
 
-    public function testIgnore()
+    public function testIgnorePath()
     {
         $event = new RequestHandled(Request::create('/test'), new Response());
 
@@ -110,7 +110,7 @@ class RequestWatcherTest extends TestCase
         $this->assertEmpty(Telescope::$entriesQueue);
     }
 
-    public function testIgnoreAnotherPath()
+    public function testIgnorePathAnotherPath()
     {
         $event = new RequestHandled(Request::create('/test/test'), new Response());
 
