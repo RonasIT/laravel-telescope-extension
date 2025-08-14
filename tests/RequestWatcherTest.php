@@ -18,12 +18,17 @@ class RequestWatcherTest extends TestCase
     {
         parent::setUp();
 
+        Telescope::flushEntries();
         Telescope::$shouldRecord = true;
 
         $this->configName = 'telescope.' . RequestWatcher::class;
 
         Config::set("{$this->configName}.ignore_error_messages", [
             'Something went wrong!',
+        ]);
+
+        Config::set("{$this->configName}.ignore_paths", [
+            'test',
         ]);
     }
 
@@ -86,6 +91,28 @@ class RequestWatcherTest extends TestCase
         $response = new Response('Something went wrong!', Response::HTTP_BAD_REQUEST);
 
         $event = new RequestHandled(new Request(), $response);
+
+        $options = config($this->configName);
+
+        new RequestWatcher($options)->recordRequest($event);
+
+        $this->assertNotEmpty(Telescope::$entriesQueue);
+    }
+
+    public function testIgnore()
+    {
+        $event = new RequestHandled(Request::create('/test'), new Response());
+
+        $options = config($this->configName);
+
+        new RequestWatcher($options)->recordRequest($event);
+
+        $this->assertEmpty(Telescope::$entriesQueue);
+    }
+
+    public function testIgnoreAnotherPath()
+    {
+        $event = new RequestHandled(Request::create('/test/test'), new Response());
 
         $options = config($this->configName);
 
