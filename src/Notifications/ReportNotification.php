@@ -24,7 +24,7 @@ class ReportNotification extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage())
-            ->subject('Laravel Telescope Daily Report')
+            ->subject('Laravel telescope report')
             ->view('emails.report', [
                 'entries' => $this->entries,
                 'telescopeBaseUrl' => config('app.url') . '/' . config('telescope.path'),
