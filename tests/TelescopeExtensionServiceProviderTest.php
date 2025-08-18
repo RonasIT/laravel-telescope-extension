@@ -7,36 +7,37 @@ use RonasIT\Support\Http\Middleware\CheckIpMiddleware;
 
 class TelescopeExtensionServiceProviderTest extends TestCase
 {
+    protected array $initialMiddlewares = [
+        'first.middleware',
+        'second.middleware',
+    ];
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Config::set('telescope.allowed_ips', ['127.0.0.1', '127.0.0.2']);
+        Config::set('telescope.middleware', $this->initialMiddlewares);
+    }
+
     public function testAddCheckIpMiddleware()
     {
-        Config::set('telescope.allowed_ips', ['127.0.0.1', '127.0.0.2']);
-        Config::set('telescope.middleware', ['first.middleware', 'second.middleware']);
+        new TelescopeExtensionServiceProvider($this->app)->boot();
 
-        $provider = new TelescopeExtensionServiceProvider($this->app);
-        $provider->boot();
-
-        $expectedMiddleware = [
-            'first.middleware',
-            'second.middleware',
+        $expectedMiddlewares = [
+            ...$this->initialMiddlewares,
             CheckIpMiddleware::class . ':127.0.0.1,127.0.0.2',
         ];
 
-        $this->assertEquals($expectedMiddleware, Config::get('telescope.middleware'));
+        $this->assertEquals($expectedMiddlewares, Config::get('telescope.middleware'));
     }
 
     public function testCheckIpMiddlewareNotAdded()
     {
         Config::set('telescope.allowed_ips', []);
-        Config::set('telescope.middleware', ['first.middleware', 'second.middleware']);
 
-        $provider = new TelescopeExtensionServiceProvider($this->app);
-        $provider->boot();
+        new TelescopeExtensionServiceProvider($this->app)->boot();
 
-        $expectedMiddleware = [
-            'first.middleware',
-            'second.middleware',
-        ];
-
-        $this->assertEquals($expectedMiddleware, Config::get('telescope.middleware'));
+        $this->assertEquals($this->initialMiddlewares, Config::get('telescope.middleware'));
     }
 }
