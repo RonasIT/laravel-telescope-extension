@@ -3,6 +3,7 @@
 namespace RonasIT\TelescopeExtension;
 
 use Illuminate\Foundation\Console\AboutCommand;
+use Illuminate\Support\Arr;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Telescope\Contracts\ClearableRepository;
 use Laravel\Telescope\Contracts\EntriesRepository;
@@ -41,10 +42,10 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
         $allowedIps = config('telescope.allowed_ips');
 
         if (!empty($allowedIps)) {
-            $middleware = config('telescope.middleware');
-            $middleware[] = CheckIpMiddleware::class . ':' . implode(',', $allowedIps);
-
-            config(['telescope.middleware' => $middleware]);
+            config(['telescope.middleware' => array_merge(
+                config('telescope.middleware'),
+                Arr::wrap(CheckIpMiddleware::class . ':' . implode(',', $allowedIps)),
+            )]);
         }
     }
 

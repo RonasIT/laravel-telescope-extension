@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f483ec8867fb5c955240dcf60abb3cc5",
+    "content-hash": "471555688f0d41400e76a0a6ec6c5576",
     "packages": [
         {
             "name": "brick/math",
@@ -4940,16 +4940,16 @@
         },
         {
             "name": "ronasit/laravel-helpers",
-            "version": "dev-Implement-middleware-to-restrict-IP-access",
+            "version": "3.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/RonasIT/laravel-helpers.git",
-                "reference": "3c15f2a4ebe06ce71c3ef12f62348afb2484a63d"
+                "reference": "83d1621fb879df858783b1d598d4f6f5bfc0fe0d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/RonasIT/laravel-helpers/zipball/3c15f2a4ebe06ce71c3ef12f62348afb2484a63d",
-                "reference": "3c15f2a4ebe06ce71c3ef12f62348afb2484a63d",
+                "url": "https://api.github.com/repos/RonasIT/laravel-helpers/zipball/83d1621fb879df858783b1d598d4f6f5bfc0fe0d",
+                "reference": "83d1621fb879df858783b1d598d4f6f5bfc0fe0d",
                 "shasum": ""
             },
             "require": {
@@ -5015,9 +5015,9 @@
             ],
             "support": {
                 "issues": "https://github.com/RonasIT/laravel-helpers/issues",
-                "source": "https://github.com/RonasIT/laravel-helpers/tree/Implement-middleware-to-restrict-IP-access"
+                "source": "https://github.com/RonasIT/laravel-helpers/tree/3.5.1"
             },
-            "time": "2025-08-13T09:36:39+00:00"
+            "time": "2025-08-17T09:18:18+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -10051,8 +10051,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "mpyw/laravel-database-mock": 15,
-        "ronasit/laravel-helpers": 20
+        "mpyw/laravel-database-mock": 15
     },
     "prefer-stable": true,
     "prefer-lowest": false,
