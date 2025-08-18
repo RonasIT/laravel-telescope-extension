@@ -14,6 +14,8 @@ class RequestWatcherTest extends TestCase
 {
     protected string $configName;
 
+    protected RequestWatcher $requestWatcher;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -30,6 +32,8 @@ class RequestWatcherTest extends TestCase
         Config::set("{$this->configName}.ignore_paths", [
             'test',
         ]);
+
+        $this->requestWatcher = new RequestWatcher(config($this->configName));
     }
 
     public function testIgnoreErrorMessage()
@@ -38,9 +42,7 @@ class RequestWatcherTest extends TestCase
 
         $event = new RequestHandled(new Request(), $response);
 
-        $options = config($this->configName);
-
-        new RequestWatcher($options)->recordRequest($event);
+        $this->requestWatcher->recordRequest($event);
 
         $this->assertEmpty(Telescope::$entriesQueue);
     }
@@ -52,9 +54,7 @@ class RequestWatcherTest extends TestCase
 
         $event = new RequestHandled(new Request(), $response);
 
-        $options = config($this->configName);
-
-        new RequestWatcher($options)->recordRequest($event);
+        $this->requestWatcher->recordRequest($event);
 
         $this->assertEmpty(Telescope::$entriesQueue);
     }
@@ -65,9 +65,7 @@ class RequestWatcherTest extends TestCase
 
         $event = new RequestHandled(new Request(), $response);
 
-        $options = config($this->configName);
-
-        new RequestWatcher($options)->recordRequest($event);
+        $this->requestWatcher->recordRequest($event);
 
         $this->assertNotEmpty(Telescope::$entriesQueue);
     }
@@ -79,9 +77,7 @@ class RequestWatcherTest extends TestCase
 
         $event = new RequestHandled(new Request(), $response);
 
-        $options = config($this->configName);
-
-        new RequestWatcher($options)->recordRequest($event);
+        $this->requestWatcher->recordRequest($event);
 
         $this->assertNotEmpty(Telescope::$entriesQueue);
     }
@@ -92,9 +88,7 @@ class RequestWatcherTest extends TestCase
 
         $event = new RequestHandled(new Request(), $response);
 
-        $options = config($this->configName);
-
-        new RequestWatcher($options)->recordRequest($event);
+        $this->requestWatcher->recordRequest($event);
 
         $this->assertNotEmpty(Telescope::$entriesQueue);
     }
@@ -103,9 +97,7 @@ class RequestWatcherTest extends TestCase
     {
         $event = new RequestHandled(Request::create('/test'), new Response());
 
-        $options = config($this->configName);
-
-        new RequestWatcher($options)->recordRequest($event);
+        $this->requestWatcher->recordRequest($event);
 
         $this->assertEmpty(Telescope::$entriesQueue);
     }
@@ -114,9 +106,7 @@ class RequestWatcherTest extends TestCase
     {
         $event = new RequestHandled(Request::create('/test/test'), new Response());
 
-        $options = config($this->configName);
-
-        new RequestWatcher($options)->recordRequest($event);
+        $this->requestWatcher->recordRequest($event);
 
         $this->assertNotEmpty(Telescope::$entriesQueue);
     }
