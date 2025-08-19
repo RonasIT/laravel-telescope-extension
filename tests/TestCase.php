@@ -8,7 +8,6 @@ use RonasIT\Support\Traits\FixturesTrait;
 use RonasIT\Support\Traits\MockTrait;
 use RonasIT\TelescopeExtension\Repositories\TelescopeRepository;
 use RonasIT\TelescopeExtension\TelescopeExtensionServiceProvider;
-use Illuminate\Support\Facades\Event;
 use ReflectionClass;
 
 class TestCase extends BaseTestCase
@@ -20,10 +19,7 @@ class TestCase extends BaseTestCase
     {
         parent::setUp();
 
-        Event::fake();
         Notification::fake();
-
-        putenv('FAIL_EXPORT_JSON=false');
     }
 
     protected function mockEnvironment(string $environment): void
@@ -77,15 +73,13 @@ class TestCase extends BaseTestCase
         foreach ($notifications as $modelClassName => $notifiableIDs) {
             foreach ($notifiableIDs as $notifiableId => $modelNotifications) {
                 foreach ($modelNotifications as $notificationClassName => $modelNotification) {
-                    foreach ($modelNotification as $notification) {
+                    foreach ($modelNotification as $key => $notification) {
                         $mailMessage = $notification['notification']->toMail($notification['notifiable']);
 
                         if (in_array('mail', $notification['channels'])) {
                             $notificationTemplate = view($mailMessage->view, $mailMessage->viewData)->render();
 
-                            if (!empty($notificationTemplate)) {
-                                $this->assertFixtureWithoutType("mail_notifications/{$fixtureName}_template.html", $notificationTemplate, $exportMode);
-                            }
+                            $this->assertFixtureWithoutType("mail_notifications/{$fixtureName}_{$key}_template.html", $notificationTemplate, $exportMode);
                         }
 
                         $notification['notification'] = $this->getObjectAttributes($notification['notification']);
