@@ -1,0 +1,52 @@
+{
+    "Illuminate\\Notifications\\AnonymousNotifiable": {
+        "": {
+            "RonasIT\\TelescopeExtension\\Notifications\\ReportNotification": [
+                {
+                    "notification": {
+                        "entries": {
+                            "cache": 1,
+                            "client-requests": 3,
+                            "commands": 4,
+                            "exceptions": 5,
+                            "jobs": 6,
+                            "mail": 8,
+                            "models": 1,
+                            "queries": 5,
+                            "redis": 4,
+                            "requests": 5,
+                            "schedule": 11,
+                            "views": 3,
+                            "batches": 8,
+                            "dumps": 4,
+                            "events": 1,
+                            "gates": 2,
+                            "logs": 5,
+                            "notifications": 7
+                        },
+                        "locale": null,
+                        "connection": null,
+                        "queue": null,
+                        "delay": null,
+                        "afterCommit": null,
+                        "middleware": [],
+                        "chained": [],
+                        "chainConnection": null,
+                        "chainQueue": null,
+                        "chainCatchCallbacks": null
+                    },
+                    "channels": [
+                        "mail"
+                    ],
+                    "notifiable": {
+                        "routes": {
+                            "": "test@mail.com"
+                        }
+                    },
+                    "locale": null,
+                    "subject": "Laravel telescope report"
+                }
+            ]
+        }
+    }
+}

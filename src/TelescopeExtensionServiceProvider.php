@@ -55,7 +55,8 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
                 $frequency = config('notifications.report.frequency');
                 $time = config('notifications.report.time');
 
-                $schedule->command('telescope:report')
+                $schedule
+                    ->command('telescope-report:send')
                     ->dailyAt("{$time}:00")
                     ->when(fn () => now()->dayOfYear % $frequency == 0);
             }
