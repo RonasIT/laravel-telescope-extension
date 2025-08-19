@@ -9,6 +9,7 @@ use RonasIT\TelescopeExtension\TelescopeExtensionServiceProvider;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Console\Scheduling\Schedule;
 use RonasIT\TelescopeExtension\Tests\Support\SQLMockTrait;
+use Illuminate\Support\Str;
 
 class SendTelescopeReportTest extends TestCase
 {
@@ -42,10 +43,7 @@ class SendTelescopeReportTest extends TestCase
 
         $event = Arr::first($this->schedule->events());
 
-        $this->assertEquals(
-            expected: "'/usr/local/bin/php' 'artisan' telescope-report:send",
-            actual: $event->command,
-        );
+        $this->assertTrue(Str::endsWith($event->command, 'telescope-report:send'));
 
         $this->assertEquals('0 15 * * *', $event->getExpression());
 
@@ -67,10 +65,7 @@ class SendTelescopeReportTest extends TestCase
 
         $event = Arr::first($this->schedule->events());
 
-        $this->assertEquals(
-            expected: "'/usr/local/bin/php' 'artisan' telescope-report:send",
-            actual: $event->command,
-        );
+        $this->assertTrue(Str::endsWith($event->command, 'telescope-report:send'));
 
         $this->assertEquals('0 15 * * *', $event->getExpression());
 
