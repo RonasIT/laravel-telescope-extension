@@ -48,6 +48,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Allowed IPs
+    |--------------------------------------------------------------------------
+    |
+    | In a production environment, you may wish to restrict access to Telescope
+    | to a specific list of IP addresses. You can list them here. The
+    | middleware will only be applied if this array is not empty.
+    |
+    */
+
+    'allowed_ips' => [],
+
+    /*
+    |--------------------------------------------------------------------------
     | Telescope Storage Driver
     |--------------------------------------------------------------------------
     |
@@ -209,6 +222,14 @@ return [
             | will not be recorded.
             */
             'ignore_error_messages' => [],
+
+            /*
+            |--------------------------------------------------------------------------
+            | Ignorable paths, array<string>
+            |--------------------------------------------------------------------------
+            | Requests that match one of these paths will not be recorded.
+            */
+            'ignore_paths' => [],
         ],
 
         Watchers\ScheduleWatcher::class => env('TELESCOPE_SCHEDULE_WATCHER', true),
