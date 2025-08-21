@@ -95,11 +95,19 @@ Telescope::filter(call_user_func(new \RonasIT\TelescopeExtension\Filters\Product
 
 ### Request Watcher
 
-The extended Request watcher works with the new configuration and allows skipping incoming HTTP requests based on the `message` field in the response:
+The extended Request watcher provides new configurable logic.
 
-```php
-        RequestWatcher::class => [
-            .....
-            'ignore_error_messages' => [],
-        ],
-```
+#### Ignoring requests by response message
+
+Watcher will ignore incoming HTTP requests if the `message` field in the response is equal to one of the ignorable messages.
+
+Just add the full message to the `ignore_error_messages` config.
+
+#### Ignoring requests by path
+
+Works the same as the `ignore` config of the CommandWatcher. The watcher will skip incoming HTTP requests if they are made to one of the ignorable paths.
+
+Use the `ignore_paths` config for this.
+
+The main difference between this config and the global telescope `ignore_paths` config is that the request watcher's config will ignore only incoming HTTP
+requests and will still store all other entries related to the request (such as queries, jobs, exceptions, etc.)
