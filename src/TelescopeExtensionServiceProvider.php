@@ -37,20 +37,13 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__ . '/../migrations');
 
         $this->loadRoutesFrom(__DIR__ . '/../routes/telescope.php');
-
-        $allowedIps = config('telescope.allowed_ips');
-
-        if (!empty($allowedIps)) {
-            config(['telescope.middleware' => [
-                ...config('telescope.middleware'),
-                CheckIpMiddleware::class . ':' . implode(',', $allowedIps),
-            ]]);
-        }
     }
 
     public function register(): void
     {
         $this->registerDatabaseDriver();
+
+        $this->registerCheckIpMiddleware();
     }
 
     protected function registerDatabaseDriver(): void
@@ -74,5 +67,17 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
         $this->app->when(TelescopeRepository::class)
             ->needs('$chunkSize')
             ->give(config('telescope.storage.database.chunk'));
+    }
+
+    protected function registerCheckIpMiddleware(): void
+    {
+        $allowedIps = config('telescope.allowed_ips');
+
+        if (!empty($allowedIps)) {
+            config(['telescope.middleware' => [
+                ...config('telescope.middleware'),
+                CheckIpMiddleware::class . ':' . implode(',', $allowedIps),
+            ]]);
+        }
     }
 }
