@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Laravel Telescope Report</title>
+    <title>{{ config('app.name') }} Telescope Report</title>
 </head>
 <body style="font-family: Arial, sans-serif; color: #333;">
 <h2>{{ config('app.name') }} Telescope collected Entries Report</h2>
