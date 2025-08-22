@@ -5,7 +5,7 @@
     <title>Laravel Telescope Report</title>
 </head>
 <body style="font-family: Arial, sans-serif; color: #333;">
-<h2>Laravel Telescope Active Entries Report</h2>
+<h2>{{ config('app.name') }} Telescope collected Entries Report</h2>
 
 <ul>
     @foreach ($entries as $type => $count)

@@ -31,9 +31,9 @@ class SendTelescopeReport extends Command
         EntryType::NOTIFICATION => 'notifications',
     ];
 
-    protected $signature = 'telescope-report:send';
+    protected $signature = 'telescope:send-report';
 
-    protected $description = 'Send telescope report';
+    protected $description = 'Send report about filtered entries';
 
     public function handle(): void
     {
@@ -41,8 +41,8 @@ class SendTelescopeReport extends Command
         $entries = $entries->mapWithKeys(fn ($count, $entry) => [self::entryTypeMap[$entry] => $count]);
 
         Notification::route(
-            channel: config('notifications.report.driver'),
-            route: config('notifications.report.mail_to'),
+            channel: config('telescope.notifications.report.driver'),
+            route: config('telescope.notifications.report.drivers.mail.mail_to'),
         )->notify(new ReportNotification($entries));
     }
 }

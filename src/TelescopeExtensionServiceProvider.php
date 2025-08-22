@@ -21,12 +21,10 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__ . '/../config/telescope.php' => config_path('telescope.php'),
-            __DIR__ . '/../config/notifications.php' => config_path('notifications.php'),
         ], 'config');
 
         $this->mergeConfigFrom(__DIR__ . '/../config/telescope.php', 'telescope');
         $this->mergeConfigFrom(__DIR__ . '/../config/telescope-guzzle-watcher.php', 'telescope-guzzle-watcher');
-        $this->mergeConfigFrom(__DIR__ . '/../config/notifications.php', 'notifications.telescope');
 
         $this->publishes([
             __DIR__ . '/../config/telescope-guzzle-watcher.php' => config_path('telescope-guzzle-watcher.php'),
@@ -61,12 +59,12 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
         $this->app->booted(function () {
             $schedule = $this->app->make(Schedule::class);
 
-            if (config('notifications.report.enabled')) {
-                $frequency = config('notifications.report.frequency');
-                $time = config('notifications.report.time');
+            if (config('telescope.notifications.report.enabled')) {
+                $frequency = config('telescope.notifications.report.frequency');
+                $time = config('telescope.notifications.report.time');
 
                 $schedule
-                    ->command('telescope-report:send')
+                    ->command('telescope:send-report')
                     ->dailyAt("{$time}:00")
                     ->when(fn () => now()->dayOfYear % $frequency == 0);
             }

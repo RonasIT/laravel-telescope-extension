@@ -40,11 +40,11 @@
                     ],
                     "notifiable": {
                         "routes": {
-                            "": "test@mail.com"
+                            "mail": "test@mail.com"
                         }
                     },
                     "locale": null,
-                    "subject": "Laravel telescope report"
+                    "subject": "Test app name telescope report"
                 }
             ]
         }

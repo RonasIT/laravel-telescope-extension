@@ -1,6 +1,5 @@
 <?php
 
-
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Artisan;
@@ -26,24 +25,26 @@ class SendTelescopeReportTest extends TestCase
         $this->serviceProvider = new TelescopeExtensionServiceProvider($this->app);
 
         $this->schedule = $this->app->make(Schedule::class);
+
+        Config::set('app.name', 'Test app name');
     }
 
     public function testCommandInTheList()
     {
-        $this->assertArrayHasKey('telescope-report:send', Artisan::all());
+        $this->assertArrayHasKey('telescope:send-report', Artisan::all());
     }
 
     public function testCommandEnabledAndRun(): void
     {
-        Config::set('notifications.report.enabled', true);
-        Config::set('notifications.report.frequency', 7);
-        Config::set('notifications.report.time', '15');
+        Config::set('telescope.notifications.report.enabled', true);
+        Config::set('telescope.notifications.report.frequency', 7);
+        Config::set('telescope.notifications.report.time', '15');
 
         $this->serviceProvider->boot();
 
         $event = Arr::first($this->schedule->events());
 
-        $this->assertTrue(Str::endsWith($event->command, 'telescope-report:send'));
+        $this->assertTrue(Str::endsWith($event->command, 'telescope:send-report'));
 
         $this->assertEquals('0 15 * * *', $event->getExpression());
 
@@ -57,15 +58,15 @@ class SendTelescopeReportTest extends TestCase
 
     public function testCommandEnabledNotRun(): void
     {
-        Config::set('notifications.report.enabled', true);
-        Config::set('notifications.report.frequency', 8);
-        Config::set('notifications.report.time', '15');
+        Config::set('telescope.notifications.report.enabled', true);
+        Config::set('telescope.notifications.report.frequency', 8);
+        Config::set('telescope.notifications.report.time', '15');
 
         $this->serviceProvider->boot();
 
         $event = Arr::first($this->schedule->events());
 
-        $this->assertTrue(Str::endsWith($event->command, 'telescope-report:send'));
+        $this->assertTrue(Str::endsWith($event->command, 'telescope:send-report'));
 
         $this->assertEquals('0 15 * * *', $event->getExpression());
 
@@ -79,7 +80,7 @@ class SendTelescopeReportTest extends TestCase
 
     public function testCommandDisabled(): void
     {
-        Config::set('notifications.report.enabled', false);
+        Config::set('telescope.notifications.report.enabled', false);
 
         $this->serviceProvider->boot();
 
@@ -88,7 +89,7 @@ class SendTelescopeReportTest extends TestCase
 
     public function testCommand()
     {
-        Config::set('notifications.report.mail_to', 'test@mail.com');
+        Config::set('telescope.notifications.report.drivers.mail.mail_to', 'test@mail.com');
 
         $statementMock = Mockery::mock(PDOStatement::class);
 
@@ -115,7 +116,7 @@ class SendTelescopeReportTest extends TestCase
             ->with('select type, count(*) as count from "telescope_entries" group by "type"')
             ->andReturn($statementMock);
 
-        $this->artisan('telescope-report:send');
+        $this->artisan('telescope:send-report');
 
         $this->assertNotificationSent('command');
     }
