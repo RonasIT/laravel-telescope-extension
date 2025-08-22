@@ -8,8 +8,10 @@ use Laravel\Telescope\Contracts\ClearableRepository;
 use Laravel\Telescope\Contracts\EntriesRepository;
 use Laravel\Telescope\Contracts\PrunableRepository;
 use RonasIT\Support\Http\Middleware\CheckIpMiddleware;
+use RonasIT\TelescopeExtension\Console\Commands\SendTelescopeReport;
 use RonasIT\TelescopeExtension\Console\Commands\TelescopePrune;
 use RonasIT\TelescopeExtension\Repositories\TelescopeRepository;
+use Illuminate\Console\Scheduling\Schedule;
 
 class TelescopeExtensionServiceProvider extends ServiceProvider
 {
@@ -28,9 +30,14 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
             __DIR__ . '/../config/telescope-guzzle-watcher.php' => config_path('telescope-guzzle-watcher.php'),
         ], 'config');
 
+        $this->publishes([
+            __DIR__ . '/../resources/views/report.blade.php' => resource_path('views/vendor/telescope/report.blade.php'),
+        ], 'view');
+
         if ($this->app->runningInConsole()) {
             $this->commands([
                 TelescopePrune::class,
+                SendTelescopeReport::class,
             ]);
         }
 
@@ -46,6 +53,22 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
                 CheckIpMiddleware::class . ':' . implode(',', $allowedIps),
             ]]);
         }
+
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'telescope');
+
+        $this->app->booted(function () {
+            $schedule = $this->app->make(Schedule::class);
+
+            if (config('telescope.notifications.report.enabled')) {
+                $frequency = config('telescope.notifications.report.frequency');
+                $time = config('telescope.notifications.report.time');
+
+                $schedule
+                    ->command('telescope:send-report')
+                    ->dailyAt("{$time}:00")
+                    ->when(fn () => now()->dayOfYear % $frequency == 0);
+            }
+        });
     }
 
     public function register(): void
