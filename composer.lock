@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "aeddb1d61cd594abcdc2e388ac30a82a",
+    "content-hash": "4ef617588227582a43f43e3302e13f98",
     "packages": [
         {
             "name": "brick/math",
@@ -4940,16 +4940,16 @@
         },
         {
             "name": "ronasit/laravel-helpers",
-            "version": "dev-30_change_check_ip_middleware",
+            "version": "3.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/RonasIT/laravel-helpers.git",
-                "reference": "c77617fdb197e9a854b64d9ce740dd66cb925916"
+                "reference": "bc8bea176f06f9f4cc263b79b78a485eb7a0e543"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/RonasIT/laravel-helpers/zipball/c77617fdb197e9a854b64d9ce740dd66cb925916",
-                "reference": "c77617fdb197e9a854b64d9ce740dd66cb925916",
+                "url": "https://api.github.com/repos/RonasIT/laravel-helpers/zipball/bc8bea176f06f9f4cc263b79b78a485eb7a0e543",
+                "reference": "bc8bea176f06f9f4cc263b79b78a485eb7a0e543",
                 "shasum": ""
             },
             "require": {
@@ -5015,9 +5015,9 @@
             ],
             "support": {
                 "issues": "https://github.com/RonasIT/laravel-helpers/issues",
-                "source": "https://github.com/RonasIT/laravel-helpers/tree/30_change_check_ip_middleware"
+                "source": "https://github.com/RonasIT/laravel-helpers/tree/3.5.2"
             },
-            "time": "2025-08-22T06:27:47+00:00"
+            "time": "2025-08-22T10:21:26+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -10051,8 +10051,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "mpyw/laravel-database-mock": 15,
-        "ronasit/laravel-helpers": 20
+        "mpyw/laravel-database-mock": 15
     },
     "prefer-stable": true,
     "prefer-lowest": false,
