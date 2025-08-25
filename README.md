@@ -22,6 +22,14 @@ That's it!
 
 ## Features
 
+### 🔒 Restricting Access by IP in the Production environment
+
+Package allows to restrict access to the Telescope only in the `production` environment using an IP whitelist.
+
+Modify the `allowed_ips` config for this.
+
+Empty config value will allow to have access from any IP address.
+
 ### Updated prune command
 
 Manually call the console command `telescope:prune` with your options
