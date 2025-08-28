@@ -37,6 +37,8 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__ . '/../migrations');
 
         $this->loadRoutesFrom(__DIR__ . '/../routes/telescope.php');
+
+        $this->loadViewsFrom(__DIR__.'/../resources/views/', 'telescope');
     }
 
     public function register(): void
