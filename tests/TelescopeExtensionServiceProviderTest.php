@@ -41,7 +41,7 @@ class TelescopeExtensionServiceProviderTest extends TestCase
         $this->assertEquals($this->initialMiddlewares, Config::get('telescope.middleware'));
     }
 
-    public function testYelescopeViewPath()
+    public function testTelescopeViewPath()
     {
         $hints = app('view')->getFinder()->getHints();
 
