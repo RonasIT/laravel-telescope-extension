@@ -44,19 +44,7 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
 
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'telescope');
 
-        $this->app->booted(function () {
-            $schedule = $this->app->make(Schedule::class);
-
-            if (config('telescope.notifications.report.enabled')) {
-                $frequency = config('telescope.notifications.report.frequency');
-                $time = config('telescope.notifications.report.time');
-
-                $schedule
-                    ->command('telescope:send-report')
-                    ->dailyAt("{$time}:00")
-                    ->when(fn () => now()->dayOfYear % $frequency == 0);
-            }
-        });
+        $this->app->booted(fn () => $this->scheduleTelescopeReport());
     }
 
     public function register(): void
@@ -98,6 +86,21 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
                 ...config('telescope.middleware'),
                 CheckIpMiddleware::class . ':' . implode(',', $allowedIps),
             ]]);
+        }
+    }
+
+    protected function scheduleTelescopeReport(): void
+    {
+        $schedule = $this->app->make(Schedule::class);
+
+        if (config('telescope.notifications.report.enabled')) {
+            $frequency = config('telescope.notifications.report.frequency');
+            $time = config('telescope.notifications.report.time');
+
+            $schedule
+                ->command('telescope:send-report')
+                ->dailyAt("{$time}:00")
+                ->when(fn () => now()->dayOfYear % $frequency == 0);
         }
     }
 }

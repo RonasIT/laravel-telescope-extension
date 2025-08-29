@@ -4,7 +4,6 @@
             "RonasIT\\TelescopeExtension\\Notifications\\ReportNotification": [
                 {
                     "notification": {
-                        "driver": "mail",
                         "entries": {
                             "cache": 1,
                             "client-requests": 3,

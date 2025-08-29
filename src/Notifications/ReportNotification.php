@@ -14,17 +14,14 @@ class ReportNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    protected string $driver;
-
     public function __construct(
         public Collection $entries,
     ) {
-        $this->driver = config('telescope.notifications.report.driver');
     }
 
     public function via(object $notifiable): array
     {
-        return Arr::wrap($this->driver);
+        return Arr::wrap(config('telescope.notifications.report.driver'));
     }
 
     public function toMail(object $notifiable): Mailable
@@ -32,6 +29,6 @@ class ReportNotification extends Notification implements ShouldQueue
         return (new ReportMail([
             'entries' => $this->entries,
             'telescopeBaseUrl' => config('app.url') . '/' . config('telescope.path'),
-        ]))->to(config("telescope.notifications.report.drivers.{$this->driver}.to"));
+        ]))->to(config("telescope.notifications.report.drivers.mail.to"));
     }
 }
