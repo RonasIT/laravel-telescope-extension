@@ -22,7 +22,7 @@ class TelescopeExtensionServiceProviderTest extends TestCase
 
     public function testAddCheckIpMiddleware()
     {
-        new TelescopeExtensionServiceProvider($this->app)->boot();
+        new TelescopeExtensionServiceProvider($this->app)->register();
 
         $expectedMiddlewares = [
             ...$this->initialMiddlewares,
@@ -36,7 +36,7 @@ class TelescopeExtensionServiceProviderTest extends TestCase
     {
         Config::set('telescope.allowed_ips', []);
 
-        new TelescopeExtensionServiceProvider($this->app)->boot();
+        new TelescopeExtensionServiceProvider($this->app)->register();
 
         $this->assertEquals($this->initialMiddlewares, Config::get('telescope.middleware'));
     }
