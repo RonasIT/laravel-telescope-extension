@@ -2,24 +2,29 @@
 
 namespace RonasIT\TelescopeExtension\Tests;
 
+use Illuminate\Console\Scheduling\Event;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Str;
 use Orchestra\Testbench\TestCase as BaseTestCase;
-use RonasIT\Support\Traits\FixturesTrait;
-use RonasIT\Support\Traits\MockTrait;
+use RonasIT\Support\Traits\TestingTrait;
+use RonasIT\TelescopeExtension\Tests\Support\MailsMockTrait;
 use RonasIT\TelescopeExtension\Repositories\TelescopeRepository;
 use RonasIT\TelescopeExtension\TelescopeExtensionServiceProvider;
 use ReflectionClass;
 
 class TestCase extends BaseTestCase
 {
-    use FixturesTrait;
-    use MockTrait;
+    use TestingTrait;
+    use MailsMockTrait { MailsMockTrait::assertFixture insteadof TestingTrait; }
 
     protected function setUp(): void
     {
         parent::setUp();
 
         Notification::fake();
+        Mail::fake();
     }
 
     protected function mockEnvironment(string $environment): void
@@ -76,14 +81,9 @@ class TestCase extends BaseTestCase
                     foreach ($modelNotification as $key => $notification) {
                         $mailMessage = $notification['notification']->toMail($notification['notifiable']);
 
-                        if (in_array('mail', $notification['channels'])) {
-                            $notificationTemplate = view($mailMessage->view, $mailMessage->viewData)->render();
-
-                            $this->assertFixtureWithoutType("mail_notifications/{$fixtureName}_{$key}_template.html", $notificationTemplate, $exportMode);
-                        }
-
                         $notification['notification'] = $this->getObjectAttributes($notification['notification']);
                         $notification['subject'] = $mailMessage->subject;
+                        $notification['mailable'] = $mailMessage;
                         unset($notification['notification']['id']);
 
                         $actualData[$modelClassName][$notifiableId][$notificationClassName][] = $notification;
@@ -125,5 +125,29 @@ class TestCase extends BaseTestCase
         }
 
         return json_decode(json_encode($result), true);
+    }
+
+    protected function getProtectedProperty(object $object, string $propertyName)
+    {
+        $reflector = new ReflectionClass($object);
+        $property = $reflector->getProperty($propertyName);
+        $property->setAccessible(true);
+
+        return $property->getValue($object);
+    }
+
+    protected function assertScheduledEventEquals(Event $event, string $command, string $cron): void
+    {
+        $this->assertTrue(Str::endsWith($event->command, $command));
+
+        $this->assertEquals($cron, $event->getExpression());
+    }
+
+    protected function assertScheduledEventExecuted(Event $event, bool $isExecuted): void
+    {
+        $filters = $this->getProtectedProperty($event, 'filters');
+        $filterClosure = Arr::first($filters);
+
+        $this->assertEquals($isExecuted, $filterClosure());
     }
 }

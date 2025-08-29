@@ -245,7 +245,6 @@ return [
             |----------------------------------------------------------------------
             | Frequency, integer
             |----------------------------------------------------------------------
-            | How often (in days) the report is sent
             */
             'frequency' => env('TELESCOPE_REPORT_FREQUENCY', 7),
             'time' => env('TELESCOPE_REPORT_TIME_HOUR', 12),
@@ -253,7 +252,7 @@ return [
 
             'drivers' => [
                 'mail' => [
-                    'mail_to' => explode(',', env('TELESCOPE_REPORT_MAIL_TO', '')),
+                    'to' => explode(',', env('TELESCOPE_REPORT_MAIL_TO', '')),
                 ],
             ],
         ],

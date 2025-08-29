@@ -40,9 +40,6 @@ class SendTelescopeReport extends Command
         $entries = app(TelescopeRepository::class)->getEntryCounts();
         $entries = $entries->mapWithKeys(fn ($count, $entry) => [self::entryTypeMap[$entry] => $count]);
 
-        Notification::route(
-            channel: config('telescope.notifications.report.driver'),
-            route: config('telescope.notifications.report.drivers.mail.mail_to'),
-        )->notify(new ReportNotification($entries));
+        Notification::routes([])->notify(new ReportNotification($entries));
     }
 }

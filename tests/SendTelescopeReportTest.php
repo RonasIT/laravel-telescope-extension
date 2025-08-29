@@ -7,12 +7,13 @@ use RonasIT\TelescopeExtension\Tests\TestCase;
 use RonasIT\TelescopeExtension\TelescopeExtensionServiceProvider;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Console\Scheduling\Schedule;
-use RonasIT\TelescopeExtension\Tests\Support\SQLMockTrait;
-use Illuminate\Support\Str;
+use RonasIT\TelescopeExtension\Mail\ReportMail;
+use Illuminate\Support\Facades\Mail;
+use RonasIT\TelescopeExtension\Tests\Support\SendTelescopeReportTestTrait;
 
 class SendTelescopeReportTest extends TestCase
 {
-    use SqlMockTrait;
+    use SendTelescopeReportTestTrait;
 
     protected TelescopeExtensionServiceProvider $serviceProvider;
 
@@ -44,16 +45,11 @@ class SendTelescopeReportTest extends TestCase
 
         $event = Arr::first($this->schedule->events());
 
-        $this->assertTrue(Str::endsWith($event->command, 'telescope:send-report'));
-
-        $this->assertEquals('0 15 * * *', $event->getExpression());
-
-        $filters = $this->getProtectedProperty($event, 'filters');
-        $filterClosure = Arr::first($filters);
+        $this->assertScheduledEventEquals($event, 'telescope:send-report', '0 15 * * *');
 
         Carbon::setTestNow(Carbon::create(2018, 1, 14));
 
-        $this->assertTrue($filterClosure());
+        $this->assertScheduledEventExecuted($event, true);
     }
 
     public function testCommandEnabledNotRun(): void
@@ -66,16 +62,11 @@ class SendTelescopeReportTest extends TestCase
 
         $event = Arr::first($this->schedule->events());
 
-        $this->assertTrue(Str::endsWith($event->command, 'telescope:send-report'));
-
-        $this->assertEquals('0 15 * * *', $event->getExpression());
-
-        $filters = $this->getProtectedProperty($event, 'filters');
-        $filterClosure = Arr::first($filters);
+        $this->assertScheduledEventEquals($event, 'telescope:send-report', '0 15 * * *');
 
         Carbon::setTestNow(Carbon::create(2018, 1, 7));
 
-        $this->assertFalse($filterClosure());
+        $this->assertScheduledEventExecuted($event, false);
     }
 
     public function testCommandDisabled(): void
@@ -89,43 +80,27 @@ class SendTelescopeReportTest extends TestCase
 
     public function testCommand()
     {
-        Config::set('telescope.notifications.report.drivers.mail.mail_to', 'test@mail.com');
+        Config::set('telescope.notifications.report.drivers.mail.to', 'test@mail.com');
 
-        $statementMock = Mockery::mock(PDOStatement::class);
-
-        $statementMock
-            ->shouldReceive('fetchAll')
-            ->once()
-            ->andReturn($this->getJsonFixture('fetch_all_response'));
-
-        $statementMock
-            ->shouldReceive('execute')
-            ->once()
-            ->andReturnTrue();
-
-        $statementMock
-            ->shouldReceive('setFetchMode')
-            ->once()
-            ->with(PDO::PARAM_BOOL)
-            ->andReturnTrue();
-
-        $this
-            ->getPdo()
-            ->shouldReceive('prepare')
-            ->once()
-            ->with('select type, count(*) as count from "telescope_entries" group by "type"')
-            ->andReturn($statementMock);
+        $this->mockSelectEntries();
 
         $this->artisan('telescope:send-report');
 
         $this->assertNotificationSent('command');
     }
 
-    protected function getProtectedProperty($object, string $propertyName)
+    public function testReportMail()
     {
-        $reflector = new ReflectionClass($object);
-        $property = $reflector->getProperty($propertyName);
-        $property->setAccessible(true);
-        return $property->getValue($object);
+        Mail::to('test@mail')->send(new ReportMail([
+            'telescopeBaseUrl' => 'http://localhost/telescope',
+            'entries' => collect([
+                ...$this->getJsonFixture('entries_data'),
+            ]),
+        ]));
+
+        $this->assertMailEquals(ReportMail::class, [
+            'emails' => 'test@mail',
+            'fixture' => 'mails/report.html',
+        ]);
     }
 }
