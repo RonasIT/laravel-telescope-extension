@@ -28,9 +28,9 @@ Package allows to restrict access to the Telescope only in the `production` envi
 
 Modify the `allowed_ips` config for this.
 
-Empty config value will allow to have access from any IP address.
+Empty config value will allow to have access from **any** IP address.
 
-### Updated prune command
+### 🧹 Updated prune command
 
 Manually call the console command `telescope:prune` with your options
 or specify it into [schedule](https://laravel.com/docs/12.x/scheduling#scheduling-artisan-commands). For example:
@@ -75,11 +75,11 @@ Here is the list of possible `entry-type` values:
 | resolved_exception   |
 | completed_job        |
 
-### Store content in JSON field
+### 🧩 Store content in JSON field
 
 The content field in the `telescope_entries` table now has the `jsonb` type which makes it easier to work with using the database management system's tools.
 
-### Production Filter
+### 🔍 Production Filter
 
 Feel free to use the predefined telescope filter for the `production` environment. It'll collect next entries:
 
@@ -101,17 +101,17 @@ To enable the filter just use it in your own `TelescopeServiceProvider`
 Telescope::filter(call_user_func(new \RonasIT\TelescopeExtension\Filters\ProductionFilter));
 ```
 
-### Request Watcher
+### 👀 Extended Request Watcher
 
 The extended Request watcher provides new configurable logic.
 
-#### Ignoring requests by response message
+#### 🙈 Ignoring requests by response message
 
 Watcher will ignore incoming HTTP requests if the `message` field in the response is equal to one of the ignorable messages.
 
 Just add the full message to the `ignore_error_messages` config.
 
-#### Ignoring requests by path
+#### 🙈 Ignoring requests by path
 
 Works the same as the `ignore` config of the CommandWatcher. The watcher will skip incoming HTTP requests if they are made to one of the ignorable paths.
 
