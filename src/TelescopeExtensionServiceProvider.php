@@ -42,7 +42,7 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
 
         $this->callAfterResolving('view', fn ($view) => $view->prependNamespace('telescope', __DIR__ . '/../resources/views'));
 
-        Blade::component('entires-count', EntriesCount::class);
+        Blade::component('entries-count', EntriesCount::class);
     }
 
     public function register(): void
