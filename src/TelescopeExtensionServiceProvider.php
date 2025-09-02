@@ -10,6 +10,7 @@ use Laravel\Telescope\Contracts\PrunableRepository;
 use Illuminate\Support\Facades\Blade;
 use RonasIT\Support\Http\Middleware\CheckIpMiddleware;
 use RonasIT\TelescopeExtension\Console\Commands\TelescopePrune;
+use RonasIT\TelescopeExtension\Repositories\TelescopeRepository;
 use RonasIT\TelescopeExtension\View\Components\EntriesCount;
 
 class TelescopeExtensionServiceProvider extends ServiceProvider
