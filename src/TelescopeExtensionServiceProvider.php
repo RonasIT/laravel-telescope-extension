@@ -38,7 +38,7 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
 
         $this->loadRoutesFrom(__DIR__ . '/../routes/telescope.php');
 
-        $this->app['view']->getFinder()->prependNamespace('telescope', __DIR__.'/../resources/views');
+        $this->callAfterResolving('view', fn ($view) => $view->prependNamespace('telescope', __DIR__ . '/../resources/views'));
     }
 
     public function register(): void
