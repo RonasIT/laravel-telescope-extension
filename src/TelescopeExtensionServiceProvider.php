@@ -7,9 +7,11 @@ use Illuminate\Support\ServiceProvider;
 use Laravel\Telescope\Contracts\ClearableRepository;
 use Laravel\Telescope\Contracts\EntriesRepository;
 use Laravel\Telescope\Contracts\PrunableRepository;
+use Illuminate\Support\Facades\Blade;
 use RonasIT\Support\Http\Middleware\CheckIpMiddleware;
 use RonasIT\TelescopeExtension\Console\Commands\TelescopePrune;
 use RonasIT\TelescopeExtension\Repositories\TelescopeRepository;
+use RonasIT\TelescopeExtension\View\Components\EntriesCount;
 
 class TelescopeExtensionServiceProvider extends ServiceProvider
 {
@@ -37,6 +39,10 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__ . '/../migrations');
 
         $this->loadRoutesFrom(__DIR__ . '/../routes/telescope.php');
+
+        $this->callAfterResolving('view', fn ($view) => $view->prependNamespace('telescope', __DIR__ . '/../resources/views'));
+
+        Blade::component('entries-count', EntriesCount::class);
     }
 
     public function register(): void

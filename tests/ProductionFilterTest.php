@@ -12,7 +12,7 @@ use RonasIT\TelescopeExtension\Tests\Support\ProductionFilterTestTrait;
 use Symfony\Component\HttpFoundation\Response;
 use Closure;
 
-class  ProductionFilterTest extends TestCase
+class ProductionFilterTest extends TestCase
 {
     use ProductionFilterTestTrait;
 
