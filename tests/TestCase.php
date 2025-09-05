@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 use RonasIT\Support\Traits\TestingTrait;
-use RonasIT\TelescopeExtension\Tests\Support\MailsMockTrait;
 use RonasIT\TelescopeExtension\Repositories\TelescopeRepository;
 use RonasIT\TelescopeExtension\TelescopeExtensionServiceProvider;
 use ReflectionClass;
@@ -17,7 +16,6 @@ use ReflectionClass;
 class TestCase extends BaseTestCase
 {
     use TestingTrait;
-    use MailsMockTrait { MailsMockTrait::assertFixture insteadof TestingTrait; }
 
     protected function setUp(): void
     {
@@ -76,9 +74,9 @@ class TestCase extends BaseTestCase
         $actualData = [];
 
         foreach ($notifications as $modelClassName => $notifiableIDs) {
-            foreach ($notifiableIDs as $notifiableId => $modelNotifications) {
+            foreach ($notifiableIDs as $notifiableID => $modelNotifications) {
                 foreach ($modelNotifications as $notificationClassName => $modelNotification) {
-                    foreach ($modelNotification as $key => $notification) {
+                    foreach ($modelNotification as $notification) {
                         $mailMessage = $notification['notification']->toMail($notification['notifiable']);
 
                         $notification['notification'] = $this->getObjectAttributes($notification['notification']);
@@ -86,7 +84,7 @@ class TestCase extends BaseTestCase
                         $notification['mailable'] = $mailMessage;
                         unset($notification['notification']['id']);
 
-                        $actualData[$modelClassName][$notifiableId][$notificationClassName][] = $notification;
+                        $actualData[$modelClassName][$notifiableID][$notificationClassName][] = $notification;
                     }
                 }
             }

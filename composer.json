@@ -15,7 +15,7 @@
         "laravel/framework": ">=11.44.1",
         "laravel/telescope": "^5",
         "muhammadhuzaifa/telescope-guzzle-watcher": "^3.2",
-        "ronasit/laravel-helpers": "^3.5.2"
+        "ronasit/laravel-helpers": "dev-228_correct_mails_mock_trait_assert_fixture"
     },
     "require-dev": {
         "phpunit/phpunit": "^10.5",

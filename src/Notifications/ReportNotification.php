@@ -8,6 +8,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\URL;
 use RonasIT\TelescopeExtension\Mail\ReportMail;
 
 class ReportNotification extends Notification implements ShouldQueue
@@ -26,9 +27,11 @@ class ReportNotification extends Notification implements ShouldQueue
 
     public function toMail(object $notifiable): Mailable
     {
-        return (new ReportMail([
+        $mailData = [
             'entries' => $this->entries,
-            'telescopeBaseUrl' => config('app.url') . '/' . config('telescope.path'),
-        ]))->to(config("telescope.notifications.report.drivers.mail.to"));
+            'telescopeBaseUrl' => URL::to(config('telescope.path')),
+        ];
+
+        return (new ReportMail($mailData))->to(config("telescope.notifications.report.drivers.mail.to"));
     }
 }

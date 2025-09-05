@@ -41,13 +41,13 @@ class SendTelescopeReportTest extends TestCase
         Config::set('telescope.notifications.report.frequency', 7);
         Config::set('telescope.notifications.report.time', '15');
 
+        Carbon::setTestNow(Carbon::create(2018, 1, 14));
+
         $this->serviceProvider->boot();
 
         $event = Arr::first($this->schedule->events());
 
         $this->assertScheduledEventEquals($event, 'telescope:send-report', '0 15 * * *');
-
-        Carbon::setTestNow(Carbon::create(2018, 1, 14));
 
         $this->assertScheduledEventExecuted($event, true);
     }
@@ -58,13 +58,13 @@ class SendTelescopeReportTest extends TestCase
         Config::set('telescope.notifications.report.frequency', 8);
         Config::set('telescope.notifications.report.time', '15');
 
+        Carbon::setTestNow(Carbon::create(2018, 1, 7));
+
         $this->serviceProvider->boot();
 
         $event = Arr::first($this->schedule->events());
 
         $this->assertScheduledEventEquals($event, 'telescope:send-report', '0 15 * * *');
-
-        Carbon::setTestNow(Carbon::create(2018, 1, 7));
 
         $this->assertScheduledEventExecuted($event, false);
     }
