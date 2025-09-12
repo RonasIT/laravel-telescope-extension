@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "73d8a59d55240744e63cf08711025dfc",
+    "content-hash": "3ba1de0d458d137e23aaf92c23e89055",
     "packages": [
         {
             "name": "brick/math",
@@ -4940,16 +4940,16 @@
         },
         {
             "name": "ronasit/laravel-helpers",
-            "version": "dev-228_correct_mails_mock_trait_assert_fixture",
+            "version": "3.5.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/RonasIT/laravel-helpers.git",
-                "reference": "8d07d253fef3cae6b111a7ee87226d9cffe87d29"
+                "reference": "7f071437dc3fa5bfa563030d367b1929effb010b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/RonasIT/laravel-helpers/zipball/8d07d253fef3cae6b111a7ee87226d9cffe87d29",
-                "reference": "8d07d253fef3cae6b111a7ee87226d9cffe87d29",
+                "url": "https://api.github.com/repos/RonasIT/laravel-helpers/zipball/7f071437dc3fa5bfa563030d367b1929effb010b",
+                "reference": "7f071437dc3fa5bfa563030d367b1929effb010b",
                 "shasum": ""
             },
             "require": {
@@ -5015,9 +5015,9 @@
             ],
             "support": {
                 "issues": "https://github.com/RonasIT/laravel-helpers/issues",
-                "source": "https://github.com/RonasIT/laravel-helpers/tree/228_correct_mails_mock_trait_assert_fixture"
+                "source": "https://github.com/RonasIT/laravel-helpers/tree/3.5.4"
             },
-            "time": "2025-09-05T06:36:17+00:00"
+            "time": "2025-09-09T05:33:03+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -10051,8 +10051,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "mpyw/laravel-database-mock": 15,
-        "ronasit/laravel-helpers": 20
+        "mpyw/laravel-database-mock": 15
     },
     "prefer-stable": true,
     "prefer-lowest": false,
