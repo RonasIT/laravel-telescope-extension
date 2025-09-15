@@ -47,9 +47,6 @@ class TelescopeExtensionServiceProviderTest extends TestCase
 
         $paths = array_map('realpath', $hints['telescope']);
 
-        $this->assertContains(
-            realpath(__DIR__ . '/../resources/views'),
-            $paths
-        );
+        $this->assertContains(realpath(__DIR__ . '/../resources/views'),$paths);
     }
 }
