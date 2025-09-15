@@ -79,7 +79,7 @@
                             "logs": 5,
                             "notifications": 7
                         },
-                        "telescopeBaseUrl": "http:\/\/localhost\/telescope"
+                        "telescopeBaseUrl": "http:\/\/localhost\/telescope",
                         "attachments": [],
                         "rawAttachments": [],
                         "diskAttachments": [],
