@@ -94,7 +94,8 @@
                         "chained": [],
                         "chainConnection": null,
                         "chainQueue": null,
-                        "chainCatchCallbacks": null
+                        "chainCatchCallbacks": null,
+                        "viewData" => []
                     }
                 }
             ]
