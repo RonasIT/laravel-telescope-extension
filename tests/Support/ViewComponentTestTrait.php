@@ -24,6 +24,9 @@ trait ViewComponentTestTrait
         $queryMock->shouldReceive('count')
                 ->andReturn($count);
 
+        DB::shouldReceive('connection')
+            ->andReturnSelf();
+
         DB::shouldReceive('table')
             ->once()
             ->with('telescope_entries')

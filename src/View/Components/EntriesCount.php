@@ -2,7 +2,7 @@
 
 namespace RonasIT\TelescopeExtension\View\Components;
 
-use Illuminate\Support\Facades\DB;
+use RonasIT\TelescopeExtension\Repositories\TelescopeRepository;
 use Illuminate\View\Component;
 
 class EntriesCount extends Component
@@ -18,7 +18,7 @@ class EntriesCount extends Component
 
     public function render()
     {
-        $count = DB::table('telescope_entries')->where('type', $this->type)->count();
+        $count = app(TelescopeRepository::class)->countByType($this->type);
 
         return ($count > 0) ? "{$this->label} ({$count})" : $this->label;
     }
