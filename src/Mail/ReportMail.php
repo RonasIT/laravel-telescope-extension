@@ -15,7 +15,8 @@ class ReportMail extends Mailable implements ShouldQueue
     use SerializesModels;
 
     public function __construct(
-        public $viewData,
+        public Collection $entries,
+        pubic string $telescopeBaseUrl,
     ) {
     }
 

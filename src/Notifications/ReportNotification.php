@@ -27,11 +27,9 @@ class ReportNotification extends Notification implements ShouldQueue
 
     public function toMail(object $notifiable): Mailable
     {
-        $mailData = [
-            'entries' => $this->entries,
-            'telescopeBaseUrl' => URL::to(config('telescope.path')),
-        ];
-
-        return (new ReportMail($mailData))->to(config('telescope.notifications.report.drivers.mail.to'));
+        return (new ReportMail(
+            entries: $this->entries,
+            telescopeBaseUrl: URL::to(config('telescope.path')),
+        ))->to(config('telescope.notifications.report.drivers.mail.to'));
     }
 }

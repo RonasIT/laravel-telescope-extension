@@ -91,12 +91,10 @@ class SendTelescopeReportTest extends TestCase
 
     public function testReportMail()
     {
-        Mail::to('test@mail')->send(new ReportMail([
-            'telescopeBaseUrl' => 'http://localhost/telescope',
-            'entries' => collect([
-                ...$this->getJsonFixture('entries_data'),
-            ]),
-        ]));
+        Mail::to('test@mail')->send(new ReportMail(
+            telescopeBaseUrl: 'http://localhost/telescope',
+            entries: collect($this->getJsonFixture('entries_data')),
+        ));
 
         $this->assertMailEquals(ReportMail::class, [
             'emails' => 'test@mail',
