@@ -16,7 +16,7 @@ class ReportMail extends Mailable implements ShouldQueue
 
     public function __construct(
         public Collection $entries,
-        pubic string $telescopeBaseUrl,
+        public string $telescopeBaseUrl,
     ) {
     }
 
