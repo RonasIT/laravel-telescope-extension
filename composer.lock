@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3ba1de0d458d137e23aaf92c23e89055",
+    "content-hash": "d027dac0c3780beb10d39113c618fb7f",
     "packages": [
         {
             "name": "brick/math",
@@ -4940,16 +4940,16 @@
         },
         {
             "name": "ronasit/laravel-helpers",
-            "version": "3.5.4",
+            "version": "3.5.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/RonasIT/laravel-helpers.git",
-                "reference": "7f071437dc3fa5bfa563030d367b1929effb010b"
+                "reference": "1f24f40a6bc444f1db8944a804e46064887a2df9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/RonasIT/laravel-helpers/zipball/7f071437dc3fa5bfa563030d367b1929effb010b",
-                "reference": "7f071437dc3fa5bfa563030d367b1929effb010b",
+                "url": "https://api.github.com/repos/RonasIT/laravel-helpers/zipball/1f24f40a6bc444f1db8944a804e46064887a2df9",
+                "reference": "1f24f40a6bc444f1db8944a804e46064887a2df9",
                 "shasum": ""
             },
             "require": {
@@ -5015,9 +5015,9 @@
             ],
             "support": {
                 "issues": "https://github.com/RonasIT/laravel-helpers/issues",
-                "source": "https://github.com/RonasIT/laravel-helpers/tree/3.5.4"
+                "source": "https://github.com/RonasIT/laravel-helpers/tree/3.5.5"
             },
-            "time": "2025-09-09T05:33:03+00:00"
+            "time": "2025-09-18T07:55:07+00:00"
         },
         {
             "name": "sebastian/cli-parser",
