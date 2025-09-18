@@ -1,6 +1,5 @@
 <?php
 
-use Laravel\Telescope\Http\Middleware\Authorize;
 use Laravel\Telescope\Watchers;
 use MuhammadHuzaifa\TelescopeGuzzleWatcher\Watchers\TelescopeGuzzleWatcher;
 use RonasIT\TelescopeExtension\Watchers\RequestWatcher;
@@ -109,7 +108,7 @@ return [
 
     'middleware' => [
         'web',
-        Authorize::class,
+        'auth:web',
     ],
 
     /*
