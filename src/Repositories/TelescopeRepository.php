@@ -5,6 +5,7 @@ namespace RonasIT\TelescopeExtension\Repositories;
 use DateTimeInterface;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Laravel\Telescope\EntryType;
 use Laravel\Telescope\Storage\DatabaseEntriesRepository;
@@ -101,5 +102,14 @@ class TelescopeRepository extends DatabaseEntriesRepository
     public function countByType(string $type): int
     {
         return $this->table('telescope_entries')->where('type', $type)->count();
+    }
+
+    public function getEntryCounts(): Collection
+    {
+        return $this
+            ->table('telescope_entries')
+            ->select(DB::raw('type, count(*) as count'))
+            ->groupBy('type')
+            ->pluck('count', 'type');
     }
 }
