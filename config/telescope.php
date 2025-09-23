@@ -236,4 +236,31 @@ return [
         Watchers\ViewWatcher::class => env('TELESCOPE_VIEW_WATCHER', true),
         TelescopeGuzzleWatcher::class => env('TELESCOPE_GUZZLE_WATCHER', true),
     ],
+
+    'notifications' => [
+        'report' => [
+            'enabled' => env('IS_TELESCOPE_REPORT_ENABLED', false),
+
+            /*
+            |----------------------------------------------------------------------
+            | Frequency, days
+            |----------------------------------------------------------------------
+            */
+            'frequency' => env('TELESCOPE_REPORT_FREQUENCY', 7),
+
+            /*
+            |--------------------------------------------------------------------------
+            | Time to send, hour
+            |--------------------------------------------------------------------------
+            */
+            'time' => env('TELESCOPE_REPORT_TIME_HOUR', 12),
+            'driver' => env('TELESCOPE_REPORT_DRIVER', 'mail'),
+
+            'drivers' => [
+                'mail' => [
+                    'to' => explode(',', env('TELESCOPE_REPORT_MAIL_TO', '')),
+                ],
+            ],
+        ],
+    ]
 ];

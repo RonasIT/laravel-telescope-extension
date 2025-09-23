@@ -1,0 +1,74 @@
+[
+  {
+    "type": "cache",
+    "count": 1
+  },
+  {
+    "type": "client_request",
+    "count": 3
+  },
+  {
+    "type": "command",
+    "count": 4
+  },
+  {
+    "type": "exception",
+    "count": 5
+  },
+  {
+    "type": "job",
+    "count": 6
+  },
+  {
+    "type": "mail",
+    "count": 8
+  },
+  {
+    "type": "model",
+    "count": 1
+  },
+  {
+    "type": "query",
+    "count": 5
+  },
+  {
+    "type": "redis",
+    "count": 4
+  },
+  {
+    "type": "request",
+    "count": 5
+  },
+  {
+    "type": "schedule",
+    "count": 11
+  },
+  {
+    "type": "view",
+    "count": 3
+  },
+  {
+    "type": "batch",
+    "count": 8
+  },
+  {
+    "type": "dump",
+    "count": 4
+  },
+  {
+    "type": "event",
+    "count": 1
+  },
+  {
+    "type": "gate",
+    "count": 2
+  },
+  {
+    "type": "log",
+    "count": 5
+  },
+  {
+    "type": "notification",
+    "count": 7
+  }
+]

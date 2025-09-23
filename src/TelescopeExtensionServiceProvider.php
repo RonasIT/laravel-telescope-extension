@@ -8,8 +8,10 @@ use Laravel\Telescope\Contracts\ClearableRepository;
 use Laravel\Telescope\Contracts\EntriesRepository;
 use Laravel\Telescope\Contracts\PrunableRepository;
 use RonasIT\Support\Http\Middleware\CheckIpMiddleware;
+use RonasIT\TelescopeExtension\Console\Commands\SendTelescopeReport;
 use RonasIT\TelescopeExtension\Console\Commands\TelescopePrune;
 use RonasIT\TelescopeExtension\Repositories\TelescopeRepository;
+use Illuminate\Console\Scheduling\Schedule;
 
 class TelescopeExtensionServiceProvider extends ServiceProvider
 {
@@ -19,24 +21,30 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__ . '/../config/telescope.php' => config_path('telescope.php'),
+            __DIR__ . '/../config/telescope-guzzle-watcher.php' => config_path('telescope-guzzle-watcher.php'),
         ], 'config');
 
         $this->mergeConfigFrom(__DIR__ . '/../config/telescope.php', 'telescope');
         $this->mergeConfigFrom(__DIR__ . '/../config/telescope-guzzle-watcher.php', 'telescope-guzzle-watcher');
 
         $this->publishes([
-            __DIR__ . '/../config/telescope-guzzle-watcher.php' => config_path('telescope-guzzle-watcher.php'),
-        ], 'config');
+            __DIR__ . '/../resources/views/report.blade.php' => resource_path('views/vendor/telescope/report.blade.php'),
+        ], 'view');
 
         if ($this->app->runningInConsole()) {
             $this->commands([
                 TelescopePrune::class,
+                SendTelescopeReport::class,
             ]);
         }
 
         $this->loadMigrationsFrom(__DIR__ . '/../migrations');
 
         $this->loadRoutesFrom(__DIR__ . '/../routes/telescope.php');
+
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'telescope');
+
+        $this->app->booted(fn () => $this->scheduleTelescopeReport());
     }
 
     public function register(): void
@@ -78,6 +86,21 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
                 ...config('telescope.middleware'),
                 CheckIpMiddleware::class . ':' . implode(',', $allowedIps),
             ]]);
+        }
+    }
+
+    protected function scheduleTelescopeReport(): void
+    {
+        $schedule = $this->app->make(Schedule::class);
+
+        if (config('telescope.notifications.report.enabled')) {
+            $frequency = config('telescope.notifications.report.frequency');
+            $time = config('telescope.notifications.report.time');
+
+            $schedule
+                ->command('telescope:send-report')
+                ->dailyAt("{$time}:00")
+                ->when(fn () => now()->dayOfYear % $frequency == 0);
         }
     }
 }
