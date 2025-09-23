@@ -2,18 +2,19 @@
 
 namespace RonasIT\TelescopeExtension\View\Components;
 
-use RonasIT\TelescopeExtension\Repositories\TelescopeRepository;
+use Illuminate\Support\Str;
 use Illuminate\View\Component;
+use RonasIT\TelescopeExtension\Repositories\TelescopeRepository;
 
 class EntriesCount extends Component
 {
     public string $type;
-    public string $label;
+    public ?string $label;
 
-    public function __construct(string $type, string $label)
+    public function __construct(string $type, ?string $label = null)
     {
         $this->type = $type;
-        $this->label = $label;
+        $this->label = $label ?? Str::headline($type);
     }
 
     public function render()
