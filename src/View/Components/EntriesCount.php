@@ -14,7 +14,7 @@ class EntriesCount extends Component
     public function __construct(string $type, ?string $label = null)
     {
         $this->type = $type;
-        $this->label = $label ?? Str::headline($type);
+        $this->label = $label ?? Str::of($type)->plural()->headline();
     }
 
     public function render()
