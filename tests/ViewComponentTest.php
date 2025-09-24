@@ -15,11 +15,12 @@ class ViewComponentTest extends TestCase
         return [
             'with entries' => ['request', 'Requests', 5, 'Requests (5)'],
             'without entries' => ['command', 'Commands', 0, 'Commands'],
+            'without label' => ['batch', null, 0, 'Batches'],
         ];
     }
 
     #[DataProvider('entriesCountDataProvider')]
-    public function testEntriesCount(string $type, string $label, int $rowCount, string $expected): void
+    public function testEntriesCount(string $type, ?string $label, int $rowCount, string $expected): void
     {
         $this->mockEntriesCount($type, $rowCount);
 

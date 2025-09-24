@@ -17,12 +17,14 @@ trait ViewComponentTestTrait
     {
         $queryMock = Mockery::mock(Builder::class);
 
-        $queryMock->shouldReceive('where')
-                ->with('type', $type)
-                ->andReturnSelf();
+        $queryMock
+            ->shouldReceive('where')
+            ->with('type', $type)
+            ->andReturnSelf();
 
-        $queryMock->shouldReceive('count')
-                ->andReturn($count);
+        $queryMock
+            ->shouldReceive('count')
+            ->andReturn($count);
 
         DB::shouldReceive('connection')
             ->andReturnSelf();
