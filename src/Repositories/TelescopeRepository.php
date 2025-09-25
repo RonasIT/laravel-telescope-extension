@@ -99,6 +99,11 @@ class TelescopeRepository extends DatabaseEntriesRepository
         $this->storeTags($entries->pluck('tags', 'uuid'));
     }
 
+    public function countByType(string $type): int
+    {
+        return $this->table('telescope_entries')->where('type', $type)->count();
+    }
+
     public function getEntryCounts(): Collection
     {
         return $this

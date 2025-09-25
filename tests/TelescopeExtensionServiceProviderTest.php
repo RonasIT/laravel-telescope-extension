@@ -40,4 +40,13 @@ class TelescopeExtensionServiceProviderTest extends TestCase
 
         $this->assertEquals($this->initialMiddlewares, Config::get('telescope.middleware'));
     }
+
+    public function testTelescopeViewPath()
+    {
+        $hints = app('view')->getFinder()->getHints();
+
+        $paths = array_map('realpath', $hints['telescope']);
+
+        $this->assertContains(realpath(__DIR__ . '/../resources/views'), $paths);
+    }
 }
