@@ -34,4 +34,32 @@ trait ViewComponentTestTrait
             ->with('telescope_entries')
             ->andReturn($queryMock);
     }
+
+    public function mockExceptionsCount(int $uniqueCount): void
+    {
+        $queryMock = Mockery::mock(Builder::class);
+
+        $queryMock
+            ->shouldReceive('where')
+            ->with('type', 'exception')
+            ->andReturnSelf();
+
+        $queryMock
+            ->shouldReceive('distinct')
+            ->with('family_hash')
+            ->andReturnSelf();
+
+        $queryMock
+            ->shouldReceive('count')
+            ->with('family_hash')
+            ->andReturn($uniqueCount);
+
+        DB::shouldReceive('connection')
+            ->andReturnSelf();
+
+        DB::shouldReceive('table')
+            ->once()
+            ->with('telescope_entries')
+            ->andReturn($queryMock);
+    }
 }

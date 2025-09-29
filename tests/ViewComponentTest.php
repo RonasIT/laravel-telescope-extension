@@ -25,9 +25,20 @@ class ViewComponentTest extends TestCase
         $this->mockEntriesCount($type, $rowCount);
 
         $component = new EntriesCount($type, $label);
-        
+
         $result = $component->render();
 
         $this->assertSame($expected, $result);
+    }
+
+    public function testExeptionsCount(): void
+    {
+        $this->mockExceptionsCount(5);
+
+        $component = new EntriesCount('exception');
+
+        $result = $component->render();
+
+        $this->assertSame('Exceptions (5)', $result);
     }
 }
