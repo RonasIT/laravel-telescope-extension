@@ -31,7 +31,7 @@ class ViewComponentTest extends TestCase
         $this->assertSame($expected, $result);
     }
 
-    public function testExeptionsCount(): void
+    public function testExceptionsCount(): void
     {
         $this->mockExceptionsCount(5);
 
