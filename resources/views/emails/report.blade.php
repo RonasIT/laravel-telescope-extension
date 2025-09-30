@@ -7,35 +7,16 @@
 <body style="font-family: Arial, sans-serif; color: #333;">
 <h2>{{ config('app.name') }} Telescope collected entries</h2>
 
-@php
-    $emojiMap = [
-        'cache' => '📦',
-        'client-requests'=> '📡',
-        'requests' => '🌐',
-        'commands' => '⌨️',
-        'queries' => '📊',
-        'mail' => '✉️',
-        'views' => '🖥️',
-        'redis' => '⚡',
-        'exceptions' => '⚠️',
-        'notifications' => '🔔',
-        'jobs' => '💥',
-        'schedule' => '🕒',
-        'batches' => '🗂️',
-        'logs' => '📑',
-        'gates' => '🚪',
-        'events' => '🎫',
-        'models' => '🤖',
-        'dumps' => '📝',
-    ];
-@endphp
-<ul>
+<ul style="list-style-type: none;">
     @foreach ($entries as $type => $count)
         @if ($count > 0)
             <li>
                 <a href="{{ $telescopeBaseUrl }}/{{ $type }}" style="color: #1a73e8; text-decoration: none;">
-                    {!! $emojiMap[$type] !!}&nbsp;
-                    {{ ucfirst($type) }} ({{ $count }})
+                    {!! $entryEmojiMap[$type] !!}&nbsp;
+                    @php
+                        $displayName = $entryDisplayNameMap[$type] ?? ucfirst($type);
+                    @endphp
+                    {{ ucfirst($displayName) }} ({{ $count }})
                 </a>
             </li>
         @endif
