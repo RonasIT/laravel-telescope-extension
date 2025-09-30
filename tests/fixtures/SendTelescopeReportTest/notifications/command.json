@@ -8,8 +8,8 @@
                             "cache": 1,
                             "client-requests": 3,
                             "commands": 4,
-                            "exceptions": 5,
-                            "jobs": 6,
+                            "unresolved exceptions": 5,
+                            "failed jobs": 6,
                             "mail": 8,
                             "models": 1,
                             "queries": 5,
@@ -59,12 +59,19 @@
                         "markdown": null,
                         "view": null,
                         "textView": null,
+                        "viewData": [],
+                        "attachments": [],
+                        "rawAttachments": [],
+                        "diskAttachments": [],
+                        "callbacks": [],
+                        "theme": null,
+                        "mailer": null,
                         "entries": {
                             "cache": 1,
                             "client-requests": 3,
                             "commands": 4,
-                            "exceptions": 5,
-                            "jobs": 6,
+                            "unresolved exceptions": 5,
+                            "failed jobs": 6,
                             "mail": 8,
                             "models": 1,
                             "queries": 5,
@@ -80,12 +87,6 @@
                             "notifications": 7
                         },
                         "telescopeBaseUrl": "http:\/\/localhost\/telescope",
-                        "attachments": [],
-                        "rawAttachments": [],
-                        "diskAttachments": [],
-                        "callbacks": [],
-                        "theme": null,
-                        "mailer": null,
                         "connection": null,
                         "queue": null,
                         "delay": null,
@@ -94,8 +95,7 @@
                         "chained": [],
                         "chainConnection": null,
                         "chainQueue": null,
-                        "chainCatchCallbacks": null,
-                        "viewData": []
+                        "chainCatchCallbacks": null
                     }
                 }
             ]
