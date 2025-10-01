@@ -101,20 +101,18 @@ class TelescopeRepository extends DatabaseEntriesRepository
 
     public function countByType(string $type): int
     {
-        if ($type === "exception") {
-            return $this->countExceptions();
-        }
-
-        return $this->table('telescope_entries')->where('type', $type)->count();
-    }
-
-    public function countExceptions(): int
-    {
         return $this
             ->table('telescope_entries')
-            ->where('type', 'exception')
-            ->distinct('family_hash')
-            ->count('family_hash');
+            ->where('type', $type)
+            ->selectRaw("CASE 
+                    WHEN EXISTS (
+                        SELECT 1 
+                        FROM telescope_entries 
+                        WHERE type = ? AND family_hash IS NULL
+                    ) THEN COUNT(*) 
+                    ELSE COUNT(DISTINCT family_hash) 
+                END as count", [$type])
+            ->value('count');
     }
 
     public function getEntryCounts(): Collection
