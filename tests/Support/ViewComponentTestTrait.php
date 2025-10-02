@@ -23,7 +23,13 @@ trait ViewComponentTestTrait
             ->andReturnSelf();
 
         $queryMock
-            ->shouldReceive('count')
+            ->shouldReceive('selectRaw')
+            ->withArgs(fn ($expression, $bindings) => str_contains($expression, 'CASE') && $bindings === [$type])
+            ->andReturnSelf();
+
+        $queryMock
+            ->shouldReceive('value')
+            ->with('count')
             ->andReturn($count);
 
         DB::shouldReceive('connection')
