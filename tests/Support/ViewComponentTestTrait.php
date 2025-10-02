@@ -24,7 +24,7 @@ trait ViewComponentTestTrait
 
         $queryMock
             ->shouldReceive('selectRaw')
-            ->withArgs(fn ($raw, $bindings) => str_contains($raw, 'CASE') && $bindings === [$type])
+            ->withArgs(fn ($expression, $bindings) => str_contains($expression, 'CASE') && $bindings === [$type])
             ->andReturnSelf();
 
         $queryMock
