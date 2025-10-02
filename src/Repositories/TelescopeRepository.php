@@ -104,14 +104,17 @@ class TelescopeRepository extends DatabaseEntriesRepository
         return $this
             ->table('telescope_entries')
             ->where('type', $type)
-            ->selectRaw("CASE 
+            ->selectRaw(
+                expression: "CASE 
                     WHEN EXISTS (
                         SELECT 1 
                         FROM telescope_entries 
                         WHERE type = ? AND family_hash IS NULL
                     ) THEN COUNT(*) 
                     ELSE COUNT(DISTINCT family_hash) 
-                END as count", [$type])
+                END as count",
+                bindings: [$type],
+            )
             ->value('count');
     }
 
