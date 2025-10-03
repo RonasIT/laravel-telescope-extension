@@ -118,11 +118,25 @@ class TelescopeRepository extends DatabaseEntriesRepository
             ->value('count');
     }
 
-    public function getEntryCounts(): Collection
+    public function getReportableEntriesCountMap(): Collection
     {
         return $this
             ->table('telescope_entries')
             ->select(DB::raw('type, count(*) as count'))
+            ->where(function (Builder $subQuery) {
+                $subQuery
+                    ->whereNotIn('type', [EntryType::EXCEPTION, EntryType::JOB])
+                    ->orWhere(function (Builder $subQuery) {
+                        $subQuery
+                            ->where('type', EntryType::EXCEPTION)
+                            ->whereNull('content->resolved_at');
+                    })
+                    ->orWhere(function (Builder $subQuery) {
+                        $subQuery
+                            ->where('type', EntryType::JOB)
+                            ->where('content->status', 'failed');
+                    });
+            })
             ->groupBy('type')
             ->pluck('count', 'type');
     }

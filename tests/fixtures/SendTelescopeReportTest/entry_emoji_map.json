@@ -1,0 +1,20 @@
+{
+  "cache": "📦",
+  "client-requests": "📡",
+  "requests": "🌐",
+  "commands": "⌨️",
+  "queries": "📊",
+  "mail": "✉️",
+  "views": "🖥",
+  "redis": "⚡️",
+  "exceptions": "⚠️",
+  "notifications": "🔔",
+  "jobs": "💥",
+  "schedule": "🕒",
+  "batches": "🗂",
+  "logs": "📑",
+  "gates": "🚪",
+  "events": "🎫",
+  "models": "🤖",
+  "dumps": "📝"
+}

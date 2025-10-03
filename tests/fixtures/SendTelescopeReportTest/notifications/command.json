@@ -59,6 +59,13 @@
                         "markdown": null,
                         "view": null,
                         "textView": null,
+                        "viewData": [],
+                        "attachments": [],
+                        "rawAttachments": [],
+                        "diskAttachments": [],
+                        "callbacks": [],
+                        "theme": null,
+                        "mailer": null,
                         "entries": {
                             "cache": 1,
                             "client-requests": 3,
@@ -80,12 +87,30 @@
                             "notifications": 7
                         },
                         "telescopeBaseUrl": "http:\/\/localhost\/telescope",
-                        "attachments": [],
-                        "rawAttachments": [],
-                        "diskAttachments": [],
-                        "callbacks": [],
-                        "theme": null,
-                        "mailer": null,
+                        "entryEmojiMap": {
+                            "cache": "📦",
+                            "client-requests": "📡",
+                            "requests": "🌐",
+                            "commands": "⌨️",
+                            "queries": "📊",
+                            "mail": "✉️",
+                            "views": "🖥",
+                            "redis": "⚡️",
+                            "exceptions": "⚠️",
+                            "notifications": "🔔",
+                            "jobs": "💥",
+                            "schedule": "🕒",
+                            "batches": "🗂",
+                            "logs": "📑",
+                            "gates": "🚪",
+                            "events": "🎫",
+                            "models": "🤖",
+                            "dumps": "📝"
+                        },
+                        "entryDisplayNameMap": {
+                            "exceptions": "Unresolved exceptions",
+                            "jobs": "Failed jobs"
+                        },
                         "connection": null,
                         "queue": null,
                         "delay": null,
@@ -94,8 +119,7 @@
                         "chained": [],
                         "chainConnection": null,
                         "chainQueue": null,
-                        "chainCatchCallbacks": null,
-                        "viewData": []
+                        "chainCatchCallbacks": null
                     }
                 }
             ]

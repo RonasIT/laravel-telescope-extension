@@ -18,6 +18,8 @@ class ReportMail extends Mailable implements ShouldQueue
     public function __construct(
         public Collection $entries,
         public string $telescopeBaseUrl,
+        public array $entryEmojiMap,
+        public array $entryDisplayNameMap,
     ) {
     }
 

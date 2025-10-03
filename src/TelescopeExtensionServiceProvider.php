@@ -30,7 +30,7 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__ . '/../config/telescope-guzzle-watcher.php', 'telescope-guzzle-watcher');
 
         $this->publishes([
-            __DIR__ . '/../resources/views/report.blade.php' => resource_path('views/vendor/telescope/report.blade.php'),
+            __DIR__ . '/../resources/views/emails/report.blade.php' => resource_path('views/vendor/telescope/report.blade.php'),
         ], 'view');
 
         if ($this->app->runningInConsole()) {

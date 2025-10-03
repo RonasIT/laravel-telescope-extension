@@ -20,8 +20,14 @@ trait SendTelescopeReportTestTrait
             ->andReturn($this->getJsonFixture('sql_responses/fetch_all_response'));
 
         $statementMock
+            ->shouldReceive('bindValue')
+            ->times(5)
+            ->andReturnTrue();
+
+        $statementMock
             ->shouldReceive('execute')
             ->once()
+            ->withNoArgs()
             ->andReturnTrue();
 
         $statementMock
@@ -34,7 +40,7 @@ trait SendTelescopeReportTestTrait
             ->getPdo()
             ->shouldReceive('prepare')
             ->once()
-            ->with('select type, count(*) as count from "telescope_entries" group by "type"')
+            ->with('select type, count(*) as count from "telescope_entries" where ("type" not in (?, ?) or ("type" = ? and ' || '"content" is null) or ("type" = ? and "content" is not null)) group by "type"')
             ->andReturn($statementMock);
     }
 }
