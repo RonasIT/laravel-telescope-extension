@@ -12,11 +12,10 @@
         @if ($count > 0)
             <li>
                 <a href="{{ $telescopeBaseUrl }}/{{ $type }}" style="color: #1a73e8; text-decoration: none;">
-                    {!! $entryEmojiMap[$type] !!}&nbsp;
                     @php
                         $displayName = $entryDisplayNameMap[$type] ?? ucfirst($type);
                     @endphp
-                    {{ ucfirst($displayName) }} ({{ $count }})
+                    {!! $entryEmojiMap[$type] !!}&nbsp;{{ ucfirst($displayName) }} ({{ $count }})
                 </a>
             </li>
         @endif

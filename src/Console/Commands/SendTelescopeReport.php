@@ -37,7 +37,7 @@ class SendTelescopeReport extends Command
 
     public function handle(): void
     {
-        $entries = app(TelescopeRepository::class)->getEntryCounts();
+        $entries = app(TelescopeRepository::class)->getReportableEntriesCountMap();
         $entries = $entries->mapWithKeys(fn ($count, $entry) => [self::entryTypeMap[$entry] => $count]);
 
         Notification::routes([])->notify(new ReportNotification($entries));

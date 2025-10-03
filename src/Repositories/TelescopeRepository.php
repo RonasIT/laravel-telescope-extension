@@ -104,7 +104,7 @@ class TelescopeRepository extends DatabaseEntriesRepository
         return $this->table('telescope_entries')->where('type', $type)->count();
     }
 
-    public function getEntryCounts(): Collection
+    public function getReportableEntriesCountMap(): Collection
     {
         return $this
             ->table('telescope_entries')

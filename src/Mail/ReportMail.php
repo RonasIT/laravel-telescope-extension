@@ -15,35 +15,11 @@ class ReportMail extends Mailable implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    protected const array ENTRY_EMOJI_MAP = [
-        'cache' => '📦',
-        'client-requests'=> '📡',
-        'requests' => '🌐',
-        'commands' => '⌨️',
-        'queries' => '📊',
-        'mail' => '✉️',
-        'views' => '🖥',
-        'redis' => '⚡️',
-        'exceptions' => '⚠️',
-        'notifications' => '🔔',
-        'jobs' => '💥',
-        'schedule' => '🕒',
-        'batches' => '🗂',
-        'logs' => '📑',
-        'gates' => '🚪',
-        'events' => '🎫',
-        'models' => '🤖',
-        'dumps' => '📝',
-    ];
-
-    protected const array ENTRY_DISPLAY_NAME_MAP = [
-        'exceptions' => 'Unresolved exceptions',
-        'jobs' => 'Failed jobs',
-    ];
-
     public function __construct(
         public Collection $entries,
         public string $telescopeBaseUrl,
+        public array $entryEmojiMap,
+        public array $entryDisplayNameMap,
     ) {
     }
 
@@ -56,12 +32,6 @@ class ReportMail extends Mailable implements ShouldQueue
 
     public function content(): Content
     {
-        return new Content(
-            view: 'telescope::emails.report',
-            with: [
-                'entryEmojiMap' => self::ENTRY_EMOJI_MAP,
-                'entryDisplayNameMap' => self::ENTRY_DISPLAY_NAME_MAP,
-            ],
-        );
+        return new Content('telescope::emails.report');
     }
 }
