@@ -14,6 +14,7 @@ class ViewComponentTest extends TestCase
     {
         return [
             'with entries' => ['request', 'Requests', 5, 'Requests (5)'],
+            'with exceptions' => ['exception', 'Exceptions', 3, 'Exceptions (3)'],
             'without entries' => ['command', 'Commands', 0, 'Commands'],
             'without label' => ['batch', null, 0, 'Batches'],
         ];
@@ -25,7 +26,7 @@ class ViewComponentTest extends TestCase
         $this->mockEntriesCount($type, $rowCount);
 
         $component = new EntriesCount($type, $label);
-        
+
         $result = $component->render();
 
         $this->assertSame($expected, $result);
