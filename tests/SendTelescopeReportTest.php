@@ -94,11 +94,6 @@ class SendTelescopeReportTest extends TestCase
         Mail::to('test@mail')->send(new ReportMail(
             entries: collect($this->getJsonFixture('entries_data')),
             telescopeBaseUrl: 'http://localhost/telescope',
-            entryEmojiMap: $this->getJsonFixture('entry_emoji_map.json'),
-            entryDisplayNameMap: [
-                'exceptions' => 'Unresolved exceptions',
-                'jobs' => 'Failed jobs',
-            ],
         ));
 
         $this->assertMailEquals(ReportMail::class, [

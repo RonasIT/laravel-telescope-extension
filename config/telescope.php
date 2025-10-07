@@ -261,6 +261,32 @@ return [
                     'to' => explode(',', env('TELESCOPE_REPORT_MAIL_TO', '')),
                 ],
             ],
+
+            'entry_emoji_map' => [
+                'cache' => '📦',
+                'client-requests'=> '📡',
+                'requests' => '🌐',
+                'commands' => '⌨️',
+                'queries' => '📊',
+                'mail' => '✉️',
+                'views' => '🖥',
+                'redis' => '⚡️',
+                'exceptions' => '⚠️',
+                'notifications' => '🔔',
+                'jobs' => '💥',
+                'schedule' => '🕒',
+                'batches' => '🗂',
+                'logs' => '📑',
+                'gates' => '🚪',
+                'events' => '🎫',
+                'models' => '🤖',
+                'dumps' => '📝',
+            ],
+
+            'entry_display_name_map' => [
+                'exceptions' => 'Unresolved exceptions',
+                'jobs' => 'Failed jobs',
+            ],
         ],
     ]
 ];

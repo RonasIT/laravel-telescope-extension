@@ -87,30 +87,6 @@
                             "notifications": 7
                         },
                         "telescopeBaseUrl": "http:\/\/localhost\/telescope",
-                        "entryEmojiMap": {
-                            "cache": "📦",
-                            "client-requests": "📡",
-                            "requests": "🌐",
-                            "commands": "⌨️",
-                            "queries": "📊",
-                            "mail": "✉️",
-                            "views": "🖥",
-                            "redis": "⚡️",
-                            "exceptions": "⚠️",
-                            "notifications": "🔔",
-                            "jobs": "💥",
-                            "schedule": "🕒",
-                            "batches": "🗂",
-                            "logs": "📑",
-                            "gates": "🚪",
-                            "events": "🎫",
-                            "models": "🤖",
-                            "dumps": "📝"
-                        },
-                        "entryDisplayNameMap": {
-                            "exceptions": "Unresolved exceptions",
-                            "jobs": "Failed jobs"
-                        },
                         "connection": null,
                         "queue": null,
                         "delay": null,
