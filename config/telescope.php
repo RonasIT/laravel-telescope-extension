@@ -264,7 +264,7 @@ return [
 
             'entry_emoji_map' => [
                 'cache' => '📦',
-                'client-requests'=> '📡',
+                'client-requests' => '📡',
                 'requests' => '🌐',
                 'commands' => '⌨️',
                 'queries' => '📊',
