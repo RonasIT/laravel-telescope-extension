@@ -5,14 +5,17 @@
     <title>{{ config('app.name') }} Telescope Report</title>
 </head>
 <body style="font-family: Arial, sans-serif; color: #333;">
-<h2>{{ config('app.name') }} Telescope collected Entries Report</h2>
+<h2>{{ config('app.name') }} Telescope collected entries</h2>
 
-<ul>
+<ul style="list-style-type: none;">
     @foreach ($entries as $type => $count)
         @if ($count > 0)
             <li>
                 <a href="{{ $telescopeBaseUrl }}/{{ $type }}" style="color: #1a73e8; text-decoration: none;">
-                    {{ ucfirst($type) }} ({{ $count }})
+                    @php
+                        $displayName = $entryDisplayNameMap[$type] ?? ucfirst($type);
+                    @endphp
+                    {!! $entryEmojiMap[$type] !!}&nbsp;{{ ucfirst($displayName) }} ({{ $count }})
                 </a>
             </li>
         @endif

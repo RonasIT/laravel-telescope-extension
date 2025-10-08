@@ -30,6 +30,12 @@ class ReportMail extends Mailable implements ShouldQueue
 
     public function content(): Content
     {
-        return new Content('telescope::emails.report');
+        return new Content(
+            view: 'telescope::emails.report',
+            with: [
+                'entryEmojiMap' => config('telescope.notifications.report.entry_emoji_map'),
+                'entryDisplayNameMap' => config('telescope.notifications.report.entry_display_name_map'),
+            ],
+        );
     }
 }
