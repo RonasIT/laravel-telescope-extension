@@ -5,7 +5,6 @@ namespace RonasIT\TelescopeExtension\Repositories;
 use DateTimeInterface;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Laravel\Telescope\EntryType;
 use Laravel\Telescope\Storage\DatabaseEntriesRepository;
@@ -122,7 +121,6 @@ class TelescopeRepository extends DatabaseEntriesRepository
     {
         return $this
             ->table('telescope_entries')
-            ->select(DB::raw('type, count(*) as count'))
             ->where(function (Builder $subQuery) {
                 $subQuery
                     ->whereNotIn('type', [EntryType::EXCEPTION, EntryType::JOB])
@@ -137,6 +135,14 @@ class TelescopeRepository extends DatabaseEntriesRepository
                             ->where('content->status', 'failed');
                     });
             })
+            ->selectRaw(
+                expression: "type,
+                    CASE
+                        WHEN MAX(CASE WHEN family_hash IS NOT NULL THEN 1 ELSE 0 END) = 1 
+                        THEN COUNT(DISTINCT family_hash)
+                        ELSE COUNT(*)
+                    END as count",
+            )
             ->groupBy('type')
             ->pluck('count', 'type');
     }
