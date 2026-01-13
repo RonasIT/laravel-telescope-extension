@@ -2,18 +2,18 @@
 
 namespace RonasIT\TelescopeExtension;
 
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\AboutCommand;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Telescope\Contracts\ClearableRepository;
 use Laravel\Telescope\Contracts\EntriesRepository;
 use Laravel\Telescope\Contracts\PrunableRepository;
-use Illuminate\Support\Facades\Blade;
 use RonasIT\Support\Http\Middleware\CheckIpMiddleware;
 use RonasIT\TelescopeExtension\Console\Commands\SendTelescopeReport;
 use RonasIT\TelescopeExtension\Console\Commands\TelescopePrune;
 use RonasIT\TelescopeExtension\Repositories\TelescopeRepository;
 use RonasIT\TelescopeExtension\View\Components\EntriesCount;
-use Illuminate\Console\Scheduling\Schedule;
 
 class TelescopeExtensionServiceProvider extends ServiceProvider
 {
@@ -61,15 +61,15 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
     protected function registerDatabaseDriver(): void
     {
         $this->app->singleton(
-            EntriesRepository::class, TelescopeRepository::class
+            EntriesRepository::class, TelescopeRepository::class,
         );
 
         $this->app->singleton(
-            ClearableRepository::class, TelescopeRepository::class
+            ClearableRepository::class, TelescopeRepository::class,
         );
 
         $this->app->singleton(
-            PrunableRepository::class, TelescopeRepository::class
+            PrunableRepository::class, TelescopeRepository::class,
         );
 
         $this->app->when(TelescopeRepository::class)

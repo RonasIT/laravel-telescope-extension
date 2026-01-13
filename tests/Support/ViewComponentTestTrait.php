@@ -2,11 +2,10 @@
 
 namespace RonasIT\TelescopeExtension\Tests\Support;
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
-use RonasIT\TelescopeExtension\Tests\Support\SQLMockTrait;
 
 trait ViewComponentTestTrait
 {

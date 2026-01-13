@@ -3,8 +3,8 @@
 namespace RonasIT\TelescopeExtension\Tests\Support;
 
 use Mockery;
-use PDOStatement;
 use PDO;
+use PDOStatement;
 
 trait SendTelescopeReportTestTrait
 {

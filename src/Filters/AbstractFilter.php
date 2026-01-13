@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 abstract class AbstractFilter
 {
-    public abstract function __invoke(): Closure;
+    abstract public function __invoke(): Closure;
 
     protected function isException(IncomingEntry $entry): bool
     {

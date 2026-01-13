@@ -2,6 +2,7 @@
 
 namespace RonasIT\TelescopeExtension\Tests;
 
+use Closure;
 use Laravel\Telescope\EntryType;
 use Laravel\Telescope\IncomingEntry;
 use Laravel\Telescope\Watchers\RequestWatcher;
@@ -10,7 +11,6 @@ use RonasIT\TelescopeExtension\Tests\Support\Mock\IncomingClientRequest;
 use RonasIT\TelescopeExtension\Tests\Support\Mock\IncomingRequest;
 use RonasIT\TelescopeExtension\Tests\Support\ProductionFilterTestTrait;
 use Symfony\Component\HttpFoundation\Response;
-use Closure;
 
 class ProductionFilterTest extends TestCase
 {
@@ -80,7 +80,6 @@ class ProductionFilterTest extends TestCase
 
         $this->assertTrue($result);
     }
-
 
     public function testSuccessClientRequestProdEnv()
     {

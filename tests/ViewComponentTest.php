@@ -3,8 +3,8 @@
 namespace RonasIT\TelescopeExtension\Tests;
 
 use PHPUnit\Framework\Attributes\DataProvider;
-use RonasIT\TelescopeExtension\View\Components\EntriesCount;
 use RonasIT\TelescopeExtension\Tests\Support\ViewComponentTestTrait;
+use RonasIT\TelescopeExtension\View\Components\EntriesCount;
 
 class ViewComponentTest extends TestCase
 {

@@ -1,15 +1,15 @@
 <?php
 
 use Carbon\Carbon;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Artisan;
-use RonasIT\TelescopeExtension\Tests\TestCase;
-use RonasIT\TelescopeExtension\TelescopeExtensionServiceProvider;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Console\Scheduling\Schedule;
-use RonasIT\TelescopeExtension\Mail\ReportMail;
 use Illuminate\Support\Facades\Mail;
+use RonasIT\TelescopeExtension\Mail\ReportMail;
+use RonasIT\TelescopeExtension\TelescopeExtensionServiceProvider;
 use RonasIT\TelescopeExtension\Tests\Support\SendTelescopeReportTestTrait;
+use RonasIT\TelescopeExtension\Tests\TestCase;
 
 class SendTelescopeReportTest extends TestCase
 {

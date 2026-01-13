@@ -2,11 +2,11 @@
 
 namespace RonasIT\TelescopeExtension\Console\Commands;
 
-use RonasIT\TelescopeExtension\Repositories\TelescopeRepository;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Console\Command;
 use Laravel\Telescope\EntryType;
-use Exception;
+use RonasIT\TelescopeExtension\Repositories\TelescopeRepository;
 
 class TelescopePrune extends Command
 {
@@ -78,7 +78,7 @@ class TelescopePrune extends Command
                     throw new Exception("Incorrect value '{$typeHour}' of the 'set-hours' option.");
                 }
 
-                [$type, $hours] = $parts;
+                list($type, $hours) = $parts;
 
                 if (!in_array($type, self::TYPES)) {
                     throw new Exception("Incorrect type value '{$type}'.");
@@ -144,7 +144,7 @@ class TelescopePrune extends Command
         } elseif (!$this->expirationHours) {
             $repository->clear();
 
-            $this->info("Deleted all records.");
+            $this->info('Deleted all records.');
         }
     }
 
@@ -164,7 +164,7 @@ class TelescopePrune extends Command
                     ...$types,
                     (in_array(self::UNRESOLVED_EXCEPTION, $excludeTypes))
                         ? self::RESOLVED_EXCEPTION
-                        : self::UNRESOLVED_EXCEPTION
+                        : self::UNRESOLVED_EXCEPTION,
                 ];
             }
         }

@@ -31,13 +31,13 @@ class TelescopeRepository extends DatabaseEntriesRepository
                                 ->whereRaw(
                                     ($type === TelescopePrune::UNRESOLVED_EXCEPTION)
                                         ? "content::jsonb->>'resolved_at' is null"
-                                        : "content::jsonb->>'resolved_at' is not null"
+                                        : "content::jsonb->>'resolved_at' is not null",
                                 );
                         });
                     } elseif ($type === TelescopePrune::COMPLETED_JOB_TYPE) {
                         $subQuery->orWhere(fn ($subSubQuery) => $subSubQuery
                             ->where('type', EntryType::JOB)
-                            ->whereRaw("content::jsonb->>'status' = 'processed'")
+                            ->whereRaw("content::jsonb->>'status' = 'processed'"),
                         );
                     } else {
                         $subQuery->orWhere('type', $type);
@@ -75,7 +75,7 @@ class TelescopeRepository extends DatabaseEntriesRepository
             return;
         }
 
-        [$exceptions, $entries] = $entries->partition->isException();
+        list($exceptions, $entries) = $entries->partition->isException();
 
         $this->storeExceptions($exceptions);
 
@@ -104,14 +104,14 @@ class TelescopeRepository extends DatabaseEntriesRepository
             ->table('telescope_entries')
             ->where('type', $type)
             ->selectRaw(
-                expression: "CASE 
+                expression: 'CASE 
                     WHEN EXISTS (
                         SELECT 1 
                         FROM telescope_entries 
                         WHERE type = ? AND family_hash IS NULL
                     ) THEN COUNT(*) 
                     ELSE COUNT(DISTINCT family_hash) 
-                END as count",
+                END as count',
                 bindings: [$type],
             )
             ->value('count');
@@ -136,12 +136,12 @@ class TelescopeRepository extends DatabaseEntriesRepository
                     });
             })
             ->selectRaw(
-                expression: "type,
+                expression: 'type,
                     CASE
                         WHEN MAX(CASE WHEN family_hash IS NOT NULL THEN 1 ELSE 0 END) = 1 
                         THEN COUNT(DISTINCT family_hash)
                         ELSE COUNT(*)
-                    END as count",
+                    END as count',
             )
             ->groupBy('type')
             ->pluck('count', 'type');
