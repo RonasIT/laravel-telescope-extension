@@ -1,9 +1,9 @@
 <?php
 
-use RonasIT\TelescopeExtension\Tests\TestCase;
 use Illuminate\Support\Facades\Config;
-use RonasIT\TelescopeExtension\TelescopeExtensionServiceProvider;
 use RonasIT\Support\Http\Middleware\CheckIpMiddleware;
+use RonasIT\TelescopeExtension\TelescopeExtensionServiceProvider;
+use RonasIT\TelescopeExtension\Tests\TestCase;
 
 class TelescopeExtensionServiceProviderTest extends TestCase
 {

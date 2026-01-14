@@ -8,10 +8,10 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 use Orchestra\Testbench\TestCase as BaseTestCase;
+use ReflectionClass;
 use RonasIT\Support\Traits\TestingTrait;
 use RonasIT\TelescopeExtension\Repositories\TelescopeRepository;
 use RonasIT\TelescopeExtension\TelescopeExtensionServiceProvider;
-use ReflectionClass;
 
 class TestCase extends BaseTestCase
 {

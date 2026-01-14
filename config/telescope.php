@@ -288,5 +288,5 @@ return [
                 'jobs' => 'Failed jobs',
             ],
         ],
-    ]
+    ],
 ];

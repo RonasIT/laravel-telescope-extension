@@ -22,20 +22,20 @@ trait TelescopePruneTestTrait
             'delete from "telescope_entries" where "rowid" in (select "telescope_entries"."rowid" '
             . 'from "telescope_entries" where "created_at" < ? limit 1000)',
             [Carbon::now()->subHours(2)->toDateTimeString()],
-            1000
+            1000,
         );
 
         $this->mockDelete(
             'delete from "telescope_entries" where "rowid" in (select "telescope_entries"."rowid" '
             . 'from "telescope_entries" where "created_at" < ? limit 1000)',
             [Carbon::now()->subHours(2)->toDateTimeString()],
-            123
+            123,
         );
 
         $this->mockDelete(
             'delete from "telescope_entries" where "rowid" in (select "telescope_entries"."rowid" '
             . 'from "telescope_entries" where "created_at" < ? limit 1000)',
-            [Carbon::now()->subHours(2)->toDateTimeString()]
+            [Carbon::now()->subHours(2)->toDateTimeString()],
         );
     }
 
@@ -45,13 +45,13 @@ trait TelescopePruneTestTrait
             'delete from "telescope_entries" where "rowid" in (select "telescope_entries"."rowid" '
             . 'from "telescope_entries" where "created_at" < ? and ("type" = ?) limit 1000)',
             [Carbon::now()->subHours(5)->toDateTimeString(), EntryType::REQUEST],
-            200
+            200,
         );
 
         $this->mockDelete(
             'delete from "telescope_entries" where "rowid" in (select "telescope_entries"."rowid" '
             . 'from "telescope_entries" where "created_at" < ? and ("type" = ?) limit 1000)',
-            [Carbon::now()->subHours(5)->toDateTimeString(), EntryType::REQUEST]
+            [Carbon::now()->subHours(5)->toDateTimeString(), EntryType::REQUEST],
         );
     }
 
@@ -61,39 +61,39 @@ trait TelescopePruneTestTrait
             'delete from "telescope_entries" where "rowid" in (select "telescope_entries"."rowid" '
             . 'from "telescope_entries" where "created_at" < ? and ("type" = ?) limit 1000)',
             [Carbon::now()->subHours(5)->toDateTimeString(), EntryType::REQUEST],
-            200
+            200,
         );
 
         $this->mockDelete(
             'delete from "telescope_entries" where "rowid" in (select "telescope_entries"."rowid" '
             . 'from "telescope_entries" where "created_at" < ? and ("type" = ?) limit 1000)',
-            [Carbon::now()->subHours(5)->toDateTimeString(), EntryType::REQUEST]
+            [Carbon::now()->subHours(5)->toDateTimeString(), EntryType::REQUEST],
         );
 
         $this->mockDelete(
             'delete from "telescope_entries" where "rowid" in (select "telescope_entries"."rowid" '
             . 'from "telescope_entries" where "created_at" < ? and ("type" = ?) limit 1000)',
             [Carbon::now()->subHours(100)->toDateTimeString(), EntryType::REDIS],
-            100
+            100,
         );
 
         $this->mockDelete(
             'delete from "telescope_entries" where "rowid" in (select "telescope_entries"."rowid" '
             . 'from "telescope_entries" where "created_at" < ? and ("type" = ?) limit 1000)',
-            [Carbon::now()->subHours(100)->toDateTimeString(), EntryType::REDIS]
+            [Carbon::now()->subHours(100)->toDateTimeString(), EntryType::REDIS],
         );
 
         $this->mockDelete(
             'delete from "telescope_entries" where "rowid" in (select "telescope_entries"."rowid" '
             . 'from "telescope_entries" where "created_at" < ? and ("type" = ?) limit 1000)',
             [Carbon::now()->subHours(25)->toDateTimeString(), EntryType::QUERY],
-            50
+            50,
         );
 
         $this->mockDelete(
             'delete from "telescope_entries" where "rowid" in (select "telescope_entries"."rowid" '
             . 'from "telescope_entries" where "created_at" < ? and ("type" = ?) limit 1000)',
-            [Carbon::now()->subHours(25)->toDateTimeString(), EntryType::QUERY]
+            [Carbon::now()->subHours(25)->toDateTimeString(), EntryType::QUERY],
         );
     }
 
@@ -103,39 +103,39 @@ trait TelescopePruneTestTrait
             'delete from "telescope_entries" where "rowid" in (select "telescope_entries"."rowid" '
             . 'from "telescope_entries" where "created_at" < ? and ("type" = ?) limit 1000)',
             [Carbon::now()->subHours(5)->toDateTimeString(), EntryType::REQUEST],
-            200
+            200,
         );
 
         $this->mockDelete(
             'delete from "telescope_entries" where "rowid" in (select "telescope_entries"."rowid" '
             . 'from "telescope_entries" where "created_at" < ? and ("type" = ?) limit 1000)',
-            [Carbon::now()->subHours(5)->toDateTimeString(), EntryType::REQUEST]
+            [Carbon::now()->subHours(5)->toDateTimeString(), EntryType::REQUEST],
         );
 
         $this->mockDelete(
             'delete from "telescope_entries" where "rowid" in (select "telescope_entries"."rowid" '
             . 'from "telescope_entries" where "created_at" < ? and ("type" = ?) limit 1000)',
             [Carbon::now()->subHours(100)->toDateTimeString(), EntryType::REDIS],
-            100
+            100,
         );
 
         $this->mockDelete(
             'delete from "telescope_entries" where "rowid" in (select "telescope_entries"."rowid" '
             . 'from "telescope_entries" where "created_at" < ? and ("type" = ?) limit 1000)',
-            [Carbon::now()->subHours(100)->toDateTimeString(), EntryType::REDIS]
+            [Carbon::now()->subHours(100)->toDateTimeString(), EntryType::REDIS],
         );
 
         $this->mockDelete(
             'delete from "telescope_entries" where "rowid" in (select "telescope_entries"."rowid" '
             . 'from "telescope_entries" where "created_at" < ? and ("type" = ?) limit 1000)',
             [Carbon::now()->subHours(25)->toDateTimeString(), EntryType::QUERY],
-            50
+            50,
         );
 
         $this->mockDelete(
             'delete from "telescope_entries" where "rowid" in (select "telescope_entries"."rowid" '
             . 'from "telescope_entries" where "created_at" < ? and ("type" = ?) limit 1000)',
-            [Carbon::now()->subHours(25)->toDateTimeString(), EntryType::QUERY]
+            [Carbon::now()->subHours(25)->toDateTimeString(), EntryType::QUERY],
         );
 
         $this->mockDelete(
@@ -160,7 +160,7 @@ trait TelescopePruneTestTrait
                 EntryType::VIEW,
                 EntryType::JOB,
             ],
-            123
+            123,
         );
 
         $this->mockDelete(
@@ -185,7 +185,7 @@ trait TelescopePruneTestTrait
                 EntryType::GATE,
                 EntryType::VIEW,
                 EntryType::JOB,
-            ]
+            ],
         );
     }
 
@@ -195,13 +195,13 @@ trait TelescopePruneTestTrait
             'delete from "telescope_entries" where "rowid" in (select "telescope_entries"."rowid" '
             . 'from "telescope_entries" where "created_at" < ? and ("type" = ?) limit 1000)',
             [Carbon::now()->subHours(5)->toDateTimeString(), EntryType::REQUEST],
-            200
+            200,
         );
 
         $this->mockDelete(
             'delete from "telescope_entries" where "rowid" in (select "telescope_entries"."rowid" '
             . 'from "telescope_entries" where "created_at" < ? and ("type" = ?) limit 1000)',
-            [Carbon::now()->subHours(5)->toDateTimeString(), EntryType::REQUEST]
+            [Carbon::now()->subHours(5)->toDateTimeString(), EntryType::REQUEST],
         );
 
         $this->mockDelete(
@@ -209,27 +209,27 @@ trait TelescopePruneTestTrait
             . 'from "telescope_entries" where "created_at" < ? and (("type" = ? '
             . 'and content::jsonb->>\'resolved_at\' is null)) limit 1000)',
             [Carbon::now()->subHours(20)->toDateTimeString(), EntryType::EXCEPTION],
-            32
+            32,
         );
 
         $this->mockDelete(
             'delete from "telescope_entries" where "rowid" in (select "telescope_entries"."rowid" '
             . 'from "telescope_entries" where "created_at" < ? and (("type" = ? '
             . 'and content::jsonb->>\'resolved_at\' is null)) limit 1000)',
-            [Carbon::now()->subHours(20)->toDateTimeString(), EntryType::EXCEPTION]
+            [Carbon::now()->subHours(20)->toDateTimeString(), EntryType::EXCEPTION],
         );
 
         $this->mockDelete(
             'delete from "telescope_entries" where "rowid" in (select "telescope_entries"."rowid" '
             . 'from "telescope_entries" where "created_at" < ? and ("type" = ?) limit 1000)',
             [Carbon::now()->subHours(25)->toDateTimeString(), EntryType::QUERY],
-            50
+            50,
         );
 
         $this->mockDelete(
             'delete from "telescope_entries" where "rowid" in (select "telescope_entries"."rowid" '
             . 'from "telescope_entries" where "created_at" < ? and ("type" = ?) limit 1000)',
-            [Carbon::now()->subHours(25)->toDateTimeString(), EntryType::QUERY]
+            [Carbon::now()->subHours(25)->toDateTimeString(), EntryType::QUERY],
         );
 
         $this->mockDelete(
@@ -257,7 +257,7 @@ trait TelescopePruneTestTrait
                 EntryType::JOB,
                 EntryType::EXCEPTION,
             ],
-            200
+            200,
         );
 
         $this->mockDelete(
@@ -284,7 +284,7 @@ trait TelescopePruneTestTrait
                 EntryType::VIEW,
                 EntryType::JOB,
                 EntryType::EXCEPTION,
-            ]
+            ],
         );
     }
 
@@ -294,13 +294,13 @@ trait TelescopePruneTestTrait
             'delete from "telescope_entries" where "rowid" in (select "telescope_entries"."rowid" '
             . 'from "telescope_entries" where "created_at" < ? and ("type" = ?) limit 1000)',
             [Carbon::now()->subHours(5)->toDateTimeString(), EntryType::REQUEST],
-            200
+            200,
         );
 
         $this->mockDelete(
             'delete from "telescope_entries" where "rowid" in (select "telescope_entries"."rowid" '
             . 'from "telescope_entries" where "created_at" < ? and ("type" = ?) limit 1000)',
-            [Carbon::now()->subHours(5)->toDateTimeString(), EntryType::REQUEST]
+            [Carbon::now()->subHours(5)->toDateTimeString(), EntryType::REQUEST],
         );
 
         $this->mockDelete(
@@ -308,27 +308,27 @@ trait TelescopePruneTestTrait
             . 'from "telescope_entries" where "created_at" < ? and (("type" = ? '
             . 'and content::jsonb->>\'resolved_at\' is not null)) limit 1000)',
             [Carbon::now()->subHours(10)->toDateTimeString(), EntryType::EXCEPTION],
-            15
+            15,
         );
 
         $this->mockDelete(
             'delete from "telescope_entries" where "rowid" in (select "telescope_entries"."rowid" '
             . 'from "telescope_entries" where "created_at" < ? and (("type" = ? '
             . 'and content::jsonb->>\'resolved_at\' is not null)) limit 1000)',
-            [Carbon::now()->subHours(10)->toDateTimeString(), EntryType::EXCEPTION]
+            [Carbon::now()->subHours(10)->toDateTimeString(), EntryType::EXCEPTION],
         );
 
         $this->mockDelete(
             'delete from "telescope_entries" where "rowid" in (select "telescope_entries"."rowid" '
             . 'from "telescope_entries" where "created_at" < ? and ("type" = ?) limit 1000)',
             [Carbon::now()->subHours(25)->toDateTimeString(), EntryType::QUERY],
-            50
+            50,
         );
 
         $this->mockDelete(
             'delete from "telescope_entries" where "rowid" in (select "telescope_entries"."rowid" '
             . 'from "telescope_entries" where "created_at" < ? and ("type" = ?) limit 1000)',
-            [Carbon::now()->subHours(25)->toDateTimeString(), EntryType::QUERY]
+            [Carbon::now()->subHours(25)->toDateTimeString(), EntryType::QUERY],
         );
     }
 
