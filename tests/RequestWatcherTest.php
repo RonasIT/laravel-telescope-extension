@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
 use Laravel\Telescope\Telescope;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use RonasIT\TelescopeExtension\Watchers\RequestWatcher;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
@@ -105,6 +106,15 @@ class RequestWatcherTest extends TestCase
     public function testIgnorePathAnotherPath()
     {
         $event = new RequestHandled(Request::create('/test/test'), new Response());
+
+        $this->requestWatcher->recordRequest($event);
+
+        $this->assertNotEmpty(Telescope::$entriesQueue);
+    }
+
+    public function testSymfonyResponse()
+    {
+        $event = new RequestHandled(new Request(), new SymfonyResponse());
 
         $this->requestWatcher->recordRequest($event);
 

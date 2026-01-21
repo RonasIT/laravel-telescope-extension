@@ -22,7 +22,9 @@ class RequestWatcher extends BaseRequestWatcher
 
     protected function shouldIgnoreErrorMessage(RequestHandled $event): bool
     {
-        $message = $event->response->exception?->getMessage();
+        $message = property_exists($event->response, 'exception')
+            ? $event->response->exception?->getMessage()
+            : null;
 
         if (empty($message)) {
             $responseContent = json_decode($event->response->getContent(), true);
