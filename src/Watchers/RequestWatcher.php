@@ -2,8 +2,8 @@
 
 namespace RonasIT\TelescopeExtension\Watchers;
 
-use Illuminate\Foundation\Http\Events\RequestHandled;
 use Illuminate\Support\Arr;
+use Illuminate\Foundation\Http\Events\RequestHandled;
 use Laravel\Telescope\Telescope;
 use Laravel\Telescope\Watchers\RequestWatcher as BaseRequestWatcher;
 
