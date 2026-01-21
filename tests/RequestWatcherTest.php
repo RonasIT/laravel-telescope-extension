@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
 use Laravel\Telescope\Telescope;
-use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use RonasIT\TelescopeExtension\Watchers\RequestWatcher;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class RequestWatcherTest extends TestCase
