@@ -120,4 +120,15 @@ class RequestWatcherTest extends TestCase
 
         $this->assertNotEmpty(Telescope::$entriesQueue);
     }
+
+    public function testIgnoreErrorMessageSymfonyResponse()
+    {
+        $response = new SymfonyResponse(json_encode(['message' => 'Something went wrong!']), SymfonyResponse::HTTP_BAD_REQUEST);
+
+        $event = new RequestHandled(new Request(), $response);
+
+        $this->requestWatcher->recordRequest($event);
+
+        $this->assertEmpty(Telescope::$entriesQueue);
+    }
 }
