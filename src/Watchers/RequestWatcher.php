@@ -22,7 +22,7 @@ class RequestWatcher extends BaseRequestWatcher
 
     protected function shouldIgnoreErrorMessage(RequestHandled $event): bool
     {
-        // For the OPTIONS type the response is a SymfonyResponse which hasn't exception property
+        // For the OPTIONS type the response is a SymfonyResponse which doesn't have an exception property
         $message = (property_exists($event->response, 'exception'))
             ? $event->response->exception?->getMessage()
             : null;
