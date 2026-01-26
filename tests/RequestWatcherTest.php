@@ -8,6 +8,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
 use Laravel\Telescope\Telescope;
 use RonasIT\TelescopeExtension\Watchers\RequestWatcher;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class RequestWatcherTest extends TestCase
@@ -109,5 +110,25 @@ class RequestWatcherTest extends TestCase
         $this->requestWatcher->recordRequest($event);
 
         $this->assertNotEmpty(Telescope::$entriesQueue);
+    }
+
+    public function testSymfonyResponse()
+    {
+        $event = new RequestHandled(new Request(), new SymfonyResponse());
+
+        $this->requestWatcher->recordRequest($event);
+
+        $this->assertNotEmpty(Telescope::$entriesQueue);
+    }
+
+    public function testIgnoreErrorMessageSymfonyResponse()
+    {
+        $response = new SymfonyResponse(json_encode(['message' => 'Something went wrong!']), SymfonyResponse::HTTP_BAD_REQUEST);
+
+        $event = new RequestHandled(new Request(), $response);
+
+        $this->requestWatcher->recordRequest($event);
+
+        $this->assertEmpty(Telescope::$entriesQueue);
     }
 }
