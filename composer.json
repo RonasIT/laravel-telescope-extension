@@ -11,17 +11,17 @@
         }
     ],
     "require": {
-        "php": "^8.4",
+        "php": "^8.4.1",
         "laravel/framework": ">=11.44.1",
         "laravel/telescope": "^5",
         "muhammadhuzaifa/telescope-guzzle-watcher": "^3.2",
         "ronasit/laravel-helpers": "^3.5.5"
     },
     "require-dev": {
-        "phpunit/phpunit": "^10.5",
+        "phpunit/phpunit": "^13",
         "php-coveralls/php-coveralls": "^2.7",
         "mpyw/laravel-database-mock": "^0.0.1@alpha",
-        "orchestra/testbench": "^9.8",
+        "orchestra/testbench": "^10",
         "ext-pdo": "*",
         "laravel/pint": "^1.27"
     },
