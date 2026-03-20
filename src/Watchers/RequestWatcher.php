@@ -4,6 +4,7 @@ namespace RonasIT\TelescopeExtension\Watchers;
 
 use Illuminate\Foundation\Http\Events\RequestHandled;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Laravel\Telescope\Telescope;
 use Laravel\Telescope\Watchers\RequestWatcher as BaseRequestWatcher;
 
@@ -38,6 +39,6 @@ class RequestWatcher extends BaseRequestWatcher
 
     protected function shouldIgnorePath(RequestHandled $event): bool
     {
-        return in_array($event->request->path(), Arr::get($this->options, 'ignore_paths', []));
+        return Str::is(Arr::get($this->options, 'ignore_paths', []), $event->request->path());
     }
 }
