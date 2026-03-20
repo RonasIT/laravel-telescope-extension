@@ -29,16 +29,17 @@ class RequestWatcherTest extends TestCase
         Config::set("{$this->configName}.ignore_error_messages", [
             'Something went wrong!',
         ]);
+    }
 
-        Config::set("{$this->configName}.ignore_paths", [
-            'test',
-        ]);
-
+    protected function initWatcher(): void
+    {
         $this->requestWatcher = new RequestWatcher(config($this->configName));
     }
 
     public function testIgnoreErrorMessage()
     {
+        $this->initWatcher();
+
         $response = new Response(json_encode(['message' => 'Something went wrong!']), Response::HTTP_BAD_REQUEST);
 
         $event = new RequestHandled(new Request(), $response);
@@ -50,6 +51,8 @@ class RequestWatcherTest extends TestCase
 
     public function testIgnoreErrorMessageAsException()
     {
+        $this->initWatcher();
+
         $response = new Response();
         $response->exception = new UnprocessableEntityHttpException('Something went wrong!');
 
@@ -62,6 +65,8 @@ class RequestWatcherTest extends TestCase
 
     public function testNotIgnoreErrorMessage()
     {
+        $this->initWatcher();
+
         $response = new Response(json_encode(['message' => 'Some other error']), Response::HTTP_BAD_REQUEST);
 
         $event = new RequestHandled(new Request(), $response);
@@ -73,6 +78,8 @@ class RequestWatcherTest extends TestCase
 
     public function testNotIgnoreErrorMessageAsException()
     {
+        $this->initWatcher();
+
         $response = new Response();
         $response->exception = new UnprocessableEntityHttpException('Some other error');
 
@@ -85,6 +92,8 @@ class RequestWatcherTest extends TestCase
 
     public function testMessageContent()
     {
+        $this->initWatcher();
+
         $response = new Response('Something went wrong!', Response::HTTP_BAD_REQUEST);
 
         $event = new RequestHandled(new Request(), $response);
@@ -94,18 +103,60 @@ class RequestWatcherTest extends TestCase
         $this->assertNotEmpty(Telescope::$entriesQueue);
     }
 
-    public function testIgnorePath()
+    public static function ignorePathsDataProvider(): array
     {
-        $event = new RequestHandled(Request::create('/test'), new Response());
+        return [
+            'exact match: root path' => ['/'],
+            'exact match: single segment' => ['/test'],
+            'wildcard match: base path only' => ['/regex-suffix-test'],
+            'wildcard match: base path with suffix' => ['/regex-suffix-test-123'],
+            'wildcard match: base path with prefix' => ['test/regex-prefix-test'],
+        ];
+    }
+
+    /**
+     * @dataProvider ignorePathsDataProvider
+     */
+    public function testIgnorePath(string $path): void
+    {
+        Config::set("{$this->configName}.ignore_paths", [
+            '/',
+            'test',
+            'regex-suffix-test*',
+            '*regex-prefix-test',
+        ]);
+
+        $this->initWatcher();
+
+        $event = new RequestHandled(Request::create($path), new Response());
 
         $this->requestWatcher->recordRequest($event);
 
         $this->assertEmpty(Telescope::$entriesQueue);
     }
 
-    public function testIgnorePathAnotherPath()
+    public static function notIgnorePathsDataProvider(): array
     {
-        $event = new RequestHandled(Request::create('/test/test'), new Response());
+        return [
+            'unrelated path' => ['/other'],
+            'exact match does not cover subpaths' => ['/test/nested'],
+            'similar but not matching wildcard' => ['/not-regex-test'],
+        ];
+    }
+
+    /**
+     * @dataProvider notIgnorePathsDataProvider
+     */
+    public function testNotIgnorePath(string $path): void
+    {
+        Config::set("{$this->configName}.ignore_paths", [
+            'test',
+            'regex-test*',
+        ]);
+
+        $this->initWatcher();
+
+        $event = new RequestHandled(Request::create($path), new Response());
 
         $this->requestWatcher->recordRequest($event);
 
@@ -114,6 +165,8 @@ class RequestWatcherTest extends TestCase
 
     public function testSymfonyResponse()
     {
+        $this->initWatcher();
+
         $event = new RequestHandled(new Request(), new SymfonyResponse());
 
         $this->requestWatcher->recordRequest($event);
@@ -123,6 +176,8 @@ class RequestWatcherTest extends TestCase
 
     public function testIgnoreErrorMessageSymfonyResponse()
     {
+        $this->initWatcher();
+
         $response = new SymfonyResponse(json_encode(['message' => 'Something went wrong!']), SymfonyResponse::HTTP_BAD_REQUEST);
 
         $event = new RequestHandled(new Request(), $response);
