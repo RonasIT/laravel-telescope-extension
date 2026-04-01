@@ -13,7 +13,7 @@
     "require": {
         "php": "^8.4",
         "laravel/framework": ">=12.0",
-        "laravel/telescope": ">=5.11",
+        "laravel/telescope": ">=5.19",
         "muhammadhuzaifa/telescope-guzzle-watcher": ">=4.1",
         "ronasit/laravel-helpers": "^3.5.5"
     },
