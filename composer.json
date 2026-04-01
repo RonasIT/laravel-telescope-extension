@@ -12,16 +12,16 @@
     ],
     "require": {
         "php": "^8.4",
-        "laravel/framework": ">=11.44.1",
-        "laravel/telescope": "^5",
-        "muhammadhuzaifa/telescope-guzzle-watcher": "^3.2",
+        "laravel/framework": ">=12.0",
+        "laravel/telescope": ">=5.19",
+        "muhammadhuzaifa/telescope-guzzle-watcher": ">=4.1",
         "ronasit/laravel-helpers": "^3.5.5"
     },
     "require-dev": {
-        "phpunit/phpunit": "^10.5",
+        "phpunit/phpunit": "^11.0",
         "php-coveralls/php-coveralls": "^2.7",
         "mpyw/laravel-database-mock": "^0.0.1@alpha",
-        "orchestra/testbench": "^9.8",
+        "orchestra/testbench": "^10.0",
         "ext-pdo": "*",
         "laravel/pint": "^1.27"
     },
