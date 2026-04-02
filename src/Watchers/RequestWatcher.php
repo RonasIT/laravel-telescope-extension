@@ -39,6 +39,8 @@ class RequestWatcher extends BaseRequestWatcher
 
     protected function shouldIgnorePath(RequestHandled $event): bool
     {
-        return Str::is(Arr::get($this->options, 'ignore_paths', []), $event->request->path());
+        $ignorePathPatterns = Arr::get($this->options, 'ignore_paths', []);
+
+        return Str::is($ignorePathPatterns, $event->request->path());
     }
 }
