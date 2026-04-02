@@ -95,9 +95,10 @@ class RequestWatcherTest extends TestCase
         return [
             'exact match: root path' => ['/'],
             'exact match: single segment' => ['/test'],
-            'wildcard match: base path only' => ['/regex-suffix-test'],
-            'wildcard match: base path with suffix' => ['/regex-suffix-test-123'],
-            'wildcard match: base path with prefix' => ['test/regex-prefix-test'],
+            'trailing wildcard: exact base' => ['/suffix-test'],
+            'leading wildcard: exact base' => ['/prefix-test'],
+            'trailing wildcard: base with suffix' => ['/suffix-test-123'],
+            'leading wildcard: base with prefix' => ['/123-prefix-test'],
         ];
     }
 
@@ -109,8 +110,8 @@ class RequestWatcherTest extends TestCase
         Config::set("{$this->configName}.ignore_paths", [
             '/',
             'test',
-            'regex-suffix-test*',
-            '*regex-prefix-test',
+            'suffix-test*',
+            '*prefix-test',
         ]);
 
         $requestWatcher = new RequestWatcher(config($this->configName));
@@ -127,7 +128,8 @@ class RequestWatcherTest extends TestCase
         return [
             'unrelated path' => ['/other'],
             'exact match does not cover subpaths' => ['/test/nested'],
-            'similar but not matching wildcard' => ['/not-regex-test'],
+            'case sensitive: uppercase path does not match lowercase pattern' => ['/TEST'],
+            'wildcard: does not match wildcard pattern' => ['/123-wildcard-123'],
         ];
     }
 
@@ -138,7 +140,7 @@ class RequestWatcherTest extends TestCase
     {
         Config::set("{$this->configName}.ignore_paths", [
             'test',
-            'regex-test*',
+            'wildcard-test*',
         ]);
 
         $requestWatcher = new RequestWatcher(config($this->configName));
