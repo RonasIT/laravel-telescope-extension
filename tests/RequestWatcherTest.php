@@ -29,17 +29,12 @@ class RequestWatcherTest extends TestCase
         Config::set("{$this->configName}.ignore_error_messages", [
             'Something went wrong!',
         ]);
-    }
 
-    protected function initWatcher(): void
-    {
         $this->requestWatcher = new RequestWatcher(config($this->configName));
     }
 
     public function testIgnoreErrorMessage()
     {
-        $this->initWatcher();
-
         $response = new Response(json_encode(['message' => 'Something went wrong!']), Response::HTTP_BAD_REQUEST);
 
         $event = new RequestHandled(new Request(), $response);
@@ -51,8 +46,6 @@ class RequestWatcherTest extends TestCase
 
     public function testIgnoreErrorMessageAsException()
     {
-        $this->initWatcher();
-
         $response = new Response();
         $response->exception = new UnprocessableEntityHttpException('Something went wrong!');
 
@@ -65,8 +58,6 @@ class RequestWatcherTest extends TestCase
 
     public function testNotIgnoreErrorMessage()
     {
-        $this->initWatcher();
-
         $response = new Response(json_encode(['message' => 'Some other error']), Response::HTTP_BAD_REQUEST);
 
         $event = new RequestHandled(new Request(), $response);
@@ -78,8 +69,6 @@ class RequestWatcherTest extends TestCase
 
     public function testNotIgnoreErrorMessageAsException()
     {
-        $this->initWatcher();
-
         $response = new Response();
         $response->exception = new UnprocessableEntityHttpException('Some other error');
 
@@ -92,8 +81,6 @@ class RequestWatcherTest extends TestCase
 
     public function testMessageContent()
     {
-        $this->initWatcher();
-
         $response = new Response('Something went wrong!', Response::HTTP_BAD_REQUEST);
 
         $event = new RequestHandled(new Request(), $response);
@@ -126,11 +113,11 @@ class RequestWatcherTest extends TestCase
             '*regex-prefix-test',
         ]);
 
-        $this->initWatcher();
+        $requestWatcher = new RequestWatcher(config($this->configName));
 
         $event = new RequestHandled(Request::create($path), new Response());
 
-        $this->requestWatcher->recordRequest($event);
+        $requestWatcher->recordRequest($event);
 
         $this->assertEmpty(Telescope::$entriesQueue);
     }
@@ -154,19 +141,17 @@ class RequestWatcherTest extends TestCase
             'regex-test*',
         ]);
 
-        $this->initWatcher();
+        $requestWatcher = new RequestWatcher(config($this->configName));
 
         $event = new RequestHandled(Request::create($path), new Response());
 
-        $this->requestWatcher->recordRequest($event);
+        $requestWatcher->recordRequest($event);
 
         $this->assertNotEmpty(Telescope::$entriesQueue);
     }
 
     public function testSymfonyResponse()
     {
-        $this->initWatcher();
-
         $event = new RequestHandled(new Request(), new SymfonyResponse());
 
         $this->requestWatcher->recordRequest($event);
@@ -176,8 +161,6 @@ class RequestWatcherTest extends TestCase
 
     public function testIgnoreErrorMessageSymfonyResponse()
     {
-        $this->initWatcher();
-
         $response = new SymfonyResponse(json_encode(['message' => 'Something went wrong!']), SymfonyResponse::HTTP_BAD_REQUEST);
 
         $event = new RequestHandled(new Request(), $response);
