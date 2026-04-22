@@ -60,6 +60,8 @@ jobs:
     steps:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
+        with:
+          php-version: *php-latest
       - name: Checkout
         uses: actions/checkout@v6
       - name: Import coverage report
