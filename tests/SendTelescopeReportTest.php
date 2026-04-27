@@ -87,8 +87,9 @@ class SendTelescopeReportTest extends TestCase
 
         $this->artisan('telescope:send-report');
 
-        if ((int) strtok(app()->version(), '.') === 12) {
-            $this->assertNotificationSent('command_12');
+        // TODO: remove test for Laravel < 13 after increasing the minimum required Laravel version
+        if (version_compare(app()->version(), '13', '<')) {
+            $this->assertNotificationSent('command_legacy');
         } else {
             $this->assertNotificationSent('command');
         }
