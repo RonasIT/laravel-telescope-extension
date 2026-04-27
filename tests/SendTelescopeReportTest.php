@@ -86,7 +86,7 @@ class SendTelescopeReportTest extends TestCase
 
         $this->artisan('telescope:send-report');
 
-        if ((int) strtok(app()->version(), '.') === 12) {
+        if (version_compare(app()->version(), '12', '==')) {
             $this->assertNotificationSent('command_12');
         } else {
             $this->assertNotificationSent('command');
