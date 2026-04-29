@@ -18,10 +18,9 @@
         "ronasit/laravel-helpers": "^3.5.5"
     },
     "require-dev": {
-        "phpunit/phpunit": "^11.0",
-        "php-coveralls/php-coveralls": "^2.7",
+        "phpunit/phpunit": ">=11.0",
         "mpyw/laravel-database-mock": "^0.0.1@alpha",
-        "orchestra/testbench": "^10.0",
+        "orchestra/testbench": ">=10.0",
         "ext-pdo": "*",
         "laravel/pint": "^1.27"
     },

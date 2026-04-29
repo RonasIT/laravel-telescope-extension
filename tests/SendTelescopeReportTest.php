@@ -1,5 +1,7 @@
 <?php
 
+namespace RonasIT\TelescopeExtension\Tests;
+
 use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Arr;
@@ -9,7 +11,6 @@ use Illuminate\Support\Facades\Mail;
 use RonasIT\TelescopeExtension\Mail\ReportMail;
 use RonasIT\TelescopeExtension\TelescopeExtensionServiceProvider;
 use RonasIT\TelescopeExtension\Tests\Support\SendTelescopeReportTestTrait;
-use RonasIT\TelescopeExtension\Tests\TestCase;
 
 class SendTelescopeReportTest extends TestCase
 {
@@ -86,7 +87,12 @@ class SendTelescopeReportTest extends TestCase
 
         $this->artisan('telescope:send-report');
 
-        $this->assertNotificationSent('command');
+        // TODO: remove test for Laravel < 13 after increasing the minimum required Laravel version
+        if (version_compare(app()->version(), '13', '<')) {
+            $this->assertNotificationSent('command_legacy');
+        } else {
+            $this->assertNotificationSent('command');
+        }
     }
 
     public function testReportMail()
