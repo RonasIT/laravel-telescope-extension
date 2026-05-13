@@ -24,19 +24,18 @@
                             "logs": 5,
                             "notifications": 7
                         },
+                        "locale": null,
                         "connection": null,
                         "queue": null,
                         "messageGroup": null,
                         "deduplicator": null,
-                        "debounceOwner": "",
                         "delay": null,
                         "afterCommit": null,
                         "middleware": [],
                         "chained": [],
                         "chainConnection": null,
                         "chainQueue": null,
-                        "chainCatchCallbacks": null,
-                        "locale": null
+                        "chainCatchCallbacks": null
                     },
                     "channels": [
                         "mail"
@@ -94,7 +93,6 @@
                         "queue": null,
                         "messageGroup": null,
                         "deduplicator": null,
-                        "debounceOwner": "",
                         "delay": null,
                         "afterCommit": null,
                         "middleware": [],
