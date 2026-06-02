@@ -128,9 +128,12 @@ return [
     ],
 
     'ignore_paths' => [
+        '/',
+        'apple-touch-icon*',
         'livewire*',
         'nova-api*',
         'pulse*',
+        'status',
     ],
 
     'ignore_commands' => [
