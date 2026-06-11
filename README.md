@@ -140,7 +140,7 @@ public function register(): void
 
 Your custom notification must implement `ReportNotificationContract` and accept `Collection $entries` in its constructor.
 
-#### Example: adding a custom Telegram channel
+#### Example: adding a custom report notification
 
 ```php
 <?php
