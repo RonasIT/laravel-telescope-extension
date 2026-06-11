@@ -119,3 +119,65 @@ Use the `ignore_paths` config for this.
 
 The main difference between this config and the global telescope `ignore_paths` config is that the request watcher's config will ignore only incoming HTTP
 requests and will still store all other entries related to the request (such as queries, jobs, exceptions, etc.)
+
+### 📬 Customizing Report Notifications
+
+By default, the package sends reports via `RonasIT\TelescopeExtension\Notifications\ReportNotification`. You can replace it with your own notification class by binding your implementation to the `ReportNotificationContract` in your application's service provider.
+
+#### Overriding the default notification
+
+In `app/Providers/AppServiceProvider.php`:
+
+```php
+use RonasIT\TelescopeExtension\Contracts\ReportNotificationContract;
+use App\Notifications\CustomReportNotification;
+
+public function register(): void
+{
+    $this->app->bind(ReportNotificationContract::class, CustomReportNotification::class);
+}
+```
+
+Your custom notification must implement `ReportNotificationContract` and accept `Collection $entries` in its constructor.
+
+#### Example: adding a custom Telegram channel
+
+```php
+<?php
+
+namespace App\Notifications;
+
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Notification;
+use Illuminate\Support\Collection;
+use NotificationChannels\Telegram\TelegramMessage;
+use RonasIT\TelescopeExtension\Contracts\ReportNotificationContract;
+
+class CustomReportNotification extends Notification implements ShouldQueue, ReportNotificationContract
+{
+    use Queueable;
+
+    public function __construct(public Collection $entries) {}
+
+    public function via(object $notifiable): array
+    {
+        return ['mail', 'telegram'];
+    }
+
+    public function toMail(object $notifiable): \Illuminate\Mail\Mailable
+    {
+        // your mail implementation
+    }
+
+    public function toTelegram(object $notifiable): TelegramMessage
+    {
+        $lines = $this->entries->map(fn ($count, $type) => "{$type}: {$count}")->implode("\n");
+
+        return TelegramMessage::create()
+            ->content("Telescope Report:\n{$lines}");
+    }
+}
+```
+
+If no custom binding is provided, the package falls back to the default `ReportNotification` behavior.

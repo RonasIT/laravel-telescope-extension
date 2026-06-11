@@ -5,7 +5,7 @@ namespace RonasIT\TelescopeExtension\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Notification;
 use Laravel\Telescope\EntryType;
-use RonasIT\TelescopeExtension\Notifications\ReportNotification;
+use RonasIT\TelescopeExtension\Contracts\ReportNotificationContract;
 use RonasIT\TelescopeExtension\Repositories\TelescopeRepository;
 
 class SendTelescopeReport extends Command
@@ -40,6 +40,8 @@ class SendTelescopeReport extends Command
         $entries = app(TelescopeRepository::class)->getReportableEntriesCountMap();
         $entries = $entries->mapWithKeys(fn ($count, $entry) => [self::entryTypeMap[$entry] => $count]);
 
-        Notification::routes([])->notify(new ReportNotification($entries));
+        $notification = app()->makeWith(ReportNotificationContract::class, ['entries' => $entries]);
+
+        Notification::routes([])->notify($notification);
     }
 }

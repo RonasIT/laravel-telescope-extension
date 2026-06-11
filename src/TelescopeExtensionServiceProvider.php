@@ -12,6 +12,8 @@ use Laravel\Telescope\Contracts\PrunableRepository;
 use RonasIT\Support\Http\Middleware\CheckIpMiddleware;
 use RonasIT\TelescopeExtension\Console\Commands\SendTelescopeReport;
 use RonasIT\TelescopeExtension\Console\Commands\TelescopePrune;
+use RonasIT\TelescopeExtension\Contracts\ReportNotificationContract;
+use RonasIT\TelescopeExtension\Notifications\ReportNotification;
 use RonasIT\TelescopeExtension\Repositories\TelescopeRepository;
 use RonasIT\TelescopeExtension\View\Components\EntriesCount;
 
@@ -56,6 +58,8 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
         $this->registerDatabaseDriver();
 
         $this->registerCheckIpMiddleware();
+
+        $this->app->bind(ReportNotificationContract::class, ReportNotification::class);
     }
 
     protected function registerDatabaseDriver(): void
