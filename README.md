@@ -122,7 +122,7 @@ requests and will still store all other entries related to the request (such as 
 
 ### 📬 Customizing Report Notifications
 
-By default, the package sends reports via `RonasIT\TelescopeExtension\Notifications\ReportNotification`. You can replace it with your own notification class by binding your implementation to the `ReportNotificationContract` in your application's service provider.
+By default, the package sends reports via `RonasIT\TelescopeExtension\Notifications\ReportNotification`. You can replace it with your own notification class by binding your implementation to the `ReportNotificationContract` in service provider.
 
 #### Overriding the default notification
 
@@ -158,7 +158,10 @@ class CustomReportNotification extends Notification implements ShouldQueue, Repo
 {
     use Queueable;
 
-    public function __construct(public Collection $entries) {}
+    public function __construct(
+        public Collection $entries, 
+    ) {
+    }
 
     public function via(object $notifiable): array
     {
@@ -172,10 +175,7 @@ class CustomReportNotification extends Notification implements ShouldQueue, Repo
 
     public function toTelegram(object $notifiable): TelegramMessage
     {
-        $lines = $this->entries->map(fn ($count, $type) => "{$type}: {$count}")->implode("\n");
-
-        return TelegramMessage::create()
-            ->content("Telescope Report:\n{$lines}");
+        // your telegram implementation
     }
 }
 ```
