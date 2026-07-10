@@ -15,7 +15,7 @@
         "laravel/framework": ">=12.0",
         "laravel/telescope": ">=5.19",
         "muhammadhuzaifa/telescope-guzzle-watcher": ">=4.1",
-        "ronasit/laravel-helpers": "^3.5.5"
+        "ronasit/laravel-helpers": "^3.5.5 || @dev"
     },
     "require-dev": {
         "phpunit/phpunit": ">=11.0",
