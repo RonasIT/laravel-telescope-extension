@@ -138,7 +138,11 @@ public function register(): void
 }
 ```
 
-Your custom notification must implement `ReportNotificationContract` and accept `Collection $entries` in its constructor.
+Your custom notification must extend `Illuminate\Notifications\Notification`, implement `ReportNotificationContract` and
+accept a constructor parameter named exactly `$entries` of type `Collection` — the package resolves the notification via
+`makeWith(['entries' => $entries])`, which matches constructor parameters by name.
+
+The contract requires a `via(object $notifiable): array` method, so the list of channels stays under your control.
 
 #### Example: adding a custom report notification
 
@@ -159,7 +163,7 @@ class CustomReportNotification extends Notification implements ShouldQueue, Repo
     use Queueable;
 
     public function __construct(
-        public Collection $entries, 
+        public Collection $entries,
     ) {
     }
 

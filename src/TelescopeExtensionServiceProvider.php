@@ -59,7 +59,7 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
 
         $this->registerCheckIpMiddleware();
 
-        $this->app->bind(ReportNotificationContract::class, ReportNotification::class);
+        $this->app->bindIf(ReportNotificationContract::class, ReportNotification::class);
     }
 
     protected function registerDatabaseDriver(): void
