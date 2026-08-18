@@ -120,13 +120,59 @@ Use the `ignore_paths` config for this.
 The main difference between this config and the global telescope `ignore_paths` config is that the request watcher's config will ignore only incoming HTTP
 requests and will still store all other entries related to the request (such as queries, jobs, exceptions, etc.)
 
-### 📬 Customizing Report Notifications
+### 📬 Periodic report
 
-By default, the package sends reports via `RonasIT\TelescopeExtension\Notifications\ReportNotification`. You can replace it with your own notification class by binding your implementation to the `ReportNotificationContract` in service provider.
+The package can send a periodic report with the number of entries collected by Telescope, grouped by entry type. Every
+entry type in the report is a link to the corresponding Telescope tab.
 
-#### Overriding the default notification
+The report is sent by the `telescope:send-report` command. There is no need to register it in your scheduler: the
+package schedules the command automatically as soon as the report is enabled. You can also send the report manually at
+any time:
 
-In `app/Providers/AppServiceProvider.php`:
+```sh
+php artisan telescope:send-report
+```
+
+#### Configuration
+
+All the settings are placed in the `notifications.report` section of the `telescope` config:
+
+| Config key               | Env variable                  | Default    | Description                                   |
+|--------------------------|-------------------------------|------------|-----------------------------------------------|
+| `enabled`                | `IS_TELESCOPE_REPORT_ENABLED` | `false`    | Enables the scheduled report                  |
+| `frequency`              | `TELESCOPE_REPORT_FREQUENCY`  | `7`        | Sending frequency in days                     |
+| `time`                   | `TELESCOPE_REPORT_TIME_HOUR`  | `12`       | Hour of the day when the report is sent       |
+| `driver`                 | `TELESCOPE_REPORT_DRIVER`     | `mail`     | Notification channel or a list of channels    |
+| `drivers.mail.to`        | `TELESCOPE_REPORT_MAIL_TO`    | `''`       | Comma-separated list of recipients            |
+| `entry_emoji_map`        | —                             | see config | Emoji displayed next to each entry type       |
+| `entry_display_name_map` | —                             | see config | Overrides the displayed name of an entry type |
+
+The command is scheduled daily at `{time}:00` and sends the report only on the days when the day of the year is
+divisible by `frequency`, so with the default value of `7` the report is sent about once a week.
+
+#### Report content
+
+Entries are counted per type with the following exceptions:
+
+• Exceptions — only unresolved ones are counted
+• Jobs — only failed ones are counted
+• Entries having a `family_hash` are counted by unique hash, so the same repeated entry is counted once
+
+#### Customizing the report template
+
+Publish the mail template and modify it:
+
+``` sh
+php artisan vendor:publish --provider=RonasIT\\TelescopeExtension\\TelescopeExtensionServiceProvider --tag=view
+```
+
+The template will be published to `resources/views/vendor/telescope/report.blade.php`.
+
+#### Extending the report notification
+
+By default, the report is sent via `RonasIT\TelescopeExtension\Notifications\ReportNotification`, which supports the
+`mail` channel only. To deliver the report to other channels, bind your own notification class to the
+`ReportNotificationContract` in `app/Providers/AppServiceProvider.php`:
 
 ```php
 use RonasIT\TelescopeExtension\Contracts\ReportNotificationContract;
@@ -138,43 +184,25 @@ public function register(): void
 }
 ```
 
-Your custom notification must extend `Illuminate\Notifications\Notification`, implement `ReportNotificationContract` and
-accept a constructor parameter named exactly `$entries` of type `Collection` — the package resolves the notification via
-`makeWith(['entries' => $entries])`, which matches constructor parameters by name.
-
-The contract requires a `via(object $notifiable): array` method, so the list of channels stays under your control.
-
-#### Example: adding a custom report notification
+The easiest way is to extend the default `ReportNotification`: it already implements `ReportNotificationContract`,
+accepts the `$entries` collection and provides the `mail` channel implementation, so only the additional channels have to
+be declared. For example, to send the report both by mail and to Telegram:
 
 ```php
 <?php
 
 namespace App\Notifications;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Notification;
-use Illuminate\Support\Collection;
 use NotificationChannels\Telegram\TelegramMessage;
-use RonasIT\TelescopeExtension\Contracts\ReportNotificationContract;
+use RonasIT\TelescopeExtension\Notifications\ReportNotification;
 
-class CustomReportNotification extends Notification implements ShouldQueue, ReportNotificationContract
+class CustomReportNotification extends ReportNotification
 {
-    use Queueable;
-
-    public function __construct(
-        public Collection $entries,
-    ) {
-    }
-
     public function via(object $notifiable): array
     {
-        return ['mail', 'telegram'];
-    }
-
-    public function toMail(object $notifiable): \Illuminate\Mail\Mailable
-    {
-        // your mail implementation
+        return array_merge(parent::via($notifiable), [
+            'telegram',
+        ]);
     }
 
     public function toTelegram(object $notifiable): TelegramMessage
@@ -184,4 +212,8 @@ class CustomReportNotification extends Notification implements ShouldQueue, Repo
 }
 ```
 
-If no custom binding is provided, the package falls back to the default `ReportNotification` behavior.
+If you prefer to implement the notification from scratch, it must extend `Illuminate\Notifications\Notification`,
+implement `ReportNotificationContract` and accept a constructor parameter named exactly `$entries` of type `Collection`
+— the package resolves the notification via `makeWith(['entries' => $entries])`, which matches constructor parameters by
+name. The contract requires a `via(object $notifiable): array` method, so the list of channels always stays under your
+control.
