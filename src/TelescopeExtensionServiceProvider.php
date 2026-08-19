@@ -12,6 +12,8 @@ use Laravel\Telescope\Contracts\PrunableRepository;
 use RonasIT\Support\Http\Middleware\CheckIpMiddleware;
 use RonasIT\TelescopeExtension\Console\Commands\SendTelescopeReport;
 use RonasIT\TelescopeExtension\Console\Commands\TelescopePrune;
+use RonasIT\TelescopeExtension\Contracts\ReportNotificationContract;
+use RonasIT\TelescopeExtension\Notifications\ReportNotification;
 use RonasIT\TelescopeExtension\Repositories\TelescopeRepository;
 use RonasIT\TelescopeExtension\View\Components\EntriesCount;
 
@@ -30,7 +32,7 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__ . '/../config/telescope-guzzle-watcher.php', 'telescope-guzzle-watcher');
 
         $this->publishes([
-            __DIR__ . '/../resources/views/emails/report.blade.php' => resource_path('views/vendor/telescope/report.blade.php'),
+            __DIR__ . '/../resources/views/emails/report.blade.php' => resource_path('views/vendor/telescope/emails/report.blade.php'),
         ], 'view');
 
         if ($this->app->runningInConsole()) {
@@ -44,7 +46,17 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
 
         $this->loadRoutesFrom(__DIR__ . '/../routes/telescope.php');
 
-        $this->callAfterResolving('view', fn ($view) => $view->prependNamespace('telescope', __DIR__ . '/../resources/views'));
+        $this->callAfterResolving('view', function ($view) {
+            $paths = [__DIR__ . '/../resources/views'];
+
+            $overridePath = resource_path('views/vendor/telescope');
+
+            if (is_dir($overridePath)) {
+                array_unshift($paths, $overridePath);
+            }
+
+            $view->prependNamespace('telescope', $paths);
+        });
 
         Blade::component('entries-count', EntriesCount::class);
 
@@ -56,6 +68,8 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
         $this->registerDatabaseDriver();
 
         $this->registerCheckIpMiddleware();
+
+        $this->app->bindIf(ReportNotificationContract::class, ReportNotification::class);
     }
 
     protected function registerDatabaseDriver(): void

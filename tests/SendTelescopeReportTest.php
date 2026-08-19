@@ -4,12 +4,17 @@ namespace RonasIT\TelescopeExtension\Tests;
 
 use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Notifications\AnonymousNotifiable;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
+use RonasIT\TelescopeExtension\Contracts\ReportNotificationContract;
 use RonasIT\TelescopeExtension\Mail\ReportMail;
+use RonasIT\TelescopeExtension\Notifications\ReportNotification;
 use RonasIT\TelescopeExtension\TelescopeExtensionServiceProvider;
+use RonasIT\TelescopeExtension\Tests\Support\Mock\CustomReportNotification;
 use RonasIT\TelescopeExtension\Tests\Support\SendTelescopeReportTestTrait;
 
 class SendTelescopeReportTest extends TestCase
@@ -93,6 +98,24 @@ class SendTelescopeReportTest extends TestCase
         } else {
             $this->assertNotificationSent('command');
         }
+    }
+
+    public function testCommandWithCustomNotification()
+    {
+        $this->app->bind(ReportNotificationContract::class, CustomReportNotification::class);
+
+        $this->mockSelectEntries();
+
+        $this->artisan('telescope:send-report');
+
+        Notification::assertCount(1);
+
+        Notification::assertNotSentTo(new AnonymousNotifiable(), ReportNotification::class);
+
+        Notification::assertSentOnDemand(
+            CustomReportNotification::class,
+            fn (CustomReportNotification $notification) => $notification->entries->all() === $this->getJsonFixture('entries_data'),
+        );
     }
 
     public function testReportMail()

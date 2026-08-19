@@ -9,9 +9,10 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\URL;
+use RonasIT\TelescopeExtension\Contracts\ReportNotificationContract;
 use RonasIT\TelescopeExtension\Mail\ReportMail;
 
-class ReportNotification extends Notification implements ShouldQueue
+class ReportNotification extends Notification implements ReportNotificationContract, ShouldQueue
 {
     use Queueable;
 

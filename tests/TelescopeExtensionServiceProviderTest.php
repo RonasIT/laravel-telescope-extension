@@ -3,6 +3,7 @@
 namespace RonasIT\TelescopeExtension\Tests;
 
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\File;
 use RonasIT\Support\Http\Middleware\CheckIpMiddleware;
 use RonasIT\TelescopeExtension\TelescopeExtensionServiceProvider;
 
@@ -49,5 +50,22 @@ class TelescopeExtensionServiceProviderTest extends TestCase
         $paths = array_map('realpath', $hints['telescope']);
 
         $this->assertContains(realpath(__DIR__ . '/../resources/views'), $paths);
+    }
+
+    public function testTelescopeViewPathWithPublishedOverride()
+    {
+        $overridePath = resource_path('views/vendor/telescope');
+
+        File::ensureDirectoryExists($overridePath);
+
+        try {
+            $paths = app('view')->getFinder()->getHints();
+
+            $path = $paths['telescope'][0];
+
+            $this->assertSame(realpath($overridePath), realpath($path));
+        } finally {
+            File::deleteDirectory($overridePath);
+        }
     }
 }
