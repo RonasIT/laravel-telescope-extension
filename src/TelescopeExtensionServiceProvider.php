@@ -46,7 +46,17 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
 
         $this->loadRoutesFrom(__DIR__ . '/../routes/telescope.php');
 
-        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'telescope');
+        $this->callAfterResolving('view', function ($view) {
+            $paths = [__DIR__ . '/../resources/views'];
+
+            $overridePath = resource_path('views/vendor/telescope');
+
+            if (is_dir($overridePath)) {
+                array_unshift($paths, $overridePath);
+            }
+
+            $view->prependNamespace('telescope', $paths);
+        });
 
         Blade::component('entries-count', EntriesCount::class);
 
