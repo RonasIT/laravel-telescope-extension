@@ -36,7 +36,8 @@
                         "chainConnection": null,
                         "chainQueue": null,
                         "chainCatchCallbacks": null,
-                        "locale": null
+                        "locale": null,
+                        "uniqueLockOwner": ""
                     },
                     "channels": [
                         "mail"
@@ -101,7 +102,8 @@
                         "chained": [],
                         "chainConnection": null,
                         "chainQueue": null,
-                        "chainCatchCallbacks": null
+                        "chainCatchCallbacks": null,
+                        "uniqueLockOwner": ""
                     }
                 }
             ]
