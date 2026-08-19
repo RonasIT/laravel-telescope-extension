@@ -2,7 +2,6 @@
 
 namespace RonasIT\TelescopeExtension\Tests;
 
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use RonasIT\Support\Http\Middleware\CheckIpMiddleware;
