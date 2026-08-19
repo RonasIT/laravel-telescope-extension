@@ -32,7 +32,7 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__ . '/../config/telescope-guzzle-watcher.php', 'telescope-guzzle-watcher');
 
         $this->publishes([
-            __DIR__ . '/../resources/views/emails/report.blade.php' => resource_path('views/vendor/telescope/report.blade.php'),
+            __DIR__ . '/../resources/views/emails/report.blade.php' => resource_path('views/vendor/telescope/emails/report.blade.php'),
         ], 'view');
 
         if ($this->app->runningInConsole()) {
@@ -46,7 +46,7 @@ class TelescopeExtensionServiceProvider extends ServiceProvider
 
         $this->loadRoutesFrom(__DIR__ . '/../routes/telescope.php');
 
-        $this->callAfterResolving('view', fn ($view) => $view->prependNamespace('telescope', __DIR__ . '/../resources/views'));
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'telescope');
 
         Blade::component('entries-count', EntriesCount::class);
 

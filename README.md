@@ -166,7 +166,7 @@ Publish the mail template and modify it:
 php artisan vendor:publish --provider=RonasIT\\TelescopeExtension\\TelescopeExtensionServiceProvider --tag=view
 ```
 
-The template will be published to `resources/views/vendor/telescope/report.blade.php`.
+The template will be published to `resources/views/vendor/telescope/emails/report.blade.php`.
 
 #### Extending the report notification
 
